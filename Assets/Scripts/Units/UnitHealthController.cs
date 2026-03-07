@@ -10,21 +10,22 @@ namespace Units
         [SerializeField] private Slider healthBar;
         
         private Action _onDeath;
-        private float _unitHealth;
+        
+        public float UnitHealth { get; private set; }
         
         public void Init(UnitBaseConfig config, Action onDeath)
         {
-            _unitHealth = config.Health;
+            UnitHealth = config.Health;
             _onDeath += onDeath;
         }
 
         public void OnUnitHealthChanged(float healthDelta)
         {
-            _unitHealth += healthDelta;
+            UnitHealth += healthDelta;
             
             // todo: update UI
             
-            if (_unitHealth <= 0)
+            if (UnitHealth <= 0)
             {
                 // fade out health bar
                 _onDeath?.Invoke();

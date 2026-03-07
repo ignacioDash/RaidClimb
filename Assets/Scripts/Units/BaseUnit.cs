@@ -42,11 +42,12 @@ namespace Units
         public string PlayerId { get; private set; }
         public BaseUnit Target { get; private set; }
         public UnitState UnitCurrentState { get; private set; }
-        public UnitBaseConfig UnitConfig => unitConfig;
-
+        
         private Rigidbody _rigidbody;
         private Collider _unitCollider;
         private Collider _climbWall;
+
+        private Action _onUnitDeath;
 
         private void OnEnable()
         {
@@ -54,10 +55,11 @@ namespace Units
             _unitCollider = GetComponent<Collider>();
         }
 
-        public virtual void Init(string playerId)
+        public virtual void Init(string playerId, Action onUnitDeath)
         {
             PlayerId = playerId;
             UnitCurrentState = UnitState.Idle;
+            _onUnitDeath += onUnitDeath;
 
             rangeCollider.Init(this);
                 healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
@@ -88,6 +90,7 @@ namespace Units
 
         private void OnStateChanged()
         {
+            Debug.Log($"Change state to {UnitCurrentState}");
             switch (UnitCurrentState)
             {
                 case UnitState.Idle:
@@ -106,7 +109,9 @@ namespace Units
                     // todo: play attacking animation
                     break;
                 case UnitState.Dead:
-                    // todo: play death animation
+                    // todo: await play death animation
+                    
+                    _onUnitDeath?.Invoke();
                     break;
                 default:
                     break;

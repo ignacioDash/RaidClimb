@@ -1,3 +1,4 @@
+using System;
 using Constants;
 using Input;
 using Managers;
@@ -34,10 +35,18 @@ namespace UI
             InputManager.Instance.OnRelease += OnReleaseInput;
         }
 
+        private void OnDisable()
+        {
+            InputManager.Instance.OnHold -= OnHoldInput;
+            InputManager.Instance.OnRelease -= OnReleaseInput;
+        }
+
         private void OnHoldInput(Vector3 worldPos, bool canDrop)
         {
-            // todo: use canDrop to set material
             unitSlider.value = Mathf.MoveTowards(unitSlider.value, 1f, holdFillSpeed * Time.deltaTime);
+
+            if (unitSlider.value < 1) // todo: change with ranges
+                return;
 
             if (_unitToSpawn == null)
                 _unitToSpawn = _unitManager.SpawnUnit(BaseUnit.UnitTypes.Melee, worldPos, Keys.PLAYER_ID);

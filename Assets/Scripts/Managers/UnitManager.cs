@@ -44,12 +44,15 @@ namespace Managers
         
         public void RegisterUnit(BaseUnit unit, string playerId)
         {
-            unit.Init(playerId);
-            unit.SetColliders(true);
             _registeredUnits.Add(unit);
+            
+            unit.Init(playerId, () => UnRegisterUnit(unit));
+            unit.SetColliders(true);
+            
+            // todo: give it some 1-2 seconds delay, then find and set the unit target to the closest enemy unit
         }
 
-        public void UnRegisterUnit(BaseUnit unit) // to be called after a death animation
+        private void UnRegisterUnit(BaseUnit unit)
         {
             if (_registeredUnits.Contains(unit))
                 _registeredUnits.Remove(unit);
