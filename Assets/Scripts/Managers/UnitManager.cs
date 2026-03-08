@@ -11,6 +11,9 @@ namespace Managers
 {
     public class UnitManager : MonoBehaviour, IManager
     {
+        [Header("Debug")]
+        [SerializeField] private BaseUnit testTarget;
+        
         [SerializeField] private Transform unitsContainer;
         
         [Header("Settings")]
@@ -49,7 +52,14 @@ namespace Managers
             unit.Init(playerId, () => UnRegisterUnit(unit));
             unit.SetColliders(true);
             
-            // todo: give it some 1-2 seconds delay, then find and set the unit target to the closest enemy unit
+            _ = DelayedTarget(unit);
+        }
+
+        private async Task DelayedTarget(BaseUnit unit)
+        {
+            await Task.Delay(2000);
+            
+            unit.SetUnitTarget(testTarget);
         }
 
         private void UnRegisterUnit(BaseUnit unit)

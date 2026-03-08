@@ -106,7 +106,7 @@ namespace Input
             if (!Physics.Raycast(ray, out var hit))
                 return (_lastValidDropPosition, false);
 
-            var canDrop = hit.collider.CompareTag("Ground");
+            var canDrop = hit.collider.CompareTag("Path");
 
             if (canDrop)
             {
