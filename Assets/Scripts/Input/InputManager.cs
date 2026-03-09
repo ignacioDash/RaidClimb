@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,8 @@ namespace Input
             Holding
         }
 
+        [SerializeField] private GameObject holdPreviewPrefab;
+
         [SerializeField] private float sensitivity = 0.02f;
         [SerializeField] private float minX;
         [SerializeField] private float maxX;
@@ -24,10 +27,13 @@ namespace Input
         private float _pressTime, _startX, _lastX;
         private Camera _cam;
         private Vector3 _lastValidDropPosition;
+
+        private GameObject _holdPreviewInstance;
+        private Collider[] _pathColliders;
         
         public static InputManager Instance { get; private set; }
 
-        public Action<Vector3, bool> OnHold;
+        public Action OnHold;
         public Action<Vector3> OnRelease;
 
         private void Awake()
@@ -38,6 +44,11 @@ namespace Input
             Instance = this;
             
             _cam = Camera.main;
+
+            _pathColliders = GameObject
+                .FindGameObjectsWithTag("Path")
+                .Select(o => o.GetComponent<Collider>())
+                .ToArray();
         }
 
         private void Update()
@@ -106,15 +117,31 @@ namespace Input
             if (!Physics.Raycast(ray, out var hit))
                 return (_lastValidDropPosition, false);
 
-            var canDrop = hit.collider.CompareTag("Path");
-
-            if (canDrop)
+            if (hit.collider.CompareTag("Path"))
             {
                 _lastValidDropPosition = hit.point;
                 return (hit.point, true);
             }
 
-            return (hit.point, false);
+            var closestPoint = _lastValidDropPosition;
+            var closestDist = float.MaxValue;
+
+            foreach (var pathObj in _pathColliders)
+            {
+                if (!pathObj) continue;
+
+                var point = pathObj.ClosestPoint(hit.point);
+                var dist = (point - hit.point).sqrMagnitude;
+
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestPoint = point;
+                }
+            }
+
+            _lastValidDropPosition = closestPoint;
+            return (closestPoint, false);
         }
 
         private void MoveCamera(float deltaX)
@@ -127,11 +154,20 @@ namespace Input
 
         private void OnHolding(Vector3 worldPos, bool canDrop)
         {
-            OnHold?.Invoke(worldPos, canDrop);
+            if (!_holdPreviewInstance)
+                _holdPreviewInstance = Instantiate(holdPreviewPrefab, worldPos, Quaternion.identity);
+
+            _lastValidDropPosition = canDrop ? worldPos : _lastValidDropPosition;
+            _holdPreviewInstance.transform.position = _lastValidDropPosition;
+            
+            OnHold?.Invoke();
         }
 
         private void EndHold()
         {
+            if (_holdPreviewInstance)
+                Destroy(_holdPreviewInstance.gameObject);
+                
             OnRelease?.Invoke(_lastValidDropPosition);
         }
     }

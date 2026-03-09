@@ -40,7 +40,7 @@ namespace Managers
             var unit = Instantiate(unitPrefab, spawnPoint,
                 isPlayerUnit ? Quaternion.identity : Quaternion.Euler(new Vector3(0, 180, 0)), unitsContainer);
 
-            unit.SetColliders(false);
+            unit.Rigidbody.useGravity = true;
 
             return unit;
         }
@@ -50,7 +50,6 @@ namespace Managers
             _registeredUnits.Add(unit);
             
             unit.Init(playerId, () => UnRegisterUnit(unit));
-            unit.SetColliders(true);
             
             _ = DelayedTarget(unit);
         }
@@ -59,6 +58,7 @@ namespace Managers
         {
             await Task.Delay(2000);
             
+            unit.Rigidbody.useGravity = false;
             unit.SetUnitTarget(testTarget);
         }
 

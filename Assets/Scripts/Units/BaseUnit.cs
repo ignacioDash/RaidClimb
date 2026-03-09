@@ -48,11 +48,11 @@ namespace Units
 
         public string PlayerId { get; private set; }
         public UnitTargetController UnitTargetController => unitTargetController;
+        public Rigidbody Rigidbody { get; private set; }
+        public Collider UnitCollider { get; private set; }
 
         private Transform _target;
         private Vector3 _wallNormal, _lastTargetPos;
-        private Rigidbody _rigidbody;
-        private Collider _unitCollider;
         private Collider _climbWall;
         private Action _onUnitDeath;
 
@@ -60,8 +60,8 @@ namespace Units
 
         private void OnEnable()
         {
-            _rigidbody = GetComponent<Rigidbody>();
-            _unitCollider = GetComponent<Collider>();
+            Rigidbody = GetComponent<Rigidbody>();
+            UnitCollider = GetComponent<Collider>();
         }
 
         public virtual void Init(string playerId, Action onUnitDeath)
@@ -76,20 +76,9 @@ namespace Units
                 healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
         }
 
-        public void SetVisuals(bool on)
-        {
-            unitVisualsController.SetUnitVisuals(on);
-        }
-
-        public void SetColliders(bool on)
-        {
-            _rigidbody.useGravity = on;
-            _unitCollider.enabled = on;
-        }
-
         public void SetUnitTarget(BaseUnit target)
         {
-            _rigidbody.useGravity = false;
+            Rigidbody.useGravity = false;
             
             _target = target.unitTargetController.GetRandomTarget(transform.position);
             unitCurrentState = UnitState.Moving;
@@ -122,10 +111,11 @@ namespace Units
                     break;
                 case UnitState.Defending:
                     // todo: play idle animation
+                    Rigidbody.isKinematic = false;
                     break;
                 case UnitState.Attacking:
                     // todo: play attacking animation
-                    _rigidbody.isKinematic = false;
+                    Rigidbody.isKinematic = false;
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
@@ -142,23 +132,23 @@ namespace Units
             navMeshAgent.enabled = true;
             navMeshAgent.isStopped = false;
             
-            _rigidbody.linearVelocity = Vector3.zero;
+            Rigidbody.linearVelocity = Vector3.zero;
         }
 
         private void OnClimbWall()
         {
             navMeshAgent.isStopped = true;
             navMeshAgent.enabled = false;
-            _rigidbody.freezeRotation = true;
+            Rigidbody.freezeRotation = true;
 
-            _rigidbody.linearVelocity = Vector3.up * unitConfig.ClimbSpeed;
+            Rigidbody.linearVelocity = Vector3.up * unitConfig.ClimbSpeed;
         }
         
         private async Task DelayedTarget()
         {
             await Task.Delay(500);
             
-            _rigidbody.freezeRotation = false;
+            Rigidbody.freezeRotation = false;
             
             unitCurrentState = UnitState.Moving;
             OnStateChanged();
@@ -246,8 +236,8 @@ namespace Units
             {
                 var velocity = _wallNormal * unitConfig.ClimbSpeed * -2f;
 
-                _rigidbody.linearVelocity = velocity;
-                _rigidbody.useGravity = true;
+                Rigidbody.linearVelocity = velocity;
+                Rigidbody.useGravity = true;
 
                 _climbWall = null;
 
