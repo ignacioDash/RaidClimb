@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Config;
 using UnityEngine;
@@ -48,19 +49,21 @@ namespace Units
 
         public string PlayerId { get; private set; }
         public UnitTargetController UnitTargetController => unitTargetController;
-        public Rigidbody Rigidbody { get; private set; }
         public Collider UnitCollider { get; private set; }
 
+        private Rigidbody _rigidbody;
         private Transform _target;
         private Vector3 _wallNormal, _lastTargetPos;
         private Collider _climbWall;
+        private CancellationTokenSource _climbCts;
+        private Task _climbTask;
         private Action _onUnitDeath;
 
         private const float RETARGET_DISTANCE = 0.2f;
 
         private void OnEnable()
         {
-            Rigidbody = GetComponent<Rigidbody>();
+            _rigidbody = GetComponent<Rigidbody>();
             UnitCollider = GetComponent<Collider>();
         }
 
@@ -78,8 +81,6 @@ namespace Units
 
         public void SetUnitTarget(BaseUnit target)
         {
-            Rigidbody.useGravity = false;
-            
             _target = target.unitTargetController.GetRandomTarget(transform.position);
             unitCurrentState = UnitState.Moving;
             OnStateChanged();
@@ -111,11 +112,11 @@ namespace Units
                     break;
                 case UnitState.Defending:
                     // todo: play idle animation
-                    Rigidbody.isKinematic = false;
+                    _rigidbody.isKinematic = false;
                     break;
                 case UnitState.Attacking:
                     // todo: play attacking animation
-                    Rigidbody.isKinematic = false;
+                    _rigidbody.isKinematic = false;
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
@@ -129,26 +130,44 @@ namespace Units
 
         private void OnStartMovement()
         {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.freezeRotation = false;
+            
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+            
             navMeshAgent.enabled = true;
             navMeshAgent.isStopped = false;
-            
-            Rigidbody.linearVelocity = Vector3.zero;
         }
 
         private void OnClimbWall()
         {
             navMeshAgent.isStopped = true;
             navMeshAgent.enabled = false;
-            Rigidbody.freezeRotation = true;
 
-            Rigidbody.linearVelocity = Vector3.up * unitConfig.ClimbSpeed;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+            _rigidbody.freezeRotation = true;
+
+            _climbCts?.Cancel();
+            _climbCts?.Dispose();
+            _climbCts = new CancellationTokenSource();
+
+            _climbTask = ClimbWallLoop(_climbCts.Token);
+        }
+        
+        private async Task ClimbWallLoop(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested && _climbWall && unitCurrentState == UnitState.Climbing)
+            {
+                transform.position += Vector3.up * (unitConfig.ClimbSpeed * Time.deltaTime);
+                await Task.Yield();
+            }
         }
         
         private async Task DelayedTarget()
         {
             await Task.Delay(500);
-            
-            Rigidbody.freezeRotation = false;
             
             unitCurrentState = UnitState.Moving;
             OnStateChanged();
@@ -156,7 +175,7 @@ namespace Units
             navMeshAgent.SetDestination(_target.transform.position);
         }
         
-        private void HandleMoveToTarget()
+        private void HandleMoveToTarget() // checking if we are close enough to attack
         {
             if (!_target)
                 return;
@@ -170,7 +189,7 @@ namespace Units
             ChangeUnitStateTo(UnitState.Attacking);
         }
 
-        private void HandleAttackTarget()
+        private void HandleAttackTarget() // checking if we are too far to attack so we move again
         {
             if (!_target)
                 return;
@@ -183,7 +202,7 @@ namespace Units
             ChangeUnitStateTo(UnitState.Moving);
         }
 
-        private void HandleTargetMovements()
+        private void HandleTargetMovements() // did the target moved more than retarget? if so refresh target's position
         {
             if (!_target || !navMeshAgent.enabled)
                 return;
@@ -234,10 +253,16 @@ namespace Units
         {
             if (other == _climbWall && unitCurrentState == UnitState.Climbing)
             {
+                _climbCts?.Cancel();
+                _climbCts?.Dispose();
+                _climbCts = null;
+
+                _rigidbody.isKinematic = false;
+                
                 var velocity = _wallNormal * unitConfig.ClimbSpeed * -2f;
 
-                Rigidbody.linearVelocity = velocity;
-                Rigidbody.useGravity = true;
+                _rigidbody.linearVelocity = velocity;
+                _rigidbody.useGravity = true;
 
                 _climbWall = null;
 

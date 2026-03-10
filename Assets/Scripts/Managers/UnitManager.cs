@@ -39,9 +39,7 @@ namespace Managers
             var isPlayerUnit = playerId == Keys.PLAYER_ID;
             var unit = Instantiate(unitPrefab, spawnPoint,
                 isPlayerUnit ? Quaternion.identity : Quaternion.Euler(new Vector3(0, 180, 0)), unitsContainer);
-
-            unit.Rigidbody.useGravity = true;
-
+            
             return unit;
         }
         
@@ -58,7 +56,6 @@ namespace Managers
         {
             await Task.Delay(2000);
             
-            unit.Rigidbody.useGravity = false;
             unit.SetUnitTarget(testTarget);
         }
 
