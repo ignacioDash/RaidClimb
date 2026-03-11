@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Constants;
+using Castles;
 using Managers;
 using UnityEngine;
 
@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private UIManager uiManager;
     [SerializeField] private UnitManager unitManager;
+    [SerializeField] private CastleManager playerCastle, opponentCastle;
 
     private GameStateManager _gameStateManager;
+    private DataManager _dataManager;
 
     private readonly Dictionary<Type, IManager> _managers = new();
 
@@ -26,16 +28,9 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    private void Start()
+    private async void Start()
     {
-        try
-        {
-            _ = SetUp();
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-        }
+        await SetUp();
     }
 
     public T GetManager<T>()
@@ -47,6 +42,8 @@ public class GameManager : MonoBehaviour
     public async Task StartGame()
     {
         await uiManager.NavigateTo(UIManager.Screens.InGameScreen);
+
+        ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
         
         _gameStateManager.StartGame();
     }
@@ -62,20 +59,27 @@ public class GameManager : MonoBehaviour
     private async Task SetUp()
     {
         _gameStateManager = new GameStateManager();
+        _dataManager = new DataManager();
+        
+        _managers.Add(typeof(DataManager), _dataManager);
+        _managers.Add(typeof(UIManager), uiManager);
+        _managers.Add(typeof(UnitManager), unitManager);
+        _managers.Add(typeof(GameStateManager), _gameStateManager);
+        _managers.Add(typeof(PlayerCastleManager), playerCastle);
+        _managers.Add(typeof(OpponentCastleManager), opponentCastle);
+        
+        await _dataManager.Init(null);
 
         var managersInit = new List<Task>
         {
             uiManager.Init(null),
             unitManager.Init(null),
-            _gameStateManager.Init(null)
+            _gameStateManager.Init(null),
+            playerCastle.Init(null),
+            opponentCastle.Init(null)
         };
 
         await Task.WhenAll(managersInit);
-        
-        _managers.Add(typeof(UIManager), uiManager);
-        _managers.Add(typeof(UnitManager), unitManager);
-        _managers.Add(typeof(GameStateManager), _gameStateManager);
-
         await uiManager.NavigateTo(UIManager.Screens.MainScreen);
     }
 

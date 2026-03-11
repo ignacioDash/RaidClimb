@@ -11,15 +11,13 @@ namespace Managers
 {
     public class UnitManager : MonoBehaviour, IManager
     {
-        [Header("Debug")]
-        [SerializeField] private BaseUnit testTarget;
-        
         [SerializeField] private Transform unitsContainer;
         
         [Header("Settings")]
         [SerializeField] private List<UnitReference> unitReferences;
         
-        private readonly List<BaseUnit> _registeredUnits = new();
+        private readonly List<BaseUnit> _playerUnits = new();
+        private readonly List<BaseUnit> _opponentUnits = new();
         
         public async Task Init(object[] args)
         {
@@ -40,41 +38,69 @@ namespace Managers
             var unit = Instantiate(unitPrefab, spawnPoint,
                 isPlayerUnit ? Quaternion.identity : Quaternion.Euler(new Vector3(0, 180, 0)), unitsContainer);
             
-            return unit;
-        }
-        
-        public void RegisterUnit(BaseUnit unit, string playerId)
-        {
-            _registeredUnits.Add(unit);
+            if (isPlayerUnit) _playerUnits.Add(unit);
+            else _opponentUnits.Add(unit);
             
             unit.Init(playerId, () => UnRegisterUnit(unit));
             
-            _ = DelayedTarget(unit);
+            return unit;
         }
 
-        private async Task DelayedTarget(BaseUnit unit)
+        public async Task SetDelayedTarget(BaseUnit unit)
         {
-            await Task.Delay(2000);
-            
-            unit.SetUnitTarget(testTarget);
+            await Task.Delay(1500);
+
+            var isPlayerUnit = unit.PlayerId == Keys.PLAYER_ID;
+            var enemyUnits = isPlayerUnit ? _opponentUnits : _playerUnits;
+
+            BaseUnit closestEnemy = null;
+            var closestDistance = float.MaxValue;
+
+            foreach (var enemy in enemyUnits)
+            {
+                if (!enemy) continue;
+
+                var distance = (enemy.transform.position - unit.transform.position).sqrMagnitude;
+                if (!(distance < closestDistance))
+                    continue;
+                
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+
+            unit.SetUnitTarget(closestEnemy);
         }
 
         private void UnRegisterUnit(BaseUnit unit)
         {
-            if (_registeredUnits.Contains(unit))
-                _registeredUnits.Remove(unit);
+            if (unit.PlayerId == Keys.PLAYER_ID)
+            {
+                if (_playerUnits.Contains(unit))
+                    _playerUnits.Remove(unit);
+            }
+            else
+            {
+                if (_opponentUnits.Contains(unit))
+                    _opponentUnits.Remove(unit);
+            }
 
             Destroy(unit.gameObject);
         }
 
         public void Cleanup()
         {
-            foreach (var unit in _registeredUnits)
+            foreach (var unit in _playerUnits)
             {
                 Destroy(unit.gameObject);
             }
             
-            _registeredUnits.Clear();
+            foreach (var unit in _opponentUnits)
+            {
+                Destroy(unit.gameObject);
+            }
+            
+            _playerUnits.Clear();
+            _opponentUnits.Clear();
         }
     }
 

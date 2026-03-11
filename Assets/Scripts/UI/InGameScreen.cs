@@ -56,7 +56,7 @@ namespace UI
                 if (_unitToSpawn)
                 {
                     _unitToSpawn.transform.position = unitPosition;
-                    _unitManager.RegisterUnit(_unitToSpawn, Keys.PLAYER_ID);
+                    _ = _unitManager.SetDelayedTarget(_unitToSpawn);
                 }
             }
 

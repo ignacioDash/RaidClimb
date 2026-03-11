@@ -59,7 +59,7 @@ namespace Units
         private Task _climbTask;
         private Action _onUnitDeath;
 
-        private const float RETARGET_DISTANCE = 0.2f;
+        private const float RETARGET_DISTANCE = 0.1f;
 
         private void OnEnable()
         {
@@ -96,7 +96,6 @@ namespace Units
 
         private void OnStateChanged()
         {
-            Debug.Log($"Change state to {unitCurrentState}");
             switch (unitCurrentState)
             {
                 case UnitState.Idle:
@@ -112,11 +111,11 @@ namespace Units
                     break;
                 case UnitState.Defending:
                     // todo: play idle animation
-                    _rigidbody.isKinematic = false;
+                    _ = DelayedKinematicSet(true);
                     break;
                 case UnitState.Attacking:
                     // todo: play attacking animation
-                    _rigidbody.isKinematic = false;
+                    _ = DelayedKinematicSet(true);
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
@@ -126,6 +125,14 @@ namespace Units
                 default:
                     break;
             }
+        }
+
+        private async Task DelayedKinematicSet(bool on)
+        {
+            await Task.Delay(200);
+
+            if (_rigidbody)
+                _rigidbody.isKinematic = on;
         }
 
         private void OnStartMovement()
@@ -167,7 +174,7 @@ namespace Units
         
         private async Task DelayedTarget()
         {
-            await Task.Delay(500);
+            await Task.Delay(1000);
             
             unitCurrentState = UnitState.Moving;
             OnStateChanged();
@@ -180,11 +187,17 @@ namespace Units
             if (!_target)
                 return;
 
-            var xDistance = Mathf.Abs(_target.transform.position.x - transform.position.x);
+            var position = transform.position;
+            var a = new Vector2(position.x, position.z);
+            var targetPosition = _target.transform.position;
+            var b = new Vector2(targetPosition.x, targetPosition.z);
 
-            if (!(xDistance <= unitConfig.Range))
+            var distance = Vector2.Distance(a, b);
+            
+            if (distance > unitConfig.Range)
                 return;
             
+            navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
             ChangeUnitStateTo(UnitState.Attacking);
         }
