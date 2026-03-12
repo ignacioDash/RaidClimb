@@ -38,7 +38,8 @@ namespace Managers
                 if (spawnPosition == null)
                     continue;
 
-                var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId);
+                var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId,
+                    BaseUnit.UnitState.Defending);
                 if (!unit)
                     continue;
                 

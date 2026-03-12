@@ -48,15 +48,28 @@ namespace Units
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         public string PlayerId { get; private set; }
-        public UnitTargetController UnitTargetController => unitTargetController;
+        public UnitState UnitCurrentState { get; private set; }
         public Collider UnitCollider { get; private set; }
+        public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
+        public bool IsDefender { get; private set; }
 
+        // common
         private Rigidbody _rigidbody;
-        private Transform _target;
+        private BaseUnit _target;
+        
+        //movement
+        private Transform _moveTarget;
+        
+        // climbing
         private Vector3 _wallNormal, _lastTargetPos;
         private Collider _climbWall;
         private CancellationTokenSource _climbCts;
         private Task _climbTask;
+        
+        // attacking
+        private float _nextAttackTime;
+        
+        // death
         private Action _onUnitDeath;
 
         private const float RETARGET_DISTANCE = 0.1f;
@@ -67,31 +80,44 @@ namespace Units
             UnitCollider = GetComponent<Collider>();
         }
 
-        public virtual void Init(string playerId, Action onUnitDeath)
+        public virtual void Init(string playerId, UnitState startState, Action onUnitDeath)
         {
             PlayerId = playerId;
-            unitCurrentState = UnitState.Idle;
+            ChangeUnitStateTo(startState);
+
+            IsDefender = startState == UnitState.Defending;
+            
+            TargetInfo = new UnitTargetInfo();
             _onUnitDeath += onUnitDeath;
             
             navMeshAgent.enabled = false;
             
             rangeCollider.Init(this);
-                healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
+            healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
         }
 
         public void SetUnitTarget(BaseUnit target)
         {
-            _target = target.unitTargetController.GetRandomTarget(transform.position);
-            unitCurrentState = UnitState.Moving;
-            OnStateChanged();
+            _target = target;
+            _moveTarget = target.unitTargetController.GetRandomTarget(transform.position);
+
+            ChangeUnitStateTo(UnitState.Moving);
             
-            navMeshAgent.SetDestination(_target.transform.position);
+            navMeshAgent.SetDestination(_moveTarget.transform.position);
         }
 
         public void ChangeUnitStateTo(UnitState newState)
         {
+            if (unitCurrentState == newState)
+                return;
+            
             unitCurrentState = newState;
             OnStateChanged();
+        }
+
+        private void TakeDamage(float damage)
+        {
+            healthController.OnUnitHealthChanged(-damage);
         }
 
         private void OnStateChanged()
@@ -119,7 +145,6 @@ namespace Units
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
-                    
                     _onUnitDeath?.Invoke();
                     break;
                 default:
@@ -179,17 +204,17 @@ namespace Units
             unitCurrentState = UnitState.Moving;
             OnStateChanged();
             
-            navMeshAgent.SetDestination(_target.transform.position);
+            navMeshAgent.SetDestination(_moveTarget.transform.position);
         }
         
-        private void HandleMoveToTarget() // checking if we are close enough to attack
+        private void HandleMoveToTarget()
         {
-            if (!_target)
+            if (!_moveTarget)
                 return;
 
             var position = transform.position;
             var a = new Vector2(position.x, position.z);
-            var targetPosition = _target.transform.position;
+            var targetPosition = _moveTarget.transform.position;
             var b = new Vector2(targetPosition.x, targetPosition.z);
 
             var distance = Vector2.Distance(a, b);
@@ -202,30 +227,53 @@ namespace Units
             ChangeUnitStateTo(UnitState.Attacking);
         }
 
-        private void HandleAttackTarget() // checking if we are too far to attack so we move again
+        private void HandleAttackTarget()
+        {
+            if (!_moveTarget)
+                return;
+
+            var xDistance = Mathf.Abs(_moveTarget.transform.position.x - transform.position.x);
+
+            if (xDistance > unitConfig.Range)
+            {
+                ChangeUnitStateTo(UnitState.Moving);
+                return;
+            }
+            
+            if (Time.time < _nextAttackTime)
+                return;
+            
+            AttackTarget();
+        }
+        
+        private void AttackTarget()
         {
             if (!_target)
                 return;
-
-            var xDistance = Mathf.Abs(_target.transform.position.x - transform.position.x);
-
-            if (!(xDistance > unitConfig.Range))
-                return;
             
-            ChangeUnitStateTo(UnitState.Moving);
+            _nextAttackTime = Time.time + unitConfig.AttackSpeed;
+
+            _target.TakeDamage(unitConfig.Damage);
         }
 
         private void HandleTargetMovements() // did the target moved more than retarget? if so refresh target's position
         {
-            if (!_target || !navMeshAgent.enabled)
+            if (!_moveTarget || !navMeshAgent.enabled)
                 return;
 
-            _lastTargetPos = _target.position;
+            _lastTargetPos = _moveTarget.position;
 
-            if (Vector3.Distance(_lastTargetPos, _target.position) < RETARGET_DISTANCE)
+            if (Vector3.Distance(_lastTargetPos, _moveTarget.position) < RETARGET_DISTANCE)
                 return;
 
             navMeshAgent.SetDestination(_lastTargetPos);
+        }
+
+        public void CleanUp()
+        {
+            _climbCts?.Cancel();
+            _climbCts?.Dispose();
+            _climbCts = null;
         }
         
         #region UNITY
@@ -249,7 +297,7 @@ namespace Units
         {
             if (other.CompareTag("CastleWall") && unitCurrentState == UnitState.Moving)
             {
-                if (_target && _target.transform.position.y > transform.position.y)
+                if (_moveTarget && _moveTarget.transform.position.y > transform.position.y)
                 {
                     _climbWall = other.GetComponent<Collider>();
                     

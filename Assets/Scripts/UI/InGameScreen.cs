@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Constants;
 using Input;
 using Managers;
@@ -56,12 +57,20 @@ namespace UI
                 if (_unitToSpawn)
                 {
                     _unitToSpawn.transform.position = unitPosition;
-                    _ = _unitManager.SetDelayedTarget(_unitToSpawn);
+                    _ = SetDelayedTarget();
                 }
             }
 
-            _unitToSpawn = null;
             unitSlider.value = 0f;
+        }
+
+        private async Task SetDelayedTarget()
+        {
+            await Task.Delay(1500);
+            
+            _unitManager.FindNewTargetFor(_unitToSpawn);
+            
+            _unitToSpawn = null;
         }
 
         private Vector3 GetUnitPosition(Vector3 worldPos)

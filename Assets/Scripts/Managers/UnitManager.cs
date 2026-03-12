@@ -25,7 +25,7 @@ namespace Managers
         }
 
         [CanBeNull]
-        public BaseUnit SpawnUnit(BaseUnit.UnitTypes unitType, Vector3 spawnPoint, string playerId)
+        public BaseUnit SpawnUnit(BaseUnit.UnitTypes unitType, Vector3 spawnPoint, string playerId, BaseUnit.UnitState startState = BaseUnit.UnitState.Idle)
         {
             var unitPrefab = unitReferences.FirstOrDefault(u => u.UnitType == unitType)?.UnitPrefab;
             if (unitPrefab == null)
@@ -41,15 +41,13 @@ namespace Managers
             if (isPlayerUnit) _playerUnits.Add(unit);
             else _opponentUnits.Add(unit);
             
-            unit.Init(playerId, () => UnRegisterUnit(unit));
+            unit.Init(playerId, startState, () => OnUnitDeath(unit));
             
             return unit;
         }
 
-        public async Task SetDelayedTarget(BaseUnit unit)
+        public void FindNewTargetFor(BaseUnit unit)
         {
-            await Task.Delay(1500);
-
             var isPlayerUnit = unit.PlayerId == Keys.PLAYER_ID;
             var enemyUnits = isPlayerUnit ? _opponentUnits : _playerUnits;
 
@@ -68,11 +66,17 @@ namespace Managers
                 closestEnemy = enemy;
             }
 
-            unit.SetUnitTarget(closestEnemy);
+            if (closestEnemy)
+            {
+                closestEnemy.TargetInfo.AddTargeter(unit);
+                unit.SetUnitTarget(closestEnemy);
+            }
         }
 
         private void UnRegisterUnit(BaseUnit unit)
         {
+            unit.CleanUp();
+            
             if (unit.PlayerId == Keys.PLAYER_ID)
             {
                 if (_playerUnits.Contains(unit))
@@ -91,6 +95,7 @@ namespace Managers
         {
             foreach (var unit in _playerUnits)
             {
+                unit.CleanUp();
                 Destroy(unit.gameObject);
             }
             
@@ -101,6 +106,28 @@ namespace Managers
             
             _playerUnits.Clear();
             _opponentUnits.Clear();
+        }
+
+        private void OnUnitDeath(BaseUnit unit)
+        {
+            UnRegisterUnit(unit);
+
+            foreach (var attacker in unit.TargetInfo.TargetedBy)
+            {
+                if (attacker.IsDefender)
+                {
+                    // keep defending
+                    attacker.ChangeUnitStateTo(BaseUnit.UnitState.Defending);
+                    continue;
+                }
+
+                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead &&
+                                     attacker.UnitCurrentState != BaseUnit.UnitState.Climbing;
+
+                if (canAttackAgain)
+                    FindNewTargetFor(attacker);
+            }
+
         }
     }
 
