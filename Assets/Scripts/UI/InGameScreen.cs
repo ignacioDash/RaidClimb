@@ -4,6 +4,7 @@ using Constants;
 using Input;
 using Managers;
 using Units;
+using Units.UnitTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ namespace UI
         [SerializeField] private float holdFillSpeed = 1f;
 
         private UnitManager _unitManager;
+        private InputManager _inputManager;
         private BaseUnit _unitToSpawn;
         private Camera _cam;
         private Vector3 _lastValidUnitPosition;
@@ -31,15 +33,16 @@ namespace UI
 
             _cam = Camera.main;
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
+            _inputManager = GameManager.Instance.GetManager<InputManager>();
 
-            InputManager.Instance.OnHold += OnHoldInput;
-            InputManager.Instance.OnRelease += OnReleaseInput;
+            _inputManager.OnHold += OnHoldInput;
+            _inputManager.OnRelease += OnReleaseInput;
         }
 
         private void OnDisable()
         {
-            InputManager.Instance.OnHold -= OnHoldInput;
-            InputManager.Instance.OnRelease -= OnReleaseInput;
+            _inputManager.OnHold -= OnHoldInput;
+            _inputManager.OnRelease -= OnReleaseInput;
         }
 
         private void OnHoldInput()

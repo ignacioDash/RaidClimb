@@ -1,6 +1,6 @@
 namespace UI
 {
-    public class GameEndScreen
+    public class GameEndScreen : BaseScreen
     {
         
     }

@@ -4,14 +4,10 @@ using System.Threading.Tasks;
 using Config;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
-namespace Units
+namespace Units.UnitTypes
 {
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Collider))]
-    public abstract class BaseUnit : MonoBehaviour
+    public abstract partial class BaseUnit : MonoBehaviour
     {
         public enum UnitState
         {
@@ -20,7 +16,9 @@ namespace Units
             Climbing, // climbing towards the closest enemy
             Defending, // waiting for a trigger to move/attack
             Attacking, // actively attacking the closest enemy
-            Dead
+            Dead,
+            Won,
+            Lost
         }
 
         public enum UnitTypes
@@ -31,7 +29,9 @@ namespace Units
             Tank,
             Swat,
             Sapper,
-            King
+            King,
+            Defender,
+            // todo: other defender types?
         }
         
         [SerializeField] private UnitState unitCurrentState;
@@ -48,14 +48,14 @@ namespace Units
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         public string PlayerId { get; private set; }
-        public UnitState UnitCurrentState { get; private set; }
         public Collider UnitCollider { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
-        public bool IsDefender { get; private set; }
+        public UnitState UnitCurrentState => unitCurrentState;
+        public bool IsDefender => unitType == UnitTypes.Defender;
 
         // common
+        protected BaseUnit _target;
         private Rigidbody _rigidbody;
-        private BaseUnit _target;
         
         //movement
         private Transform _moveTarget;
@@ -84,13 +84,12 @@ namespace Units
         {
             PlayerId = playerId;
             ChangeUnitStateTo(startState);
-
-            IsDefender = startState == UnitState.Defending;
             
             TargetInfo = new UnitTargetInfo();
             _onUnitDeath += onUnitDeath;
             
-            navMeshAgent.enabled = false;
+            if (navMeshAgent)
+                navMeshAgent.enabled = false;
             
             rangeCollider.Init(this);
             healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
@@ -100,12 +99,11 @@ namespace Units
         {
             _target = target;
             _moveTarget = target.unitTargetController.GetRandomTarget(transform.position);
-
             
             ChangeUnitStateTo(state);
             
-            if (state == UnitState.Moving)
-                navMeshAgent.SetDestination(_moveTarget.transform.position);
+            if (navMeshAgent && navMeshAgent.enabled)
+                navMeshAgent.SetDestination(_moveTarget.position);
         }
 
         public void ChangeUnitStateTo(UnitState newState)
@@ -138,32 +136,53 @@ namespace Units
                     OnClimbWall();
                     break;
                 case UnitState.Defending:
-                    // todo: play idle animation
-                    _ = DelayedKinematicSet(true);
+                    // todo: play defending animation
+                    OnTriggerDefending();
                     break;
                 case UnitState.Attacking:
                     // todo: play attacking animation
+                    OnTriggerAttacking();
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
                     _onUnitDeath?.Invoke();
                     break;
+                case UnitState.Won:
+                    // todo: play victory animation
+                    OnGameEnded();
+                    break;
+                case UnitState.Lost:
+                    // todo: play lose animation
+                    OnGameEnded();
+                    break;
                 default:
                     break;
             }
         }
-
-        private async Task DelayedKinematicSet(bool on)
+        
+        private void OnGameEnded()
         {
-            await Task.Delay(200);
+            if (navMeshAgent)
+            {
+                navMeshAgent.isStopped = true;
+                navMeshAgent.enabled = false;
+            }
 
             if (_rigidbody)
-                _rigidbody.isKinematic = on;
+            {
+                _rigidbody.isKinematic = true;
+                _rigidbody.useGravity = false;
+            }
+            
+            _climbCts?.Cancel();
+            _climbCts?.Dispose();
         }
 
         private void OnStartMovement()
         {
-            _rigidbody.linearVelocity = Vector3.zero;
+            if (!_rigidbody.isKinematic)
+                _rigidbody.linearVelocity = Vector3.zero;
+            
             _rigidbody.freezeRotation = false;
             
             _rigidbody.useGravity = false;
@@ -208,45 +227,6 @@ namespace Units
             navMeshAgent.SetDestination(_moveTarget.transform.position);
         }
         
-        private void HandleMoveToTarget()
-        {
-            if (!_moveTarget)
-                return;
-
-            var position = transform.position;
-            var a = new Vector2(position.x, position.z);
-            var targetPosition = _moveTarget.transform.position;
-            var b = new Vector2(targetPosition.x, targetPosition.z);
-
-            var distance = Vector2.Distance(a, b);
-            
-            if (distance > unitConfig.Range)
-                return;
-            
-            navMeshAgent.velocity = Vector3.zero;
-            navMeshAgent.isStopped = true;
-            ChangeUnitStateTo(UnitState.Attacking);
-        }
-
-        private void HandleAttackTarget()
-        {
-            if (!_moveTarget)
-                return;
-
-            var xDistance = Mathf.Abs(_moveTarget.transform.position.x - transform.position.x);
-
-            if (xDistance > unitConfig.Range)
-            {
-                ChangeUnitStateTo(UnitState.Moving);
-                return;
-            }
-            
-            if (Time.time < _nextAttackTime)
-                return;
-            
-            AttackTarget();
-        }
-        
         private void AttackTarget()
         {
             if (!_target)
@@ -257,81 +237,11 @@ namespace Units
             _target.TakeDamage(unitConfig.Damage);
         }
 
-        private void HandleTargetMovements() // did the target moved more than retarget? if so refresh target's position
-        {
-            if (!_moveTarget || !navMeshAgent.enabled)
-                return;
-
-            _lastTargetPos = _moveTarget.position;
-
-            if (Vector3.Distance(_lastTargetPos, _moveTarget.position) < RETARGET_DISTANCE)
-                return;
-
-            navMeshAgent.SetDestination(_lastTargetPos);
-        }
-
         public void CleanUp()
         {
             _climbCts?.Cancel();
             _climbCts?.Dispose();
             _climbCts = null;
         }
-        
-        #region UNITY
-        
-        private void Update()
-        {
-            HandleTargetMovements();
-            
-            switch (unitCurrentState)
-            {
-                case UnitState.Moving:
-                    HandleMoveToTarget();
-                    break;
-                case UnitState.Attacking:
-                    HandleAttackTarget();
-                    break;
-            }
-        }
-        
-        protected virtual void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("CastleWall") && unitCurrentState == UnitState.Moving)
-            {
-                if (_moveTarget && _moveTarget.transform.position.y > transform.position.y)
-                {
-                    _climbWall = other.GetComponent<Collider>();
-                    
-                    var position = transform.position;
-                    var closestPoint = other.ClosestPoint(position);
-                    _wallNormal = (position - closestPoint).normalized;
-
-                    ChangeUnitStateTo(UnitState.Climbing);
-                }
-            }
-        }
-
-        protected virtual void OnTriggerExit(Collider other)
-        {
-            if (other == _climbWall && unitCurrentState == UnitState.Climbing)
-            {
-                _climbCts?.Cancel();
-                _climbCts?.Dispose();
-                _climbCts = null;
-
-                _rigidbody.isKinematic = false;
-                
-                var velocity = _wallNormal * unitConfig.ClimbSpeed * -2f;
-
-                _rigidbody.linearVelocity = velocity;
-                _rigidbody.useGravity = true;
-
-                _climbWall = null;
-
-                _ = DelayedTarget();
-            }
-        }
-        
-        #endregion
     }
 }

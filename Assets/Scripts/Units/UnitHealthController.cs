@@ -16,6 +16,7 @@ namespace Units
         private UnitBaseConfig _config;
         private Camera _mainCamera;
         
+        public Canvas WorldCanvas => worldCanvas;
         public float UnitHealth { get; private set; }
         
         public void Init(UnitBaseConfig config, Action onDeath)

@@ -1,7 +1,122 @@
+using UnityEngine;
+
 namespace Units.UnitTypes
 {
-    public class BaseUnit_UnitHanlders
+    public abstract partial class BaseUnit
     {
+        private void Update()
+        {
+            HandleTargetMovements();
+            
+            switch (unitCurrentState)
+            {
+                case UnitState.Moving:
+                    HandleMoveToTarget();
+                    break;
+                case UnitState.Attacking:
+                    HandleAttackTarget();
+                    break;
+            }
+        }
         
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("CastleWall") && unitCurrentState == UnitState.Moving)
+            {
+                if (_moveTarget && _moveTarget.transform.position.y > transform.position.y)
+                {
+                    _climbWall = other.GetComponent<Collider>();
+                    
+                    var position = transform.position;
+                    var closestPoint = other.ClosestPoint(position);
+                    _wallNormal = (position - closestPoint).normalized;
+
+                    ChangeUnitStateTo(UnitState.Climbing);
+                }
+            }
+        }
+
+        protected virtual void OnTriggerExit(Collider other)
+        {
+            if (other == _climbWall && unitCurrentState == UnitState.Climbing)
+            {
+                _climbCts?.Cancel();
+                _climbCts?.Dispose();
+                _climbCts = null;
+
+                _rigidbody.isKinematic = false;
+                
+                var velocity = _wallNormal * unitConfig.ClimbSpeed * -2f;
+
+                _rigidbody.linearVelocity = velocity;
+                _rigidbody.useGravity = true;
+
+                _climbWall = null;
+
+                _ = DelayedTarget();
+            }
+        }
+
+        protected virtual void OnTriggerAttacking()
+        {
+            _target.TargetInfo.AddTargeter(this);
+        }
+        
+        protected virtual void OnTriggerDefending()
+        {
+            
+        }
+                
+        protected virtual void HandleMoveToTarget()
+        {
+            if (!_target)
+                return;
+
+            var position = transform.position;
+            var a = new Vector2(position.x, position.z);
+            var targetPosition = _target.transform.position;
+            var b = new Vector2(targetPosition.x, targetPosition.z);
+
+            var distance = Vector2.Distance(a, b);
+            
+            if (distance > unitConfig.Range)
+                return;
+            
+            navMeshAgent.velocity = Vector3.zero;
+            navMeshAgent.isStopped = true;
+            ChangeUnitStateTo(UnitState.Attacking);
+        }
+
+        protected virtual void HandleAttackTarget()
+        {
+            if (!_target)
+                return;
+
+            var xDistance = Mathf.Abs(_target.transform.position.x - transform.position.x);
+
+            if (xDistance > unitConfig.Range)
+            {
+                ChangeUnitStateTo(IsDefender ? UnitState.Defending : UnitState.Moving);
+                return;
+            }
+            
+            if (Time.time < _nextAttackTime)
+                return;
+            
+            AttackTarget();
+        }
+
+        protected virtual void HandleTargetMovements() // did the target moved more than retarget? if so refresh target's position
+        {
+            if (!_moveTarget || !navMeshAgent.enabled)
+                return;
+
+            _lastTargetPos = _moveTarget.position;
+
+            if (Vector3.Distance(_lastTargetPos, _moveTarget.position) < RETARGET_DISTANCE)
+                return;
+
+            navMeshAgent.SetDestination(_lastTargetPos);
+        }
     }
 }

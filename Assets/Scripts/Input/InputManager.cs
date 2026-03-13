@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input
 {
-    public class InputManager : MonoBehaviour
+    public class InputManager : MonoBehaviour, IManager
     {
         private enum InputState
         {
@@ -30,29 +32,33 @@ namespace Input
 
         private GameObject _holdPreviewInstance;
         private Collider[] _pathColliders;
+        private GameStateManager _gameStateManager;
         
-        public static InputManager Instance { get; private set; }
-
         public Action OnHold;
         public Action<Vector3> OnRelease;
-
-        private void Awake()
+        
+        public async Task Init(object[] args)
         {
-            if (Instance != null && Instance != this)
-                Destroy(Instance);
-
-            Instance = this;
-            
             _cam = Camera.main;
 
             _pathColliders = GameObject
                 .FindGameObjectsWithTag("Path")
                 .Select(o => o.GetComponent<Collider>())
                 .ToArray();
+
+            _gameStateManager = GameManager.Instance.GetManager<GameStateManager>();
+        }
+
+        public void Cleanup()
+        {
+            
         }
 
         private void Update()
         {
+            if (_gameStateManager.CurrentState != GameStateManager.GameState.InGame)
+                return;
+            
             if (Pointer.current == null) return;
 
             if (Pointer.current.press.wasPressedThisFrame)
@@ -158,6 +164,7 @@ namespace Input
                 _holdPreviewInstance = Instantiate(holdPreviewPrefab, worldPos, Quaternion.identity);
 
             _lastValidDropPosition = canDrop ? worldPos : _lastValidDropPosition;
+            _lastValidDropPosition += Vector3.up * 0.1f; // avoid ground clipping
             _holdPreviewInstance.transform.position = _lastValidDropPosition;
             
             OnHold?.Invoke();

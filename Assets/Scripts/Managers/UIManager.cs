@@ -16,7 +16,8 @@ namespace Managers
             SettingsScreen,
             LeaderboardScreen,
             CollectionScreen,
-            TowerScreen
+            TowerScreen,
+            GameEndScreen
         }
         
         [SerializeField] private MainScreenUI mainScreen;
@@ -25,6 +26,7 @@ namespace Managers
         [SerializeField] private LeaderboardScreen leaderboardScreen;
         [SerializeField] private CollectionScreen collectionScreen;
         [SerializeField] private TowerScreen towerScreen;
+        [SerializeField] private GameEndScreen gameEndScreen;
 
         private readonly Dictionary<Screens, BaseScreen> _screensDictionary = new();
 
@@ -40,6 +42,7 @@ namespace Managers
             leaderboardScreen.gameObject.SetActive(false);
             collectionScreen.gameObject.SetActive(false);
             towerScreen.gameObject.SetActive(false);
+            gameEndScreen.gameObject.SetActive(false);
             
             _screensDictionary.Add(Screens.MainScreen, mainScreen);
             _screensDictionary.Add(Screens.InGameScreen, inGameScreen);
@@ -47,6 +50,7 @@ namespace Managers
             _screensDictionary.Add(Screens.LeaderboardScreen, leaderboardScreen);
             _screensDictionary.Add(Screens.CollectionScreen, collectionScreen);
             _screensDictionary.Add(Screens.TowerScreen, towerScreen);
+            _screensDictionary.Add(Screens.GameEndScreen, gameEndScreen);
         }
 
         public async Task NavigateTo(Screens targetScreen, bool asPopUp = false)

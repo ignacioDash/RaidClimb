@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Constants;
 using JetBrains.Annotations;
-using Units;
+using Units.UnitTypes;
 using UnityEngine;
 
 namespace Managers
@@ -24,6 +24,21 @@ namespace Managers
             
         }
 
+        public void OnGameEnded(string winnerId)
+        {
+            var playerWon = winnerId == Keys.PLAYER_ID;
+            
+            foreach (var unit in _playerUnits)
+            {
+                unit.ChangeUnitStateTo(playerWon ? BaseUnit.UnitState.Won : BaseUnit.UnitState.Lost);
+            }
+
+            foreach (var unit in _opponentUnits)
+            {
+                unit.ChangeUnitStateTo(!playerWon ? BaseUnit.UnitState.Won : BaseUnit.UnitState.Lost);
+            }
+        }
+
         [CanBeNull]
         public BaseUnit SpawnUnit(BaseUnit.UnitTypes unitType, Vector3 spawnPoint, string playerId, BaseUnit.UnitState startState = BaseUnit.UnitState.Idle)
         {
@@ -37,6 +52,15 @@ namespace Managers
             var isPlayerUnit = playerId == Keys.PLAYER_ID;
             var unit = Instantiate(unitPrefab, spawnPoint,
                 isPlayerUnit ? Quaternion.identity : Quaternion.Euler(new Vector3(0, 180, 0)), unitsContainer);
+            
+            var unitRenderer = unit.GetComponent<Renderer>();
+            if (unitRenderer)
+            {
+                var transform1 = unit.transform;
+                var pos = transform1.position;
+                pos.y += unitRenderer.bounds.extents.y;
+                transform1.position = pos;
+            }
             
             if (isPlayerUnit) _playerUnits.Add(unit);
             else _opponentUnits.Add(unit);
@@ -56,7 +80,7 @@ namespace Managers
 
             foreach (var enemy in enemyUnits)
             {
-                if (!enemy) continue;
+                if (!enemy || !unit) continue;
 
                 var distance = (enemy.transform.position - unit.transform.position).sqrMagnitude;
                 if (!(distance < closestDistance))
@@ -69,7 +93,12 @@ namespace Managers
             if (closestEnemy)
             {
                 closestEnemy.TargetInfo.AddTargeter(unit);
-                unit.SetUnitTarget(closestEnemy);
+                
+                var newState = unit.UnitCurrentState == BaseUnit.UnitState.Climbing
+                    ? BaseUnit.UnitState.Climbing
+                    : BaseUnit.UnitState.Moving;
+                
+                unit.SetUnitTarget(closestEnemy, newState);
             }
         }
 
@@ -121,8 +150,7 @@ namespace Managers
                     continue;
                 }
 
-                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead &&
-                                     attacker.UnitCurrentState != BaseUnit.UnitState.Climbing;
+                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead;
 
                 if (canAttackAgain)
                     FindNewTargetFor(attacker);

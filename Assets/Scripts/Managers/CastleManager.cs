@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Units;
+using Units.UnitTypes;
 using UnityEngine;
 
 namespace Managers

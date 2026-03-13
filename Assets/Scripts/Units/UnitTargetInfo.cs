@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Units.UnitTypes;
 
 namespace Units
 {
@@ -13,7 +14,8 @@ namespace Units
 
         public void RemoveTargeter(BaseUnit unit)
         {
-            TargetedBy.Remove(unit);
+            if (TargetedBy.Contains(unit))
+                TargetedBy.Remove(unit);
         }
     }
 }

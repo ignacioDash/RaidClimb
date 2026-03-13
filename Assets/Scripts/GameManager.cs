@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castles;
+using Input;
 using Managers;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private UIManager uiManager;
     [SerializeField] private UnitManager unitManager;
+    [SerializeField] private InputManager inputManager;
     [SerializeField] private CastleManager playerCastle, opponentCastle;
 
     private GameStateManager _gameStateManager;
@@ -43,9 +45,21 @@ public class GameManager : MonoBehaviour
     {
         await uiManager.NavigateTo(UIManager.Screens.InGameScreen);
 
+        // todo: check user level
         ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
         
+        
         _gameStateManager.StartGame();
+    }
+
+    // game end
+    public async Task GameEnded(string winnerId)
+    {
+        // await selfie animation, camera closeup
+
+        unitManager.OnGameEnded(winnerId);
+        
+        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen);
     }
 
     // user leaves / finishes the game
@@ -67,6 +81,7 @@ public class GameManager : MonoBehaviour
         _managers.Add(typeof(GameStateManager), _gameStateManager);
         _managers.Add(typeof(PlayerCastleManager), playerCastle);
         _managers.Add(typeof(OpponentCastleManager), opponentCastle);
+        _managers.Add(typeof(InputManager), inputManager);
         
         await _dataManager.Init(null);
 
@@ -76,7 +91,8 @@ public class GameManager : MonoBehaviour
             unitManager.Init(null),
             _gameStateManager.Init(null),
             playerCastle.Init(null),
-            opponentCastle.Init(null)
+            opponentCastle.Init(null),
+            inputManager.Init(null)
         };
 
         await Task.WhenAll(managersInit);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Data;
 using Units;
+using Units.UnitTypes;
 
 namespace Castles
 {
@@ -16,9 +17,9 @@ namespace Castles
                         CastleLevel = 1,
                         CastleSlots = new List<CastleSlot>
                         {
-                            new() { SlotNumber = 2, SlotUnit = BaseUnit.UnitTypes.Melee },
-                            new() { SlotNumber = 3, SlotUnit = BaseUnit.UnitTypes.Melee },
-                            new() { SlotNumber = 5, SlotUnit = BaseUnit.UnitTypes.Melee },
+                            new() { SlotNumber = 2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotNumber = 3, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotNumber = 5, SlotUnit = BaseUnit.UnitTypes.King },
                         }
                     };
                 default:

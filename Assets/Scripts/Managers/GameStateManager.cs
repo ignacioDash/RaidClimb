@@ -11,21 +11,26 @@ namespace Managers
             GameEnded,
         }
 
-        private GameState _currentState;
+        public GameState CurrentState { get; private set; }
 
         public void StartGame()
         {
-            _currentState = GameState.InGame;
+            CurrentState = GameState.InGame;
+        }
+
+        public void FinishGame()
+        {
+            
         }
         
         public async Task Init(object[] args)
         {
-            _currentState = GameState.NotStarted;
+            CurrentState = GameState.NotStarted;
         }
 
         public void Cleanup()
         {
-            _currentState = GameState.NotStarted;
+            CurrentState = GameState.NotStarted;
         }
     }
 }
