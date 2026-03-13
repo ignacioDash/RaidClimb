@@ -96,14 +96,16 @@ namespace Units
             healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
         }
 
-        public void SetUnitTarget(BaseUnit target)
+        public void SetUnitTarget(BaseUnit target, UnitState state)
         {
             _target = target;
             _moveTarget = target.unitTargetController.GetRandomTarget(transform.position);
 
-            ChangeUnitStateTo(UnitState.Moving);
             
-            navMeshAgent.SetDestination(_moveTarget.transform.position);
+            ChangeUnitStateTo(state);
+            
+            if (state == UnitState.Moving)
+                navMeshAgent.SetDestination(_moveTarget.transform.position);
         }
 
         public void ChangeUnitStateTo(UnitState newState)
@@ -141,7 +143,6 @@ namespace Units
                     break;
                 case UnitState.Attacking:
                     // todo: play attacking animation
-                    _ = DelayedKinematicSet(true);
                     break;
                 case UnitState.Dead:
                     // todo: await play death animation
