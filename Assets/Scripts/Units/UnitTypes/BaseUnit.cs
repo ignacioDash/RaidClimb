@@ -51,6 +51,7 @@ namespace Units.UnitTypes
         public Collider UnitCollider { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
         public UnitState UnitCurrentState => unitCurrentState;
+        public UnitTypes UnitType => unitType;
         public bool IsDefender => unitType == UnitTypes.Defender;
 
         // common
@@ -99,6 +100,9 @@ namespace Units.UnitTypes
         {
             _target = target;
             _moveTarget = target.unitTargetController.GetRandomTarget(transform.position);
+
+            if (_target.unitType == UnitTypes.King)
+                state = UnitState.Moving;
             
             ChangeUnitStateTo(state);
             
@@ -162,7 +166,7 @@ namespace Units.UnitTypes
         
         private void OnGameEnded()
         {
-            if (navMeshAgent)
+            if (navMeshAgent && navMeshAgent.enabled)
             {
                 navMeshAgent.isStopped = true;
                 navMeshAgent.enabled = false;

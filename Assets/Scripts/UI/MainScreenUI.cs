@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI
 
         protected override void OnEnable()
         {
+            SetButtons(false);
             base.OnEnable();
             
             _uiManager = GameManager.Instance.GetManager<UIManager>();
@@ -32,36 +34,51 @@ namespace UI
             towerButton.onClick.RemoveListener(OnTowerButton);
         }
 
+        public override async Task OpenScreen(object[] args)
+        {
+            await base.OpenScreen(args);
+            
+            SetButtons(true);
+        }
+
         private async void OnPlayButton()
         {
-            playButton.interactable = false;
-
+            SetButtons(false);
             await GameManager.Instance.StartGame();
         }
 
         private async void OnSettingsButton()
         {
-            settingsButton.interactable = false;
+            SetButtons(false);
             await _uiManager.NavigateTo(UIManager.Screens.SettingsScreen, true);
-            settingsButton.interactable = true;
+            SetButtons(true);
         }
 
         private async void OnLeaderboardButton()
         {
-            leaderboardButton.interactable = false;
+            SetButtons(false);
             await _uiManager.NavigateTo(UIManager.Screens.LeaderboardScreen);
         }
 
         private async void OnCollectionButton()
         {
-            collectionButton.interactable = false;
+            SetButtons(false);
             await _uiManager.NavigateTo(UIManager.Screens.CollectionScreen);
         }
 
         private async void OnTowerButton()
         {
-            towerButton.interactable = false;
+            SetButtons(false);
             await _uiManager.NavigateTo(UIManager.Screens.TowerScreen);
+        }
+
+        private void SetButtons(bool on)
+        {
+            towerButton.interactable = on;
+            collectionButton.interactable = on;
+            leaderboardButton.interactable = on;
+            settingsButton.interactable = on;
+            playButton.interactable = on;
         }
     }
 }

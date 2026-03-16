@@ -69,7 +69,7 @@ namespace Units.UnitTypes
                 
         protected virtual void HandleMoveToTarget()
         {
-            if (!_target)
+            if (!_target || _target.unitType == UnitTypes.King)
                 return;
 
             var position = transform.position;

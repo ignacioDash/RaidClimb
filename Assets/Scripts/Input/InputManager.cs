@@ -37,6 +37,8 @@ namespace Input
         public Action OnHold;
         public Action<Vector3> OnRelease;
         
+        public bool Inited { get; private set; }
+        
         public async Task Init(object[] args)
         {
             _cam = Camera.main;
@@ -47,6 +49,8 @@ namespace Input
                 .ToArray();
 
             _gameStateManager = GameManager.Instance.GetManager<GameStateManager>();
+
+            Inited = true;
         }
 
         public void Cleanup()
@@ -56,7 +60,10 @@ namespace Input
 
         private void Update()
         {
-            if (_gameStateManager.CurrentState != GameStateManager.GameState.InGame)
+            if (!Inited)
+                return;
+            
+            if (_gameStateManager?.CurrentState != GameStateManager.GameState.InGame)
                 return;
             
             if (Pointer.current == null) return;

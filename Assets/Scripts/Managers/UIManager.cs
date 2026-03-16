@@ -53,7 +53,7 @@ namespace Managers
             _screensDictionary.Add(Screens.GameEndScreen, gameEndScreen);
         }
 
-        public async Task NavigateTo(Screens targetScreen, bool asPopUp = false)
+        public async Task NavigateTo(Screens targetScreen, bool asPopUp = false, object[] args = null)
         {
             var transitions = new List<Task>();
             Action onCompleted = null;
@@ -73,7 +73,7 @@ namespace Managers
             if (hasNext)
             {
                 nextScreen.gameObject.SetActive(true);
-                var fadeIn = nextScreen.OpenScreen();
+                var fadeIn = nextScreen.OpenScreen(args);
                 transitions.Add(fadeIn);
 
                 _currentScreen = targetScreen;

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
   m_Name: RangedUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
-  health: 5
-  damage: 2
-  range: 5
-  movementSpeed: 1
+  health: 65
+  damage: 22
+  range: 3.5
+  movementSpeed: 2
   climbSpeed: 1
-  attackSpeed: 3
+  attackSpeed: 1

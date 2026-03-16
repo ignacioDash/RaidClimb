@@ -80,7 +80,11 @@ namespace Managers
 
             foreach (var enemy in enemyUnits)
             {
-                if (!enemy || !unit) continue;
+                if (!enemy || !unit)
+                    continue;
+
+                if (!enemy.IsDefender && enemy.UnitType != BaseUnit.UnitTypes.King)
+                    continue;
 
                 var distance = (enemy.transform.position - unit.transform.position).sqrMagnitude;
                 if (!(distance < closestDistance))

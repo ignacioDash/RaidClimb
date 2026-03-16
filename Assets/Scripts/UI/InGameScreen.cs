@@ -1,9 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using Constants;
 using Input;
 using Managers;
-using Units;
 using Units.UnitTypes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +11,8 @@ namespace UI
     public class InGameScreen : BaseScreen
     {
         [SerializeField] private Slider unitSlider;
+        [SerializeField] private Button pauseButton, unPauseButton, exitButton;
+        [SerializeField] private GameObject pauseMenu;
         
         [Header("Settings")]
         [SerializeField] private float holdFillSpeed = 1f;
@@ -25,7 +25,7 @@ namespace UI
 
         private const float MIN_Y_HEIGHT = 7f;
 
-        protected override void OnEnable()
+        protected override async void OnEnable()
         {
             base.OnEnable();
 
@@ -37,12 +37,50 @@ namespace UI
 
             _inputManager.OnHold += OnHoldInput;
             _inputManager.OnRelease += OnReleaseInput;
+
+            pauseButton.onClick.AddListener(OnPaused);
+            unPauseButton.onClick.AddListener(OnUnPause);
+            exitButton.onClick.AddListener(OnExitButton);
+
+            pauseMenu.gameObject.SetActive(false);
+            SetButtons(true);
         }
 
         private void OnDisable()
         {
             _inputManager.OnHold -= OnHoldInput;
             _inputManager.OnRelease -= OnReleaseInput;
+            
+            pauseButton.onClick.RemoveListener(OnPaused);
+            unPauseButton.onClick.RemoveListener(OnUnPause);
+            exitButton.onClick.RemoveListener(OnExitButton);
+        }
+
+        private void SetButtons(bool on)
+        {
+            pauseButton.interactable = on;
+            unPauseButton.interactable = on;
+            exitButton.interactable = on;
+        }
+
+        private async void OnExitButton()
+        {
+            SetButtons(false);
+            await GameManager.Instance.FinishGame();
+        }
+
+        private void OnUnPause()
+        {
+            pauseMenu.SetActive(false);
+
+            Time.timeScale = 1;
+        }
+
+        private void OnPaused()
+        {
+            Time.timeScale = 0;
+
+            pauseMenu.SetActive(true);
         }
 
         private void OnHoldInput()

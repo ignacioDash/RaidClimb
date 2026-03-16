@@ -17,7 +17,7 @@ namespace UI
             _canvasGroup.alpha = 0;
         }
 
-        public virtual Task OpenScreen()
+        public virtual Task OpenScreen(object[] args)
         {
             return _canvasGroup.FadeCanvasGroup(1, fadeDuration);
         }

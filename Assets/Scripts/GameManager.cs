@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castles;
+using Constants;
 using Input;
 using Managers;
 using UnityEngine;
@@ -48,7 +49,6 @@ public class GameManager : MonoBehaviour
         // todo: check user level
         ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
         
-        
         _gameStateManager.StartGame();
     }
 
@@ -58,8 +58,10 @@ public class GameManager : MonoBehaviour
         // await selfie animation, camera closeup
 
         unitManager.OnGameEnded(winnerId);
-        
-        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen);
+
+        var playerWon = winnerId == Keys.PLAYER_ID;
+
+        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon });
     }
 
     // user leaves / finishes the game
