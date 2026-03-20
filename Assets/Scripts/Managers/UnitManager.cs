@@ -50,8 +50,11 @@ namespace Managers
             }
 
             var isPlayerUnit = playerId == Keys.PLAYER_ID;
-            var unit = Instantiate(unitPrefab, spawnPoint,
-                isPlayerUnit ? Quaternion.identity : Quaternion.Euler(new Vector3(0, 180, 0)), unitsContainer);
+            var unitRotation = isPlayerUnit
+                ? Quaternion.Euler(new Vector3(0, -90, 0))
+                : Quaternion.Euler(new Vector3(0, 90, 0));
+            
+            var unit = Instantiate(unitPrefab, spawnPoint, unitRotation, unitsContainer);
             
             var unitRenderer = unit.GetComponent<Renderer>();
             if (unitRenderer)
@@ -131,12 +134,13 @@ namespace Managers
                 unit.CleanUp();
                 Destroy(unit.gameObject);
             }
-            
+
             foreach (var unit in _opponentUnits)
             {
+                unit.CleanUp();
                 Destroy(unit.gameObject);
             }
-            
+
             _playerUnits.Clear();
             _opponentUnits.Clear();
         }

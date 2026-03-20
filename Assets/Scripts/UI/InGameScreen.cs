@@ -10,7 +10,7 @@ namespace UI
 {
     public class InGameScreen : BaseScreen
     {
-        [SerializeField] private Slider unitSlider;
+        [SerializeField] private Slider unitSlider1;
         [SerializeField] private Button pauseButton, unPauseButton, exitButton;
         [SerializeField] private GameObject pauseMenu;
         
@@ -20,7 +20,6 @@ namespace UI
         private UnitManager _unitManager;
         private InputManager _inputManager;
         private BaseUnit _unitToSpawn;
-        private Camera _cam;
         private Vector3 _lastValidUnitPosition;
 
         private const float MIN_Y_HEIGHT = 7f;
@@ -29,9 +28,8 @@ namespace UI
         {
             base.OnEnable();
 
-            unitSlider.value = 0;
+            unitSlider1.value = 0;
 
-            _cam = Camera.main;
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
             _inputManager = GameManager.Instance.GetManager<InputManager>();
 
@@ -65,7 +63,10 @@ namespace UI
 
         private async void OnExitButton()
         {
+            Time.timeScale = 1;
+            
             SetButtons(false);
+            
             await GameManager.Instance.FinishGame();
         }
 
@@ -85,12 +86,12 @@ namespace UI
 
         private void OnHoldInput()
         {
-            unitSlider.value = Mathf.MoveTowards(unitSlider.value, 1f, holdFillSpeed * Time.deltaTime);
+            unitSlider1.value = Mathf.MoveTowards(unitSlider1.value, 1f, holdFillSpeed * Time.deltaTime);
         }
 
         private void OnReleaseInput(Vector3 worldPos)
         {
-            if (unitSlider.value >= 1) // todo: change with ranges
+            if (unitSlider1.value >= 1) // todo: change with ranges
             {
                 var unitPosition = GetUnitPosition(worldPos);
                 _unitToSpawn = _unitManager.SpawnUnit(BaseUnit.UnitTypes.Melee, unitPosition, Keys.PLAYER_ID);
@@ -102,7 +103,7 @@ namespace UI
                 }
             }
 
-            unitSlider.value = 0f;
+            unitSlider1.value = 0f;
         }
 
         private async Task SetDelayedTarget()

@@ -7,11 +7,10 @@ namespace Units
     public class UnitTargetController : MonoBehaviour
     {
         [SerializeField] private List<Transform> targets;
+        [SerializeField] private float radius = 2;
 
         private readonly HashSet<Transform> _usedTargets = new();
-
-        private const float RADIUS = 0.5f;
-
+        
         private void OnEnable()
         {
             var count = targets.Count;
@@ -24,7 +23,7 @@ namespace Units
                     Mathf.Cos(angle),
                     0f,
                     Mathf.Sin(angle)
-                ) * RADIUS;
+                ) * radius;
 
                 targets[i].position = transform.position + offset;
             }

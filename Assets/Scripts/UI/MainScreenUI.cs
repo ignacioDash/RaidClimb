@@ -69,7 +69,12 @@ namespace UI
         private async void OnTowerButton()
         {
             SetButtons(false);
-            await _uiManager.NavigateTo(UIManager.Screens.TowerScreen);
+            var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
+                .SetCameraAt(CameraManager.CameraPosition.Castle);
+            
+            var screenTransition = _uiManager.NavigateTo(UIManager.Screens.TowerScreen);
+
+            await Task.WhenAll(cameraTransition, screenTransition);
         }
 
         private void SetButtons(bool on)

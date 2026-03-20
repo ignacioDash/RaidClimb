@@ -4,6 +4,9 @@ namespace Units.UnitTypes
 {
     public abstract partial class BaseUnit
     {
+        private float _lastClimbTime;
+        private const float CLIMB_CD = 1f;
+        
         private void Update()
         {
             HandleTargetMovements();
@@ -25,6 +28,11 @@ namespace Units.UnitTypes
             {
                 if (_moveTarget && _moveTarget.transform.position.y > transform.position.y)
                 {
+                    if (Time.time - _lastClimbTime < CLIMB_CD)
+                        return;
+
+                    _lastClimbTime = Time.time;
+                    
                     _climbWall = other.GetComponent<Collider>();
                     
                     var position = transform.position;
@@ -69,12 +77,12 @@ namespace Units.UnitTypes
                 
         protected virtual void HandleMoveToTarget()
         {
-            if (!_target || _target.unitType == UnitTypes.King)
+            if (!_moveTarget || _target.unitType == UnitTypes.King)
                 return;
 
             var position = transform.position;
             var a = new Vector2(position.x, position.z);
-            var targetPosition = _target.transform.position;
+            var targetPosition = _moveTarget.position;
             var b = new Vector2(targetPosition.x, targetPosition.z);
 
             var distance = Vector2.Distance(a, b);
@@ -89,10 +97,12 @@ namespace Units.UnitTypes
 
         protected virtual void HandleAttackTarget()
         {
-            if (!_target)
+            var target = _moveTarget ? _moveTarget : _target ? _target.transform : null;
+            
+            if (!target)
                 return;
 
-            var xDistance = Mathf.Abs(_target.transform.position.x - transform.position.x);
+            var xDistance = Mathf.Abs(target.transform.position.x - transform.position.x);
 
             if (xDistance > unitConfig.Range)
             {

@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private UIManager uiManager;
     [SerializeField] private UnitManager unitManager;
+    [SerializeField] private TrapsManager trapsManager;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private CameraManager cameraManager;
     [SerializeField] private CastleManager playerCastle, opponentCastle;
 
     private GameStateManager _gameStateManager;
@@ -44,7 +46,10 @@ public class GameManager : MonoBehaviour
     // user presses play button
     public async Task StartGame()
     {
-        await uiManager.NavigateTo(UIManager.Screens.InGameScreen);
+        var cameraAnimation = cameraManager.SetCameraAt(CameraManager.CameraPosition.Play);
+        var screenChange = uiManager.NavigateTo(UIManager.Screens.InGameScreen);
+
+        await Task.WhenAll(cameraAnimation, screenChange);
 
         // todo: check user level
         ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
@@ -55,11 +60,16 @@ public class GameManager : MonoBehaviour
     // game end
     public async Task GameEnded(string winnerId)
     {
-        // await selfie animation, camera closeup
+        var playerWon = winnerId == Keys.PLAYER_ID;
+
+        // todo: selfie anim, here or at king unit?
+        
+        var cameraAnimation =
+            cameraManager.SetCameraAt(playerWon ? CameraManager.CameraPosition.Win : CameraManager.CameraPosition.Lose);
+
+        await Task.WhenAll(cameraAnimation);
 
         unitManager.OnGameEnded(winnerId);
-
-        var playerWon = winnerId == Keys.PLAYER_ID;
 
         await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon });
     }
@@ -67,7 +77,10 @@ public class GameManager : MonoBehaviour
     // user leaves / finishes the game
     public async Task FinishGame()
     {
-        await uiManager.NavigateTo(UIManager.Screens.MainScreen);
+        var cameraAnimation = cameraManager.SetCameraAt(CameraManager.CameraPosition.Default);
+        var screenChange = uiManager.NavigateTo(UIManager.Screens.MainScreen);
+
+        await Task.WhenAll(cameraAnimation, screenChange);
         
         CleanUp();
     }
@@ -84,6 +97,8 @@ public class GameManager : MonoBehaviour
         _managers.Add(typeof(PlayerCastleManager), playerCastle);
         _managers.Add(typeof(OpponentCastleManager), opponentCastle);
         _managers.Add(typeof(InputManager), inputManager);
+        _managers.Add(typeof(TrapsManager), trapsManager);
+        _managers.Add(typeof(CameraManager), cameraManager);
         
         await _dataManager.Init(null);
 
@@ -94,7 +109,9 @@ public class GameManager : MonoBehaviour
             _gameStateManager.Init(null),
             playerCastle.Init(null),
             opponentCastle.Init(null),
-            inputManager.Init(null)
+            inputManager.Init(null),
+            trapsManager.Init(null),
+            cameraManager.Init(null),
         };
 
         await Task.WhenAll(managersInit);

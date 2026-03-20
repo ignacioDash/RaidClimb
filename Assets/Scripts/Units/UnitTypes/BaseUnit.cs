@@ -39,7 +39,7 @@ namespace Units.UnitTypes
         [Header("Settings")]
         [SerializeField] protected UnitTypes unitType;
         [SerializeField] protected UnitBaseConfig unitConfig;
-        
+
         [Header("References")]
         [SerializeField] protected UnitRangeCollider rangeCollider;
         [SerializeField] protected UnitHealthController healthController;
@@ -48,7 +48,6 @@ namespace Units.UnitTypes
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         public string PlayerId { get; private set; }
-        public Collider UnitCollider { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
         public UnitState UnitCurrentState => unitCurrentState;
         public UnitTypes UnitType => unitType;
@@ -78,7 +77,6 @@ namespace Units.UnitTypes
         private void OnEnable()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            UnitCollider = GetComponent<Collider>();
         }
 
         public virtual void Init(string playerId, UnitState startState, Action onUnitDeath)
@@ -119,7 +117,7 @@ namespace Units.UnitTypes
             OnStateChanged();
         }
 
-        private void TakeDamage(float damage)
+        public void TakeDamage(float damage)
         {
             healthController.OnUnitHealthChanged(-damage);
         }
@@ -231,7 +229,7 @@ namespace Units.UnitTypes
             navMeshAgent.SetDestination(_moveTarget.transform.position);
         }
         
-        private void AttackTarget()
+        protected void AttackTarget()
         {
             if (!_target)
                 return;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Units;
+using Units.Traps;
 using Units.UnitTypes;
 using UnityEngine;
 
@@ -32,19 +32,30 @@ namespace Managers
                 return;
 
             var unitManager = GameManager.Instance.GetManager<UnitManager>();
+            var trapsManager = GameManager.Instance.GetManager<TrapsManager>();
 
             foreach (var slot in _castleData.CastleSlots)
             {
-                var spawnPosition = castleSlots.FirstOrDefault(s => s.SlotNumber == slot.SlotNumber);
+                var spawnPosition = castleSlots.FirstOrDefault(s => s.SlotId == slot.SlotId);
                 if (spawnPosition == null)
                     continue;
-
-                var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId,
-                    BaseUnit.UnitState.Defending);
-                if (!unit)
-                    continue;
                 
-                unit.ChangeUnitStateTo(BaseUnit.UnitState.Defending);
+                if (slot.SlotUnit != BaseUnit.UnitTypes.None)
+                {
+                    var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId,
+                        BaseUnit.UnitState.Defending);
+
+                    if (!unit) continue;
+
+                    unit.ChangeUnitStateTo(BaseUnit.UnitState.Defending);
+                }
+                else if (slot.SlotTrap != BaseTrap.TrapTypes.None)
+                {
+                    var trap = trapsManager.SpawnTrap(slot.SlotTrap, spawnPosition.SlotPosition, _playerId);
+
+                    if (!trap) continue;
+                    
+                }
             }
         }
     }
@@ -52,10 +63,10 @@ namespace Managers
     [Serializable]
     public class CastleSlotReference
     {
-        [SerializeField] private int slotNumber;
+        [SerializeField] private CastleSlotId slotId;
         [SerializeField] private Transform slotPosition;
 
-        public int SlotNumber => slotNumber;
+        public CastleSlotId SlotId => slotId;
         public Transform SlotPosition => slotPosition;
     }
 }

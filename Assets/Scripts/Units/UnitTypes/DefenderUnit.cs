@@ -48,7 +48,7 @@ namespace Units.UnitTypes
         {
             if (other.CompareTag("Unit"))
             {
-                var entryUnit = other.GetComponent<BaseUnit>();
+                var entryUnit = other.GetComponentInParent<BaseUnit>();
                 if (entryUnit && entryUnit.PlayerId != PlayerId)
                 {
                     if (_target == null && UnitCurrentState == UnitState.Defending)

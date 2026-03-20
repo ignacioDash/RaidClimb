@@ -1,7 +1,40 @@
+using System;
+using System.Threading.Tasks;
+using Managers;
+using UnityEngine;
+using UnityEngine.UI;
+
 namespace UI
 {
     public class TowerScreen : BaseScreen
     {
+        [SerializeField] private Button exitButton;
         
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            exitButton.onClick.AddListener(OnExit);
+
+            exitButton.interactable = true;
+        }
+
+        private void OnDisable()
+        {
+            exitButton.onClick.RemoveListener(OnExit);
+        }
+
+        private async void OnExit()
+        {
+            exitButton.interactable = false;
+
+            var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
+                .SetCameraAt(CameraManager.CameraPosition.Default);
+
+            var screenTransition =
+                GameManager.Instance.GetManager<UIManager>().NavigateTo(UIManager.Screens.MainScreen);
+
+            await Task.WhenAll(cameraTransition, screenTransition);
+        }
     }
 }

@@ -16,5 +16,5 @@ MonoBehaviour:
   damage: 22
   range: 3.5
   movementSpeed: 2
-  climbSpeed: 1
+  climbSpeed: 0.7
   attackSpeed: 1
