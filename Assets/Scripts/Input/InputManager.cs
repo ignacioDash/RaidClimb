@@ -20,13 +20,13 @@ namespace Input
         [SerializeField] private GameObject holdPreviewPrefab;
 
         [SerializeField] private float sensitivity = 0.02f;
-        [SerializeField] private float minX;
-        [SerializeField] private float maxX;
+        [SerializeField] private float minX, minZ;
+        [SerializeField] private float maxX, maxZ;
         [SerializeField] private float dragThreshold = 10f;
         [SerializeField] private float holdDelay = 0.5f;
         
         private InputState _state;
-        private float _pressTime, _startX, _lastX;
+        private float _pressTime, _startX, _startY, _lastX, _lastY;
         private Camera _cam;
         private Vector3 _lastValidDropPosition;
 
@@ -71,7 +71,9 @@ namespace Input
             if (Pointer.current.press.wasPressedThisFrame)
             {
                 _startX = Pointer.current.position.ReadValue().x;
+                _startY = Pointer.current.position.ReadValue().y;
                 _lastX = _startX;
+                _lastY = _startY;
                 _pressTime = Time.time;
                 _state = InputState.Pressed;
             }
@@ -80,6 +82,7 @@ namespace Input
             {
                 var pointerPos = Pointer.current.position.ReadValue();
                 var currentX = pointerPos.x;
+                var currentY = pointerPos.y;
                 var deltaFromStart = Mathf.Abs(currentX - _startX);
 
                 switch (_state)
@@ -89,6 +92,7 @@ namespace Input
                         {
                             _state = InputState.Dragging;
                             _lastX = currentX;
+                            _lastY = currentY;
                         }
                         else if (Time.time - _pressTime >= holdDelay)
                         {
@@ -100,8 +104,12 @@ namespace Input
                     case InputState.Dragging:
                     {
                         var deltaX = currentX - _lastX;
+                        var deltaY = currentY - _lastY;
+
                         _lastX = currentX;
-                        MoveCamera(deltaX);
+                        _lastY = currentY;
+
+                        MoveCamera(deltaX, deltaY);
                         break;
                     }
 
@@ -157,11 +165,16 @@ namespace Input
             return (closestPoint, false);
         }
 
-        private void MoveCamera(float deltaX)
+        private void MoveCamera(float deltaX, float deltaY)
         {
             var pos = transform.position;
+
             pos.x -= deltaX * sensitivity;
+            pos.z -= deltaY * sensitivity;
+
             pos.x = Mathf.Clamp(pos.x, minX, maxX);
+            pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
+
             transform.position = pos;
         }
 

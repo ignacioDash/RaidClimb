@@ -5,7 +5,7 @@ namespace Units.UnitTypes
     public abstract partial class BaseUnit
     {
         private float _lastClimbTime;
-        private const float CLIMB_CD = 1f;
+        private const float CLIMB_CD = 2f;
         
         private void Update()
         {
@@ -54,7 +54,7 @@ namespace Units.UnitTypes
 
                 _rigidbody.isKinematic = false;
                 
-                var velocity = _wallNormal * unitConfig.ClimbSpeed * -2f;
+                var velocity = _wallNormal * unitConfig.ClimbSpeed * -3f;
 
                 _rigidbody.linearVelocity = velocity;
                 _rigidbody.useGravity = true;
