@@ -35,7 +35,6 @@ namespace Units.UnitTypes
             if (_kingCaptured)
                 return;
             
-            Debug.LogError($"trigger enter {other.name}");
             if (other.CompareTag("Unit"))
             {
                 var entryUnit = other.GetComponentInParent<BaseUnit>();

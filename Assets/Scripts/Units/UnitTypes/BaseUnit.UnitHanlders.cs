@@ -104,9 +104,10 @@ namespace Units.UnitTypes
 
             var xDistance = Mathf.Abs(target.transform.position.x - transform.position.x);
 
-            if (xDistance > unitConfig.Range)
+            // defenders are handled via enter/exit
+            if (!IsDefender && xDistance > unitConfig.Range)
             {
-                ChangeUnitStateTo(IsDefender ? UnitState.Defending : UnitState.Moving);
+                ChangeUnitStateTo(UnitState.Moving);
                 return;
             }
             
