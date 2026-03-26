@@ -146,6 +146,7 @@ namespace Units.UnitTypes
                     OnTriggerAttacking();
                     break;
                 case UnitState.Dead:
+                    _target.unitTargetController.ReturnTarget(_moveTarget);
                     // todo: await play death animation
                     _onUnitDeath?.Invoke();
                     break;

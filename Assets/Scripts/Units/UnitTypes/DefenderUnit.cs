@@ -54,7 +54,6 @@ namespace Units.UnitTypes
                     if (_target == null && UnitCurrentState == UnitState.Defending)
                     {
                         _target = entryUnit;
-                        Debug.LogError($"attack {_target.name}");
                         ChangeUnitStateTo(UnitState.Attacking);
                     }
                     else

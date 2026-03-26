@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +28,12 @@ namespace Units
             }
         }
 
+        public void ReturnTarget(Transform target)
+        {
+            if (_usedTargets.Contains(target))
+                _usedTargets.Remove(target);
+        }
+        
         public Transform GetRandomTarget(Vector3 from)
         {
             Transform closestUnused = null;
