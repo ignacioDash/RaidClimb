@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using Managers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Input
@@ -22,26 +23,15 @@ namespace Input
         [SerializeField] private Collider[] pathsCollider;
         [SerializeField] private GameObject holdPreviewPrefab;
 
-        [SerializeField] private float sensitivity = 0.02f;
-        [SerializeField] private float minX, minZ;
-        [SerializeField] private float maxX, maxZ;
-        [SerializeField] private float dragThreshold = 10f;
         [SerializeField] private float holdDelay = 0.5f;
         
         private InputState _state;
-        private float _pressTime, _startX, _startY, _lastX, _lastY;
+        private float _pressTime;
         private Camera _cam;
         private Vector3 _lastValidDropPosition;
 
         private GameObject _holdPreviewInstance;
         private GameStateManager _gameStateManager;
-        
-        // camera animations
-        private Tween _cameraYTween;
-        private float _targetY;
-        private const float CameraYAnimationDuration = 0.3f;
-        private const float Step1X = 40f, Step2X = 50f;
-        private const float YBasePosition = 30f, YStep1Position = 38f, YStep2Position = 50f;
         
         public Action OnHold;
         public Action<Vector3> OnRelease;
@@ -51,9 +41,7 @@ namespace Input
         public async Task Init(object[] args)
         {
             _cam = Camera.main;
-
-            _targetY = _cam.transform.position.y;
-
+            
             _gameStateManager = GameManager.Instance.GetManager<GameStateManager>();
 
             Inited = true;
@@ -61,7 +49,7 @@ namespace Input
 
         public void Cleanup()
         {
-            _cameraYTween?.Kill();
+            
         }
 
         private void Update()
@@ -73,55 +61,40 @@ namespace Input
                 return;
             
             if (Pointer.current == null) return;
-
+            
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return;
+            
+            var pointerPos = Pointer.current.position.ReadValue();
+                
+            var ray = _cam.ScreenPointToRay(pointerPos);
+            
             if (Pointer.current.press.wasPressedThisFrame)
             {
-                _startX = Pointer.current.position.ReadValue().x;
-                _startY = Pointer.current.position.ReadValue().y;
-                _lastX = _startX;
-                _lastY = _startY;
+                if (!Physics.Raycast(ray, out var hit, float.MaxValue))
+                    return;
+                
+                if (!pathsCollider.Contains(hit.collider))
+                    return;
+                
                 _pressTime = Time.time;
                 _state = InputState.Pressed;
             }
 
             if (Pointer.current.press.isPressed)
             {
-                var pointerPos = Pointer.current.position.ReadValue();
-                var currentX = pointerPos.x;
-                var currentY = pointerPos.y;
-                var deltaFromStart = Mathf.Abs(currentX - _startX);
-
+                if (!Physics.Raycast(ray, out var hit, float.MaxValue))
+                    return;
+                
                 switch (_state)
                 {
                     case InputState.Pressed:
-                        if (deltaFromStart > dragThreshold)
-                        {
-                            _state = InputState.Dragging;
-                            _lastX = currentX;
-                            _lastY = currentY;
-                        }
-                        else if (Time.time - _pressTime >= holdDelay)
-                        {
+                        if (Time.time - _pressTime >= holdDelay)
                             _state = InputState.Holding;
-                        }
-
                         break;
-
-                    case InputState.Dragging:
-                    {
-                        var deltaX = currentX - _lastX;
-                        var deltaY = currentY - _lastY;
-
-                        _lastX = currentX;
-                        _lastY = currentY;
-
-                        MoveCamera(deltaX, deltaY);
-                        break;
-                    }
-
                     case InputState.Holding:
                     {
-                        UpdateValidGroundPosition(pointerPos);
+                        UpdateValidGroundPosition(hit);
                         OnHolding();
                         break;
                     }
@@ -137,13 +110,8 @@ namespace Input
             }
         }
 
-        private void UpdateValidGroundPosition(Vector2 screenPos)
+        private void UpdateValidGroundPosition(RaycastHit hit)
         {
-            var ray = _cam.ScreenPointToRay(screenPos);
-
-            if (!Physics.Raycast(ray, out var hit, float.MaxValue, ~0, QueryTriggerInteraction.Ignore))
-                return;
-
             var pointInsidePath = GetPointInsidePath(hit.point);
             _lastValidDropPosition = new Vector3(pointInsidePath.x, 1f, pointInsidePath.z);
         }
@@ -182,40 +150,6 @@ namespace Input
                 closestPoint += dirToCenter.normalized * insidePadding;
 
             return closestPoint;
-        }
-
-        private void MoveCamera(float deltaX, float deltaY)
-        {
-            var pos = transform.position;
-
-            pos.x -= deltaX * sensitivity;
-            pos.z -= deltaY * sensitivity;
-
-            pos.x = Mathf.Clamp(pos.x, minX, maxX);
-            pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
-
-            transform.position = pos;
-
-            UpdateTargetYForX(pos.x);
-        }
-
-        private void UpdateTargetYForX(float x)
-        {
-            var absX = Mathf.Abs(x);
-
-            //var desiredY = absX < Step1X ? YBasePosition : absX < Step2X ? YStep1Position : YStep2Position;
-            var desiredY = absX < Step2X ? YBasePosition : YStep1Position;
-
-            if (Mathf.Approximately(_targetY, desiredY))
-                return;
-
-            _targetY = desiredY;
-
-            _cameraYTween?.Kill();
-
-            _cameraYTween = transform
-                .DOMoveY(_targetY, CameraYAnimationDuration)
-                .SetEase(Ease.OutSine);
         }
 
         private void OnHolding()

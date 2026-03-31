@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Constants;
 using Input;
@@ -11,20 +12,26 @@ namespace UI
     public class InGameScreen : BaseScreen
     {
         [SerializeField] private Slider unitSlider1;
+        [SerializeField] private Image fillImage;
         [SerializeField] private Button pauseButton, unPauseButton, exitButton;
         [SerializeField] private GameObject pauseMenu;
-        
+
         [Header("Settings")]
-        [SerializeField] private float holdFillSpeed = 1f;
+        [SerializeField] private HoldRanges[] holdRanges;
 
         private UnitManager _unitManager;
         private InputManager _inputManager;
         private BaseUnit _unitToSpawn;
         private Vector3 _lastValidUnitPosition;
+        
+        // ranges
+        private float _totalDuration;
+        private float[] _thresholds; // normalized thresholds [0..1]
+        private int _currentRange = -1;
 
         private const float MIN_Y_HEIGHT = 7f;
 
-        protected override async void OnEnable()
+        protected override void OnEnable()
         {
             base.OnEnable();
 
@@ -41,6 +48,22 @@ namespace UI
             exitButton.onClick.AddListener(OnExitButton);
 
             pauseMenu.gameObject.SetActive(false);
+
+            fillImage.sprite = holdRanges[0].RangeSprite;
+            
+            _thresholds = new float[holdRanges.Length];
+
+            _totalDuration = 0f;
+            foreach (var t in holdRanges)
+                _totalDuration += t.RangeDuration;
+
+            var acc = 0f;
+            for (var i = 0; i < holdRanges.Length; i++)
+            {
+                acc += holdRanges[i].RangeDuration;
+                _thresholds[i] = acc / _totalDuration;
+            }
+            
             SetButtons(true);
         }
 
@@ -86,24 +109,89 @@ namespace UI
 
         private void OnHoldInput()
         {
-            unitSlider1.value = Mathf.MoveTowards(unitSlider1.value, 1f, holdFillSpeed * Time.deltaTime);
+            if (holdRanges == null || holdRanges.Length == 0)
+                return;
+
+            var sectionSize = 1f / holdRanges.Length;
+
+            var sectionIndex = Mathf.Min(
+                Mathf.FloorToInt(unitSlider1.value / sectionSize),
+                holdRanges.Length - 1);
+
+            var targetValue = (sectionIndex + 1) * sectionSize;
+            var speed = sectionSize / holdRanges[sectionIndex].RangeDuration;
+
+            unitSlider1.value = Mathf.MoveTowards(
+                unitSlider1.value,
+                targetValue,
+                speed * Time.deltaTime);
+
+            var newRange = Mathf.Min(
+                Mathf.FloorToInt(unitSlider1.value / sectionSize),
+                holdRanges.Length - 1);
+
+            if (unitSlider1.value >= targetValue)
+                newRange = sectionIndex + 1;
+
+            if (newRange != _currentRange)
+            {
+                _currentRange = newRange;
+                OnReachedRange(_currentRange);
+            }
         }
 
         private void OnReleaseInput(Vector3 worldPos)
         {
-            if (unitSlider1.value >= 1) // todo: change with ranges
-            {
-                var unitPosition = GetUnitPosition(worldPos);
-                _unitToSpawn = _unitManager.SpawnUnit(BaseUnit.UnitTypes.Melee, unitPosition, Keys.PLAYER_ID);
-            
-                if (_unitToSpawn)
-                {
-                    _unitToSpawn.transform.position = unitPosition;
-                    _ = SetDelayedTarget();
-                }
-            }
+            var range = GetRangeIndex();
+            OnReleasedRange(range, worldPos);
 
             unitSlider1.value = 0f;
+            _currentRange = -1;
+        }
+        
+        private void OnReachedRange(int index)
+        {
+            if (index < 0 || index >= holdRanges.Length)
+                return;
+            
+            var rangeSprite = holdRanges[index].RangeSprite;
+            fillImage.sprite = rangeSprite;
+        }
+
+        private void OnReleasedRange(int index, Vector3 worldPos)
+        {
+            var unitType = GetUnitTypeForRange(index);
+            if (unitType == BaseUnit.UnitTypes.None)
+                return;
+            
+            var unitPosition = GetUnitPosition(worldPos);
+            _unitToSpawn = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
+            
+            if (_unitToSpawn)
+            {
+                _unitToSpawn.transform.position = unitPosition;
+                _ = SetDelayedTarget();
+            }
+        }
+
+        private BaseUnit.UnitTypes GetUnitTypeForRange(int range)
+        {
+            // todo
+            return range switch
+            {
+                0 => BaseUnit.UnitTypes.Melee,
+                1 => BaseUnit.UnitTypes.Melee,
+                2 => BaseUnit.UnitTypes.Melee,
+                3 => BaseUnit.UnitTypes.Melee,
+                4 => BaseUnit.UnitTypes.Melee,
+                _ => BaseUnit.UnitTypes.Melee
+            };
+        }
+        
+        private int GetRangeIndex()
+        {
+            var sectionSize = 1f / holdRanges.Length;
+            return Mathf.FloorToInt(unitSlider1.value / sectionSize);
         }
 
         private async Task SetDelayedTarget()
@@ -119,5 +207,12 @@ namespace UI
         {
             return new Vector3(worldPos.x, worldPos.y + MIN_Y_HEIGHT, worldPos.z);
         }
+    }
+
+    [Serializable]
+    public class HoldRanges
+    {
+        public float RangeDuration;
+        public Sprite RangeSprite;
     }
 }

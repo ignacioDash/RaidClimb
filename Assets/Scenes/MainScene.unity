@@ -2890,12 +2890,6 @@ MonoBehaviour:
   - {fileID: 26096059}
   - {fileID: 354150080}
   holdPreviewPrefab: {fileID: 834226365626422842, guid: 97908148f97444f8e93aeba31b1296be, type: 3}
-  sensitivity: 0.02
-  minX: -70
-  minZ: -50
-  maxX: 70
-  maxZ: -15
-  dragThreshold: 10
   holdDelay: 0.5
 --- !u!114 &330585549
 MonoBehaviour:
@@ -8333,7 +8327,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -40, y: 0}
+  m_SizeDelta: {x: -29.999994, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1278847757
 MonoBehaviour:
@@ -10172,8 +10166,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -100, y: 0}
+  m_AnchoredPosition: {x: 102.07499, y: 0}
+  m_SizeDelta: {x: -304.15, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1554539882
 MonoBehaviour:
@@ -11217,6 +11211,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1565064198}
+  - {fileID: 1833051163}
   - {fileID: 1893152688}
   - {fileID: 2135845086}
   m_Father: {fileID: 816563087}
@@ -11252,11 +11247,114 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.InGameScreen
   fadeDuration: 0.4
   unitSlider1: {fileID: 1554539882}
+  fillImage: {fileID: 1278847757}
   pauseButton: {fileID: 1893152689}
   unPauseButton: {fileID: 1226768610}
   exitButton: {fileID: 2021426889}
   pauseMenu: {fileID: 2135845083}
-  holdFillSpeed: 1
+  holdRanges:
+  - RangeDuration: 1
+    RangeSprite: {fileID: 21300000, guid: 0ab675eb09e04461f93762eba80ad92f, type: 3}
+  - RangeDuration: 1.5
+    RangeSprite: {fileID: 21300000, guid: a89076d7c2e7d4c86bffc654e592d13f, type: 3}
+  - RangeDuration: 2
+    RangeSprite: {fileID: 21300000, guid: 634efc44a43e04766bb57a37d3181379, type: 3}
+  - RangeDuration: 2.5
+    RangeSprite: {fileID: 21300000, guid: 98594f918bf8144f89f87a842a7d0a02, type: 3}
+--- !u!1 &1833051162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1833051163}
+  - component: {fileID: 1833051165}
+  - component: {fileID: 1833051164}
+  - component: {fileID: 1833051166}
+  m_Layer: 5
+  m_Name: Joystic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1833051163
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833051162}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1826156106}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 140, y: 107}
+  m_SizeDelta: {x: 150, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1833051164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833051162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 86cef986588994ad29bd3c4c8d72e12e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1833051165
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833051162}
+  m_CullTransparentMesh: 1
+--- !u!114 &1833051166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833051162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7188352a46a4d94b8c79db10186c815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.JoystickCameraMovement
+  joystickImage: {fileID: 1833051164}
+  sensitivity: 0.5
+  minX: -70
+  minZ: -60
+  maxX: 70
+  maxZ: -10
 --- !u!1 &1834929769
 GameObject:
   m_ObjectHideFlags: 0

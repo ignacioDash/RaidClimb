@@ -7,8 +7,47 @@
 [Ll]ogs/
 UserSettings/
 
+RaidClimb_*
+.utmp/
+Recordings/
+
 # Memory captures
 MemoryCaptures/
+
+# Addressables / Asset Bundles
+Assets/StreamingAssets/aa/
+Assets/AddressableAssetsData/*/*.bin*
+Assets/AddressableAssetsData/*/*.json
+
+# Build outputs (extra safety)
+*.apk
+*.aab
+*.ipa
+*.app
+*.exe
+
+# Unity cache / artifacts
+*.cache
+*.stacktrace
+*.pdb
+
+# IL2CPP / Android / iOS generated
+*.gradle
+.gradle/
+*.keystore
+*.hprof
+*.symbols
+*.so
+
+# Rider / VS misc
+.idea_modules/
+*.iml
+
+# macOS / Xcode
+DerivedData/
+*.xcworkspace
+*.xcuserdata/
+*.xcuserstate
 
 # IDE files
 .vscode/
