@@ -1,8 +1,10 @@
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace UI
 {
@@ -13,6 +15,8 @@ namespace UI
         [Header("Settings")] [SerializeField] private float sensitivity = 1f;
         [SerializeField] private float minX, minZ;
         [SerializeField] private float maxX, maxZ;
+        
+        public int? ActiveFingerId { get; private set; }
 
         private Camera _mainCam;
         private Tween _cameraYTween;
@@ -20,6 +24,7 @@ namespace UI
         private bool _movementEnabled;
         private Vector2 _pointerDownPosition;
         private float _targetY;
+        private int? _activeFingerId;
 
         private const float CameraYAnimationDuration = 0.3f;
         private const float JoystickDeadZone = 15f;
@@ -41,25 +46,57 @@ namespace UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            ActiveFingerId = eventData.pointerId;
             _pointerDownPosition = eventData.position;
             _movementEnabled = true;
+
+#if !UNITY_EDITOR
+            ActiveFingerId = null;
+
+            foreach (var touch in Touch.activeTouches.Where(touch => touch.isInProgress).Where(touch =>
+                         !(Vector2.Distance(touch.screenPosition, eventData.position) > 50f)))
+            {
+                ActiveFingerId = touch.touchId;
+                break;
+            }
+#endif
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            _movementEnabled = false;
+            if (ActiveFingerId != eventData.pointerId)
+                return;
+
             // joystickImage.rectTransform.anchoredPosition = Vector2.zero;
+            ActiveFingerId = null;
+            _movementEnabled = false;
         }
 
         private void Update()
         {
-            if (!_movementEnabled || _mainCam == null || Pointer.current == null)
-                return;
-
-            if (!Pointer.current.press.isPressed)
+#if UNITY_EDITOR
+            if (!_movementEnabled || Pointer.current == null || !Pointer.current.press.isPressed)
                 return;
 
             var pointerPos = Pointer.current.position.ReadValue();
+#else
+            if (!_movementEnabled || ActiveFingerId == null)
+                return;
+
+            Touch? touch = null;
+
+            foreach (var t in Touch.activeTouches.Where(t => t.touchId == ActiveFingerId.Value))
+            {
+                touch = t;
+                break;
+            }
+
+            if (touch is not { isInProgress: true })
+                return;
+
+            var pointerPos = touch.Value.screenPosition;
+#endif
+
             var offset = pointerPos - _pointerDownPosition;
             var magnitude = offset.magnitude;
 
@@ -67,13 +104,11 @@ namespace UI
                 ? offset.normalized * MaxJoystickDistance
                 : offset;
 
-            // joystickImage.rectTransform.anchoredPosition = clampedOffset;
-
             if (magnitude < JoystickDeadZone)
                 return;
 
             var strength = Mathf.Clamp01(magnitude / MaxJoystickDistance);
-            var speed = strength * sensitivity; // sensitivity = max speed
+            var speed = strength * sensitivity;
 
             var dir = clampedOffset.sqrMagnitude > 0.0001f ? clampedOffset.normalized : Vector2.zero;
             MoveCamera(dir.x * speed, dir.y * speed);

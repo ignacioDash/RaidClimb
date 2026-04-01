@@ -6,6 +6,7 @@ using Constants;
 using Input;
 using Managers;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
         
         Application.targetFrameRate = 60;
+        
+        EnhancedTouchSupport.Enable();
     }
 
     private async void Start()

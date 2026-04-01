@@ -2890,6 +2890,7 @@ MonoBehaviour:
   - {fileID: 26096059}
   - {fileID: 354150080}
   holdPreviewPrefab: {fileID: 834226365626422842, guid: 97908148f97444f8e93aeba31b1296be, type: 3}
+  joystickCameraMovement: {fileID: 1833051166}
   holdDelay: 0.5
 --- !u!114 &330585549
 MonoBehaviour:

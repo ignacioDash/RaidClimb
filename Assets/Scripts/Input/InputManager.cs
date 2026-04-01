@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DG.Tweening;
 using Managers;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace Input
 {
@@ -22,8 +22,11 @@ namespace Input
 
         [SerializeField] private Collider[] pathsCollider;
         [SerializeField] private GameObject holdPreviewPrefab;
+        [SerializeField] private JoystickCameraMovement joystickCameraMovement;
 
         [SerializeField] private float holdDelay = 0.5f;
+        
+        private int? _activeHoldFingerId;
         
         private InputState _state;
         private float _pressTime;
@@ -56,57 +59,97 @@ namespace Input
         {
             if (!Inited)
                 return;
-            
+
             if (_gameStateManager?.CurrentState != GameStateManager.GameState.InGame)
                 return;
-            
-            if (Pointer.current == null) return;
-            
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-                return;
-            
-            var pointerPos = Pointer.current.position.ReadValue();
-                
-            var ray = _cam.ScreenPointToRay(pointerPos);
-            
-            if (Pointer.current.press.wasPressedThisFrame)
-            {
-                if (!Physics.Raycast(ray, out var hit, float.MaxValue))
-                    return;
-                
-                if (!pathsCollider.Contains(hit.collider))
-                    return;
-                
-                _pressTime = Time.time;
-                _state = InputState.Pressed;
-            }
 
-            if (Pointer.current.press.isPressed)
+            Touch? activeTouch = null;
+
+            if (_activeHoldFingerId.HasValue)
             {
-                if (!Physics.Raycast(ray, out var hit, float.MaxValue))
-                    return;
-                
-                switch (_state)
+                foreach (var touch in Touch.activeTouches)
                 {
-                    case InputState.Pressed:
-                        if (Time.time - _pressTime >= holdDelay)
-                            _state = InputState.Holding;
-                        break;
-                    case InputState.Holding:
+                    if (touch.touchId == _activeHoldFingerId.Value)
                     {
-                        UpdateValidGroundPosition(hit);
-                        OnHolding();
+                        activeTouch = touch;
                         break;
                     }
                 }
+
+                if (!activeTouch.HasValue)
+                {
+                    if (_state == InputState.Holding)
+                        EndHold();
+
+                    _activeHoldFingerId = null;
+                    _state = InputState.None;
+                    return;
+                }
             }
-
-            if (Pointer.current.press.wasReleasedThisFrame)
+            else
             {
-                if (_state == InputState.Holding)
-                    EndHold();
+                foreach (var touch in Touch.activeTouches)
+                {
+                    if (!touch.isInProgress)
+                        continue;
 
-                _state = InputState.None;
+                    if (joystickCameraMovement.ActiveFingerId == touch.touchId)
+                        continue;
+
+                    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.touchId))
+                        continue;
+
+                    if (touch.phase != UnityEngine.InputSystem.TouchPhase.Began)
+                        continue;
+
+                    activeTouch = touch;
+                    _activeHoldFingerId = touch.touchId;
+                    break;
+                }
+
+                if (!activeTouch.HasValue)
+                    return;
+            }
+            
+#if UNITY_EDITOR
+            var pointerPos = Pointer.current.position.ReadValue();
+#else
+            var pointerPos = activeTouch.Value.screenPosition;
+#endif
+
+            var ray = _cam.ScreenPointToRay(pointerPos);
+
+            if (!Physics.Raycast(ray, out var hit, float.MaxValue))
+                return;
+
+            switch (_state)
+            {
+                case InputState.None:
+                {
+                    if (!pathsCollider.Contains(hit.collider))
+                    {
+                        _activeHoldFingerId = null;
+                        return;
+                    }
+
+                    _pressTime = Time.time;
+                    _state = InputState.Pressed;
+                    break;
+                }
+
+                case InputState.Pressed:
+                {
+                    if (Time.time - _pressTime >= holdDelay)
+                        _state = InputState.Holding;
+                    break;
+                }
+
+                case InputState.Holding:
+                {
+                    UpdateValidGroundPosition(hit);
+                    OnHolding();
+                    break;
+                }
             }
         }
 
