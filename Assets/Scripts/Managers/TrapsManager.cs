@@ -48,13 +48,15 @@ namespace Managers
             foreach (var trap in _playerTraps)
             {
                 trap.CleanUp();
-                Destroy(trap.gameObject);
+                if (trap)
+                    Destroy(trap.gameObject);
             }
 
             foreach (var trap in _opponentTraps)
             {
                 trap.CleanUp();
-                Destroy(trap.gameObject);
+                if (trap)
+                    Destroy(trap.gameObject);
             }
 
             _playerTraps.Clear();

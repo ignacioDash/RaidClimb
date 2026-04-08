@@ -12,15 +12,21 @@ namespace Managers
             Play,
             Castle,
             Win,
-            Lose
+            Lose,
+            Opponent,
+            None
         }
         
         [SerializeField] private Camera mainCamera;
 
-        [SerializeField]
-        private Transform defaultCameraPosition, playCameraPosition, winCameraPosition, loseCameraPosition, editCastleCameraPosition;
+        [SerializeField] private Transform defaultCameraPosition,
+            playCameraPosition,
+            winCameraPosition,
+            loseCameraPosition,
+            editCastleCameraPosition,
+            opponentCastlePosition;
 
-        private CameraPosition _currentCameraPosition;
+        private CameraPosition _currentCameraPosition = CameraPosition.None;
         private Tween _cameraPositionTween, _cameraRotationTween;
 
         private const float CAMERA_ANIMATION_DURATION = 0.4f;
@@ -52,6 +58,9 @@ namespace Managers
                     break;
                 case CameraPosition.Lose:
                     await AnimateCameraTowardsPosition(loseCameraPosition);
+                    break;
+                case CameraPosition.Opponent:
+                    await AnimateCameraTowardsPosition(opponentCastlePosition);
                     break;
             }
         }

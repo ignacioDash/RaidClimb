@@ -22,12 +22,17 @@ namespace Castles
 
             while (dataManager is not { Initialized: true })
             {
-                await Task.Delay(50);
+                await Task.Yield();
             }
             
             _castleData = dataManager.PlayerData.PlayerCastleData;
 
             // castle is shown at init
+            UpdateCastleWithCastleData();
+        }
+
+        public override void OnGameStarted()
+        {
             UpdateCastleWithCastleData();
         }
     }

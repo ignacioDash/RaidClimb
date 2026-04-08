@@ -16,7 +16,12 @@ namespace Managers
         
         public async Task Init(object[] args)
         {
-            PlayerData = new PlayerData();
+            PlayerData = new PlayerData
+            {
+                UserData = new UserData(),
+                PlayerCastleData = new CastleData(),
+                TrophiesData = new TrophiesData()
+            };
             
             var path = Path.Combine(Application.persistentDataPath, SAVE_DATA_FILE);
             
@@ -32,6 +37,10 @@ namespace Managers
                 {
                     Debug.LogException(e);
                 }
+            }
+            else
+            {
+                await Save();
             }
 
             Initialized = true;

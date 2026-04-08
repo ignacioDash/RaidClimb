@@ -41,11 +41,11 @@ namespace Units.UnitTypes
         [SerializeField] protected UnitBaseConfig unitConfig;
 
         [Header("References")]
-        [SerializeField] protected UnitRangeCollider rangeCollider;
         [SerializeField] protected UnitHealthController healthController;
         [SerializeField] protected UnitVisualsController unitVisualsController;
         [SerializeField] private UnitTargetController unitTargetController;
         [SerializeField] private NavMeshAgent navMeshAgent;
+        [SerializeField] private Animator animatorController;
 
         public string PlayerId { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
@@ -68,9 +68,18 @@ namespace Units.UnitTypes
         
         // attacking
         private float _nextAttackTime;
+        protected Vector3 _attackRotationOffset;
         
         // death
         private Action _onUnitDeath;
+        
+        private static readonly int Falling = Animator.StringToHash("Falling");
+        private static readonly int Walking = Animator.StringToHash("Walking");
+        private static readonly int Death = Animator.StringToHash("Death");
+        private static readonly int Victory = Animator.StringToHash("Dancing");
+        private static readonly int Defeat = Animator.StringToHash("Defeat");
+        private static readonly int Climb = Animator.StringToHash("Climb");
+        protected static int Attack = Animator.StringToHash("");
 
         private const float RETARGET_DISTANCE = 0.1f;
 
@@ -81,6 +90,7 @@ namespace Units.UnitTypes
 
         public virtual void Init(string playerId, UnitState startState, Action onUnitDeath)
         {
+            _attackRotationOffset = Vector3.zero;
             PlayerId = playerId;
             ChangeUnitStateTo(startState);
             
@@ -90,7 +100,6 @@ namespace Units.UnitTypes
             if (navMeshAgent)
                 navMeshAgent.enabled = false;
             
-            rangeCollider.Init(this);
             healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
         }
 
@@ -110,7 +119,7 @@ namespace Units.UnitTypes
 
         public void ChangeUnitStateTo(UnitState newState)
         {
-            if (unitCurrentState == newState)
+            if (unitCurrentState == newState || unitCurrentState == UnitState.Lost || unitCurrentState == UnitState.Won)
                 return;
             
             unitCurrentState = newState;
@@ -127,14 +136,16 @@ namespace Units.UnitTypes
             switch (unitCurrentState)
             {
                 case UnitState.Idle:
-                    // todo: play idle animation
+                    animatorController.SetTrigger(Falling);
                     break;
                 case UnitState.Moving:
-                    // todo: play moving animation
+                    if (animatorController)
+                        animatorController.SetTrigger(Walking);
                     OnStartMovement();
                     break;
                 case UnitState.Climbing:
-                    // todo: play climbing animation
+                    if (animatorController)
+                        animatorController.SetTrigger(Climb);
                     OnClimbWall();
                     break;
                 case UnitState.Defending:
@@ -142,25 +153,42 @@ namespace Units.UnitTypes
                     OnTriggerDefending();
                     break;
                 case UnitState.Attacking:
-                    // todo: play attacking animation
+                    var dir = _target.transform.position - transform.position;
+                    dir.y = 0f;
+
+                    if (dir.sqrMagnitude > 0.001f)
+                    {
+                        transform.rotation = Quaternion.LookRotation(dir);
+                        transform.Rotate(_attackRotationOffset);
+                    }
+                    
+                    if (animatorController)
+                        animatorController.SetTrigger(Attack);
                     OnTriggerAttacking();
                     break;
                 case UnitState.Dead:
-                    _target.unitTargetController.ReturnTarget(_moveTarget);
-                    // todo: await play death animation
-                    _onUnitDeath?.Invoke();
+                    animatorController.SetTrigger(Death);
+                    if (_target && _target.unitTargetController)
+                        _target.unitTargetController.ReturnTarget(_moveTarget);
+                    DelayedDeath();
                     break;
                 case UnitState.Won:
-                    // todo: play victory animation
+                    animatorController.SetTrigger(Victory);
                     OnGameEnded();
                     break;
                 case UnitState.Lost:
-                    // todo: play lose animation
+                    animatorController.SetTrigger(Defeat);
                     OnGameEnded();
                     break;
                 default:
                     break;
             }
+        }
+
+        private async void DelayedDeath()
+        {
+            await Task.Delay(2000);
+            _onUnitDeath?.Invoke();
         }
         
         private void OnGameEnded()

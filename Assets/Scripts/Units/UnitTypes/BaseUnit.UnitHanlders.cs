@@ -5,6 +5,8 @@ namespace Units.UnitTypes
     public abstract partial class BaseUnit
     {
         private float _lastClimbTime;
+        private const float CLIMB_END_PUSH_X = 4f;
+        private const float CLIMB_END_PUSH_Y = 6f;
         private const float CLIMB_CD = 2f;
         
         private void Update()
@@ -38,6 +40,8 @@ namespace Units.UnitTypes
                     var position = transform.position;
                     var closestPoint = other.ClosestPoint(position);
                     _wallNormal = (position - closestPoint).normalized;
+                    
+                    transform.rotation = Quaternion.LookRotation(-_wallNormal);
 
                     ChangeUnitStateTo(UnitState.Climbing);
                 }
@@ -53,8 +57,8 @@ namespace Units.UnitTypes
                 _climbCts = null;
 
                 _rigidbody.isKinematic = false;
-                
-                var velocity = _wallNormal * unitConfig.ClimbSpeed * -3f;
+
+                var velocity = (_wallNormal * -1 * CLIMB_END_PUSH_X) + (Vector3.up * CLIMB_END_PUSH_Y);
 
                 _rigidbody.linearVelocity = velocity;
                 _rigidbody.useGravity = true;

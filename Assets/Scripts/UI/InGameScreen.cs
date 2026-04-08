@@ -11,10 +11,11 @@ namespace UI
 {
     public class InGameScreen : BaseScreen
     {
-        [SerializeField] private Slider unitSlider1;
-        [SerializeField] private Image fillImage;
         [SerializeField] private Button pauseButton, unPauseButton, exitButton;
+        [SerializeField] private Image[] rangeImages;
         [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private Image pointerImage;
+        [SerializeField] private RectTransform pointerStart, pointerEnd;
 
         [Header("Settings")]
         [SerializeField] private HoldRanges[] holdRanges;
@@ -22,20 +23,14 @@ namespace UI
         private UnitManager _unitManager;
         private InputManager _inputManager;
         private BaseUnit _unitToSpawn;
-        private Vector3 _lastValidUnitPosition;
         
         // ranges
-        private float _totalDuration;
-        private float[] _thresholds; // normalized thresholds [0..1]
+        private float _holdProgress;
         private int _currentRange = -1;
-
-        private const float MIN_Y_HEIGHT = 7f;
-
+        
         protected override void OnEnable()
         {
             base.OnEnable();
-
-            unitSlider1.value = 0;
 
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
             _inputManager = GameManager.Instance.GetManager<InputManager>();
@@ -49,20 +44,10 @@ namespace UI
 
             pauseMenu.gameObject.SetActive(false);
 
-            fillImage.sprite = holdRanges[0].RangeSprite;
-            
-            _thresholds = new float[holdRanges.Length];
-
-            _totalDuration = 0f;
-            foreach (var t in holdRanges)
-                _totalDuration += t.RangeDuration;
-
-            var acc = 0f;
-            for (var i = 0; i < holdRanges.Length; i++)
-            {
-                acc += holdRanges[i].RangeDuration;
-                _thresholds[i] = acc / _totalDuration;
-            }
+            _holdProgress = 0f;
+            _currentRange = -1;
+            UpdateRangeVisuals(-1);
+            UpdatePointerVisual();
             
             SetButtons(true);
         }
@@ -115,23 +100,25 @@ namespace UI
             var sectionSize = 1f / holdRanges.Length;
 
             var sectionIndex = Mathf.Min(
-                Mathf.FloorToInt(unitSlider1.value / sectionSize),
+                Mathf.FloorToInt(_holdProgress / sectionSize),
                 holdRanges.Length - 1);
 
             var targetValue = (sectionIndex + 1) * sectionSize;
             var speed = sectionSize / holdRanges[sectionIndex].RangeDuration;
 
-            unitSlider1.value = Mathf.MoveTowards(
-                unitSlider1.value,
+            _holdProgress = Mathf.MoveTowards(
+                _holdProgress,
                 targetValue,
                 speed * Time.deltaTime);
 
+            UpdatePointerVisual();
+
             var newRange = Mathf.Min(
-                Mathf.FloorToInt(unitSlider1.value / sectionSize),
+                Mathf.FloorToInt(_holdProgress / sectionSize),
                 holdRanges.Length - 1);
 
-            if (unitSlider1.value >= targetValue)
-                newRange = sectionIndex + 1;
+            if (_holdProgress >= targetValue)
+                newRange = Mathf.Min(sectionIndex + 1, holdRanges.Length - 1);
 
             if (newRange != _currentRange)
             {
@@ -145,17 +132,15 @@ namespace UI
             var range = GetRangeIndex();
             OnReleasedRange(range, worldPos);
 
-            unitSlider1.value = 0f;
+            _holdProgress = 0f;
             _currentRange = -1;
+            UpdateRangeVisuals(-1);
+            UpdatePointerVisual();
         }
         
         private void OnReachedRange(int index)
         {
-            if (index < 0 || index >= holdRanges.Length)
-                return;
-            
-            var rangeSprite = holdRanges[index].RangeSprite;
-            fillImage.sprite = rangeSprite;
+            UpdateRangeVisuals(index);
         }
 
         private void OnReleasedRange(int index, Vector3 worldPos)
@@ -180,18 +165,42 @@ namespace UI
             return range switch
             {
                 0 => BaseUnit.UnitTypes.Melee,
-                1 => BaseUnit.UnitTypes.Melee,
+                1 => BaseUnit.UnitTypes.Ranged,
                 2 => BaseUnit.UnitTypes.Melee,
                 3 => BaseUnit.UnitTypes.Melee,
-                4 => BaseUnit.UnitTypes.Melee,
                 _ => BaseUnit.UnitTypes.Melee
             };
         }
         
         private int GetRangeIndex()
         {
+            if (holdRanges == null || holdRanges.Length == 0)
+                return -1;
+
             var sectionSize = 1f / holdRanges.Length;
-            return Mathf.FloorToInt(unitSlider1.value / sectionSize);
+            return Mathf.Min(Mathf.FloorToInt(_holdProgress / sectionSize), holdRanges.Length - 1);
+        }
+
+        private void UpdateRangeVisuals(int activeIndex)
+        {
+            if (rangeImages == null)
+                return;
+
+            for (var i = 0; i < rangeImages.Length; i++)
+            {
+                if (!rangeImages[i])
+                    continue;
+
+                rangeImages[i].gameObject.SetActive(i == activeIndex);
+            }
+        }
+
+        private void UpdatePointerVisual()
+        {
+            if (!pointerImage || !pointerStart || !pointerEnd)
+                return;
+
+            pointerImage.rectTransform.position = Vector3.Lerp(pointerStart.position, pointerEnd.position, _holdProgress);
         }
 
         private async Task SetDelayedTarget()
@@ -205,7 +214,7 @@ namespace UI
 
         private Vector3 GetUnitPosition(Vector3 worldPos)
         {
-            return new Vector3(worldPos.x, worldPos.y + MIN_Y_HEIGHT, worldPos.z);
+            return new Vector3(worldPos.x, Values.UNIT_SPAWN_Y, worldPos.z);
         }
     }
 
@@ -213,6 +222,5 @@ namespace UI
     public class HoldRanges
     {
         public float RangeDuration;
-        public Sprite RangeSprite;
     }
 }

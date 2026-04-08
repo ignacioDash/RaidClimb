@@ -21,6 +21,8 @@ namespace Managers
             
         }
 
+        public virtual void OnGameStarted() { }
+
         public virtual void Cleanup()
         {
             

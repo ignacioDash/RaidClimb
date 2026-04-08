@@ -140,8 +140,8 @@ Transform:
   m_GameObject: {fileID: 98243236285403285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.66, y: 4.19, z: -4.23}
-  m_LocalScale: {x: 0.33029735, y: 8.625805, z: 31.29224}
+  m_LocalPosition: {x: -8.59, y: 4.19, z: -4.23}
+  m_LocalScale: {x: 0.19691668, y: 7.677219, z: 31.29224}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2719961219076812979}
@@ -377,8 +377,8 @@ Transform:
   m_GameObject: {fileID: 460418896072148733}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.52, y: 11.25, z: -3.09}
-  m_LocalScale: {x: 0.30647907, y: 8.861279, z: 8.004052}
+  m_LocalPosition: {x: -19.31, y: 11.25, z: -3.09}
+  m_LocalScale: {x: 0.45217985, y: 6.302867, z: 8.004052}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2848880402503034374}
@@ -783,8 +783,8 @@ Transform:
   m_GameObject: {fileID: 760584487249764470}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.31789783, z: -0, w: 0.948125}
-  m_LocalPosition: {x: -18.1, y: 11.25, z: -8.21}
-  m_LocalScale: {x: 0.48460466, y: 8.861279, z: 3.4311695}
+  m_LocalPosition: {x: -18.085, y: 11.25, z: -8.21}
+  m_LocalScale: {x: 0.4786635, y: 6.302867, z: 3.4311695}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2848880402503034374}
@@ -1838,8 +1838,8 @@ Transform:
   m_GameObject: {fileID: 1853858997577864714}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.4, y: 25.83, z: -0.28999996}
-  m_LocalScale: {x: 0.5244431, y: 9.716157, z: 8.004052}
+  m_LocalPosition: {x: 7.4, y: 25.34, z: -0.28999996}
+  m_LocalScale: {x: 0.5244431, y: 7.6037464, z: 8.004052}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1505094876328510679}
@@ -2678,8 +2678,8 @@ Transform:
   m_GameObject: {fileID: 2937325017467780241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.19936797, z: 0, w: 0.97992474}
-  m_LocalPosition: {x: -17.61, y: 11.25, z: -16.74}
-  m_LocalScale: {x: 0.43, y: 9.224999, z: 7.230239}
+  m_LocalPosition: {x: -17.522, y: 11.25, z: -16.74}
+  m_LocalScale: {x: 0.62514716, y: 6.7903466, z: 7.230239}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7584536444589239266}
@@ -4103,8 +4103,8 @@ Transform:
   m_GameObject: {fileID: 5391694029163780513}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.19936788, z: 0, w: 0.97992474}
-  m_LocalPosition: {x: -17.77, y: 11.25, z: 2.41}
-  m_LocalScale: {x: 0.48460466, y: 8.861279, z: 7.9438148}
+  m_LocalPosition: {x: -17.774, y: 11.25, z: 2.41}
+  m_LocalScale: {x: 0.45687073, y: 6.302867, z: 7.9438148}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2848880402503034374}
@@ -4712,8 +4712,8 @@ Transform:
   m_GameObject: {fileID: 6176803417825531638}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.19936788, z: 0, w: 0.97992474}
-  m_LocalPosition: {x: -18.14, y: 11.25, z: 9.46}
-  m_LocalScale: {x: 0.43, y: 9.224999, z: 6.643171}
+  m_LocalPosition: {x: -18.18, y: 11.25, z: 9.41}
+  m_LocalScale: {x: 0.62514716, y: 6.7903466, z: 6.643171}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7584536444589239266}
@@ -5165,8 +5165,8 @@ Transform:
   m_GameObject: {fileID: 7112230993689989357}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.047804102, z: -0, w: 0.9988568}
-  m_LocalPosition: {x: -16.83, y: 11.25, z: -11.36}
-  m_LocalScale: {x: 0.48460466, y: 8.861279, z: 4.7048726}
+  m_LocalPosition: {x: -16.887, y: 11.25, z: -11.36}
+  m_LocalScale: {x: 0.54906726, y: 6.302867, z: 4.7048726}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2848880402503034374}
@@ -5442,8 +5442,8 @@ Transform:
   m_GameObject: {fileID: 7823485588519882154}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.19, y: 11.25, z: -3.09}
-  m_LocalScale: {x: 0.43, y: 9.224999, z: 23.746668}
+  m_LocalPosition: {x: -19.47, y: 11.25, z: -3.09}
+  m_LocalScale: {x: 0.62514716, y: 6.7903466, z: 23.746668}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7584536444589239266}
@@ -6547,6 +6547,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2124394370252954294}
     m_Modifications:
+    - target: {fileID: 5734083199253026914, guid: f43ee3b5f75ea1d4388592b709da6d05, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 79097bf86bce744298945fd05fa32aa2, type: 2}
     - target: {fileID: 6094340315180480951, guid: f43ee3b5f75ea1d4388592b709da6d05, type: 3}
       propertyPath: m_Name
       value: Rock Granit 02
@@ -10382,6 +10386,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2124394370252954294}
     m_Modifications:
+    - target: {fileID: 2790950913069118665, guid: fe6393a6a24af68478245d139e9a62f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 79097bf86bce744298945fd05fa32aa2, type: 2}
     - target: {fileID: 3958769410073071526, guid: fe6393a6a24af68478245d139e9a62f0, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.9839
@@ -10984,6 +10992,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2124394370252954294}
     m_Modifications:
+    - target: {fileID: 6970903662794823344, guid: 35c98ac5865fe1b4ea611b3838f8ed4f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 79097bf86bce744298945fd05fa32aa2, type: 2}
     - target: {fileID: 8139890386740260319, guid: 35c98ac5865fe1b4ea611b3838f8ed4f, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.6856747
@@ -11762,6 +11774,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8597572948164663411, guid: fb7bc5c1c0fafdc41b2c7019e763e2f2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 79097bf86bce744298945fd05fa32aa2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

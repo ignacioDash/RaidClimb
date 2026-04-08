@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TrapsManager trapsManager;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private OpponentManager opponentManager;
     [SerializeField] private CastleManager playerCastle, opponentCastle;
 
     private GameStateManager _gameStateManager;
@@ -38,6 +39,8 @@ public class GameManager : MonoBehaviour
 
     private async void Start()
     {
+        await cameraManager.SetCameraAt(CameraManager.CameraPosition.Default);
+        
         await SetUp();
     }
 
@@ -49,15 +52,21 @@ public class GameManager : MonoBehaviour
     // user presses play button
     public async Task StartGame()
     {
-        var cameraAnimation = cameraManager.SetCameraAt(CameraManager.CameraPosition.Play);
+        var cameraAnimation = cameraManager.SetCameraAt(CameraManager.CameraPosition.Opponent);
         var screenChange = uiManager.NavigateTo(UIManager.Screens.InGameScreen);
 
         await Task.WhenAll(cameraAnimation, screenChange);
+        
+        unitManager.Cleanup();
+        
+        playerCastle.OnGameStarted();
 
         // todo: check user level
         ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
         
         _gameStateManager.StartGame();
+        
+        opponentManager.OnGameStarted();
     }
 
     // game end
@@ -69,6 +78,8 @@ public class GameManager : MonoBehaviour
         
         var cameraAnimation =
             cameraManager.SetCameraAt(playerWon ? CameraManager.CameraPosition.Win : CameraManager.CameraPosition.Lose);
+
+        opponentManager.OnGameEnded();
 
         await Task.WhenAll(cameraAnimation);
 
@@ -102,6 +113,7 @@ public class GameManager : MonoBehaviour
         _managers.Add(typeof(InputManager), inputManager);
         _managers.Add(typeof(TrapsManager), trapsManager);
         _managers.Add(typeof(CameraManager), cameraManager);
+        _managers.Add(typeof(OpponentManager), opponentManager);
         
         await _dataManager.Init(null);
 
@@ -115,6 +127,7 @@ public class GameManager : MonoBehaviour
             inputManager.Init(null),
             trapsManager.Init(null),
             cameraManager.Init(null),
+            opponentManager.Init(null),
         };
 
         await Task.WhenAll(managersInit);
@@ -127,5 +140,10 @@ public class GameManager : MonoBehaviour
         {
             manager.Cleanup();
         }
+    }
+    
+    private void OnDestroy()
+    {
+        CleanUp();
     }
 }

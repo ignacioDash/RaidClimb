@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Config;
 using Constants;
 using JetBrains.Annotations;
 using Units.UnitTypes;
@@ -14,7 +15,7 @@ namespace Managers
         [SerializeField] private Transform unitsContainer;
         
         [Header("Settings")]
-        [SerializeField] private List<UnitReference> unitReferences;
+        [SerializeField] private UnitReferences unitReferences;
         
         private readonly List<BaseUnit> _playerUnits = new();
         private readonly List<BaseUnit> _opponentUnits = new();
@@ -42,7 +43,7 @@ namespace Managers
         [CanBeNull]
         public BaseUnit SpawnUnit(BaseUnit.UnitTypes unitType, Vector3 spawnPoint, string playerId, BaseUnit.UnitState startState = BaseUnit.UnitState.Idle)
         {
-            var unitPrefab = unitReferences.FirstOrDefault(u => u.UnitType == unitType)?.UnitPrefab;
+            var unitPrefab = unitReferences.GetUnit(unitType);
             if (unitPrefab == null)
             {
                 Debug.LogError($"Could not find unit of type {unitType.ToString()}");
@@ -124,18 +125,18 @@ namespace Managers
                     _opponentUnits.Remove(unit);
             }
 
-            Destroy(unit.gameObject);
+            if (unit) Destroy(unit.gameObject);
         }
 
         public void Cleanup()
         {
-            foreach (var unit in _playerUnits)
+            foreach (var unit in _playerUnits.Where(unit => unit))
             {
                 unit.CleanUp();
                 Destroy(unit.gameObject);
             }
 
-            foreach (var unit in _opponentUnits)
+            foreach (var unit in _opponentUnits.Where(unit => unit))
             {
                 unit.CleanUp();
                 Destroy(unit.gameObject);
