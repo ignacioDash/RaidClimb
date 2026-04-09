@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Constants;
 using Managers;
 using UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
@@ -24,7 +22,6 @@ namespace Input
 
         [SerializeField] private Collider[] pathsCollider;
         [SerializeField] private Collider spawnArea;
-        [SerializeField] private GameObject holdPreviewPrefab;
         [SerializeField] private JoystickCameraMovement joystickCameraMovement;
 
         [SerializeField] private float holdDelay = 0.5f;

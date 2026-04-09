@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Castles;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace UI
             settingsButton.onClick.AddListener(OnSettingsButton);
             leaderboardButton.onClick.AddListener(OnLeaderboardButton);
             collectionButton.onClick.AddListener(OnCollectionButton);
-            towerButton.onClick.AddListener(OnTowerButton);
+            towerButton.onClick.AddListener(OnCastleButton);
         }
 
         private void OnDisable()
@@ -31,7 +32,7 @@ namespace UI
             settingsButton.onClick.RemoveListener(OnSettingsButton);
             leaderboardButton.onClick.RemoveListener(OnLeaderboardButton);
             collectionButton.onClick.RemoveListener(OnCollectionButton);
-            towerButton.onClick.RemoveListener(OnTowerButton);
+            towerButton.onClick.RemoveListener(OnCastleButton);
         }
 
         public override async Task OpenScreen(object[] args)
@@ -66,13 +67,15 @@ namespace UI
             await _uiManager.NavigateTo(UIManager.Screens.CollectionScreen);
         }
 
-        private async void OnTowerButton()
+        private async void OnCastleButton()
         {
             SetButtons(false);
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
                 .SetCameraAt(CameraManager.CameraPosition.Castle);
             
             var screenTransition = _uiManager.NavigateTo(UIManager.Screens.TowerScreen);
+            
+            GameManager.Instance.GetManager<PlayerCastleManager>().OnCastleScreenOpened();
 
             await Task.WhenAll(cameraTransition, screenTransition);
         }

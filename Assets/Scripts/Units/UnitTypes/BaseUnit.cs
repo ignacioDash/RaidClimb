@@ -45,7 +45,7 @@ namespace Units.UnitTypes
         [SerializeField] protected UnitVisualsController unitVisualsController;
         [SerializeField] private UnitTargetController unitTargetController;
         [SerializeField] private NavMeshAgent navMeshAgent;
-        [SerializeField] private Animator animatorController;
+        [SerializeField] protected Animator animatorController;
 
         public string PlayerId { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
@@ -80,6 +80,7 @@ namespace Units.UnitTypes
         private static readonly int Defeat = Animator.StringToHash("Defeat");
         private static readonly int Climb = Animator.StringToHash("Climb");
         protected static int Attack = Animator.StringToHash("");
+        protected static int Empty = Animator.StringToHash("Empty");
 
         private const float RETARGET_DISTANCE = 0.1f;
 
@@ -92,6 +93,8 @@ namespace Units.UnitTypes
         {
             _attackRotationOffset = Vector3.zero;
             PlayerId = playerId;
+            
+            unitVisualsController.Init(PlayerId);
             ChangeUnitStateTo(startState);
             
             TargetInfo = new UnitTargetInfo();
@@ -206,7 +209,6 @@ namespace Units.UnitTypes
             }
             
             _climbCts?.Cancel();
-            _climbCts?.Dispose();
         }
 
         private void OnStartMovement()
@@ -233,7 +235,6 @@ namespace Units.UnitTypes
             _rigidbody.freezeRotation = true;
 
             _climbCts?.Cancel();
-            _climbCts?.Dispose();
             _climbCts = new CancellationTokenSource();
 
             _climbTask = ClimbWallLoop(_climbCts.Token);
@@ -271,7 +272,6 @@ namespace Units.UnitTypes
         public void CleanUp()
         {
             _climbCts?.Cancel();
-            _climbCts?.Dispose();
             _climbCts = null;
         }
     }

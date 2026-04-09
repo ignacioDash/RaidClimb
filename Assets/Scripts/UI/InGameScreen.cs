@@ -166,7 +166,7 @@ namespace UI
             {
                 0 => BaseUnit.UnitTypes.Melee,
                 1 => BaseUnit.UnitTypes.Ranged,
-                2 => BaseUnit.UnitTypes.Melee,
+                2 => BaseUnit.UnitTypes.Tank,
                 3 => BaseUnit.UnitTypes.Melee,
                 _ => BaseUnit.UnitTypes.Melee
             };

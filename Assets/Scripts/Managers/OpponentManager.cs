@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Config;
 using Constants;
 using Units.UnitTypes;
 using UnityEngine;
@@ -13,9 +11,6 @@ namespace Managers
     public class OpponentManager : MonoBehaviour, IManager
     {
         [SerializeField] private Collider spawnArea;
-        
-        [Header("Settings")]
-        [SerializeField] private UnitReferences unitReferences;
         
         private DataManager _dataManager;
         private UnitManager _unitManager;
@@ -42,12 +37,12 @@ namespace Managers
             _gameplayLevel = _dataManager.PlayerData.UserData.UserLevel;
 
             _isPlaying = true;
-            //_ = PlayingLoop();
+            _ = PlayingLoop();
         }
 
         public void OnGameEnded()
         {
-            _cts.Cancel();
+            _cts?.Cancel();
             _isPlaying = false;
         }
 
@@ -92,6 +87,8 @@ namespace Managers
             return unitType switch
             {
                 BaseUnit.UnitTypes.Melee => 2000,
+                BaseUnit.UnitTypes.Ranged => 4000,
+                BaseUnit.UnitTypes.Tank => 6000,
                 _ => 2000
             };
         }
@@ -99,7 +96,8 @@ namespace Managers
         private BaseUnit.UnitTypes GetRandomUnit()
         {
             // todo:
-            var opponentUnits = new List<BaseUnit.UnitTypes> { BaseUnit.UnitTypes.Melee };
+            var opponentUnits = new List<BaseUnit.UnitTypes>
+                { BaseUnit.UnitTypes.Melee, BaseUnit.UnitTypes.Ranged, BaseUnit.UnitTypes.Tank };
 
             var randomUnit = opponentUnits[Random.Range(0, opponentUnits.Count - 1)];
             return randomUnit;

@@ -33,6 +33,9 @@ namespace UI
 
             var screenTransition =
                 GameManager.Instance.GetManager<UIManager>().NavigateTo(UIManager.Screens.MainScreen);
+            
+            GameManager.Instance.GetManager<UnitManager>().Cleanup();
+            GameManager.Instance.GetManager<TrapsManager>().Cleanup();
 
             await Task.WhenAll(cameraTransition, screenTransition);
         }

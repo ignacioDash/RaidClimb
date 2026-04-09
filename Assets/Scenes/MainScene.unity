@@ -2930,7 +2930,6 @@ MonoBehaviour:
   - {fileID: 26096059}
   - {fileID: 354150080}
   spawnArea: {fileID: 577487770}
-  holdPreviewPrefab: {fileID: 834226365626422842, guid: 97908148f97444f8e93aeba31b1296be, type: 3}
   joystickCameraMovement: {fileID: 1833051166}
   holdDelay: 0.5
   pathLayer:
@@ -4267,13 +4266,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 577487769}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.23747852, z: -0, w: 0.97139287}
-  m_LocalPosition: {x: -23.5, y: 0.58, z: -15.8}
-  m_LocalScale: {x: 16.545002, y: 1, z: 20.139004}
+  m_LocalRotation: {x: -0, y: 0.21658953, z: -0, w: 0.9762628}
+  m_LocalPosition: {x: -20.67, y: 0.58, z: -16.89}
+  m_LocalScale: {x: 13.884024, y: 1, z: 12.804137}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 27.476, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 25.018, z: 0}
 --- !u!1001 &577697845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6585,7 +6584,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.OpponentManager
   spawnArea: {fileID: 1848914733}
-  unitReferences: {fileID: 11400000, guid: 40984382571b84cedaa96b21ca0a871b, type: 2}
 --- !u!1 &892406949
 GameObject:
   m_ObjectHideFlags: 0
@@ -11769,8 +11767,8 @@ Transform:
   m_GameObject: {fileID: 1848914729}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.018186651, z: -0, w: 0.99983466}
-  m_LocalPosition: {x: 12.3, y: 0.58, z: -15}
-  m_LocalScale: {x: 25.366041, y: 1, z: 20.139}
+  m_LocalPosition: {x: 15.8, y: 0.58, z: -14.9}
+  m_LocalScale: {x: 12.56312, y: 1, z: 12.938173}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 873398741}

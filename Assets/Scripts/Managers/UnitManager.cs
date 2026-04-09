@@ -159,7 +159,8 @@ namespace Managers
                     continue;
                 }
 
-                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead;
+                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead &&
+                                     attacker.UnitCurrentState != BaseUnit.UnitState.Climbing;
 
                 if (canAttackAgain)
                     FindNewTargetFor(attacker);

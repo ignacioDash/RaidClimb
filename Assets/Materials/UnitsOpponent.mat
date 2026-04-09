@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RGBRecolor_Objects
+  m_Name: UnitsOpponent
   m_Shader: {fileID: -6465566751694194690, guid: 45b2c1cdfa01be147bb172856196fc17, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -121,13 +121,14 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _WorkflowMode: 1
+    - _XRMotionVectorsPass: 1
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.3803922, g: 0.56078434, b: 0.80392164, a: 1}
+    - _Color1: {r: 0.9339623, g: 0.3485106, b: 0.3304112, a: 1}
     - _Color2: {r: 0.59607846, g: 0.2392157, b: 0.15294118, a: 1}
     - _Color3: {r: 0.78039217, g: 0.78039217, b: 0.78039217, a: 1}
     - _CorneaColor: {r: 0.20392157, g: 0.87058824, b: 0.9490196, a: 1}

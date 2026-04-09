@@ -31,15 +31,6 @@ namespace Data
     {
         public int CastleLevel;
         public List<CastleSlot> CastleSlots;
-
-        public CastleData()
-        {
-            CastleLevel = 1;
-            CastleSlots = new List<CastleSlot>
-            {
-                new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
-            };
-        }
     }
 
     [Serializable]

@@ -26,12 +26,14 @@ namespace Castles
             }
             
             _castleData = dataManager.PlayerData.PlayerCastleData;
-
-            // castle is shown at init
-            UpdateCastleWithCastleData();
         }
 
         public override void OnGameStarted()
+        {
+            UpdateCastleWithCastleData();
+        }
+
+        public void OnCastleScreenOpened()
         {
             UpdateCastleWithCastleData();
         }
