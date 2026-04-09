@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Constants;
 using Input;
 using Managers;
@@ -22,11 +24,13 @@ namespace UI
 
         private UnitManager _unitManager;
         private InputManager _inputManager;
-        private BaseUnit _unitToSpawn;
+        private readonly List<BaseUnit> _pendingTargetUnits = new();
         
         // ranges
         private float _holdProgress;
         private int _currentRange = -1;
+        private float _holdStartTime;
+        private const float MIN_HOLD = 0.2f;
         
         protected override void OnEnable()
         {
@@ -60,6 +64,8 @@ namespace UI
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
             exitButton.onClick.RemoveListener(OnExitButton);
+            StopAllCoroutines();
+            _pendingTargetUnits.Clear();
         }
 
         private void SetButtons(bool on)
@@ -97,6 +103,9 @@ namespace UI
             if (holdRanges == null || holdRanges.Length == 0)
                 return;
 
+            if (_holdProgress == 0f)
+                _holdStartTime = Time.time;
+
             var sectionSize = 1f / holdRanges.Length;
 
             var sectionIndex = Mathf.Min(
@@ -112,6 +121,9 @@ namespace UI
                 speed * Time.deltaTime);
 
             UpdatePointerVisual();
+
+            if (Time.time - _holdStartTime < MIN_HOLD)
+                return;
 
             var newRange = Mathf.Min(
                 Mathf.FloorToInt(_holdProgress / sectionSize),
@@ -129,10 +141,21 @@ namespace UI
 
         private void OnReleaseInput(Vector3 worldPos)
         {
+            if (_holdStartTime <= 0f || Time.time - _holdStartTime < MIN_HOLD + 0.1f)
+            {
+                _holdStartTime = 0f;
+                _holdProgress = 0f;
+                _currentRange = -1;
+                UpdateRangeVisuals(-1);
+                UpdatePointerVisual();
+                return;
+            }
+
             var range = GetRangeIndex();
             OnReleasedRange(range, worldPos);
 
             _holdProgress = 0f;
+            _holdStartTime = 0f;
             _currentRange = -1;
             UpdateRangeVisuals(-1);
             UpdatePointerVisual();
@@ -150,17 +173,21 @@ namespace UI
                 return;
             
             var unitPosition = GetUnitPosition(worldPos);
-            _unitToSpawn = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
+            var unitToSpawn = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
             
-            if (_unitToSpawn)
+            if (unitToSpawn)
             {
-                _unitToSpawn.transform.position = unitPosition;
-                _ = SetDelayedTarget();
+                unitToSpawn.transform.position = unitPosition;
+                _pendingTargetUnits.Add(unitToSpawn);
+                StartCoroutine(SetDelayedTarget(unitToSpawn, 1.5f));
             }
         }
 
         private BaseUnit.UnitTypes GetUnitTypeForRange(int range)
         {
+            if (Time.time - _holdStartTime < MIN_HOLD)
+                return BaseUnit.UnitTypes.None;
+
             // todo
             return range switch
             {
@@ -183,6 +210,9 @@ namespace UI
 
         private void UpdateRangeVisuals(int activeIndex)
         {
+            if (Time.time - _holdStartTime < MIN_HOLD)
+                activeIndex = -1;
+
             if (rangeImages == null)
                 return;
 
@@ -203,13 +233,16 @@ namespace UI
             pointerImage.rectTransform.position = Vector3.Lerp(pointerStart.position, pointerEnd.position, _holdProgress);
         }
 
-        private async Task SetDelayedTarget()
+        private IEnumerator SetDelayedTarget(BaseUnit unitToSpawn, float delay)
         {
-            await Task.Delay(1500);
-            
-            _unitManager.FindNewTargetFor(_unitToSpawn);
-            
-            _unitToSpawn = null;
+            yield return new WaitForSeconds(delay);
+
+            _pendingTargetUnits.Remove(unitToSpawn);
+
+            if (!unitToSpawn)
+                yield break;
+
+            _unitManager.FindNewTargetFor(unitToSpawn);
         }
 
         private Vector3 GetUnitPosition(Vector3 worldPos)

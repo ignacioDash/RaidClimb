@@ -111,16 +111,16 @@ namespace Input
                     return;
             }
 
-            DropUnitAtRandom();
-            // DropUnitAtPath();
+            DropUnitAtRandom(activeTouch);
+            // DropUnitAtPath(activeTouch);
         }
         
-        private void DropUnitAtRandom()
+        private void DropUnitAtRandom(Touch? activeTouch)
         {
 #if UNITY_EDITOR
             var pointerPressed = Pointer.current != null && Pointer.current.press.isPressed;
 #else
-    var pointerPressed = activeTouch.HasValue && activeTouch.Value.isInProgress;
+            var pointerPressed = activeTouch.HasValue && activeTouch.Value.isInProgress;
 #endif
 
             if (!pointerPressed)
@@ -162,7 +162,7 @@ namespace Input
 
 #region OLD_INPUT
 
-        private void DropUnitAtPath()
+        private void DropUnitAtPath(Touch? activeTouch)
         {
 #if UNITY_EDITOR
             var pointerPos = Pointer.current.position.ReadValue();

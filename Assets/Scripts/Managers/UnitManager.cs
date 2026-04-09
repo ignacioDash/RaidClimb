@@ -19,10 +19,48 @@ namespace Managers
         
         private readonly List<BaseUnit> _playerUnits = new();
         private readonly List<BaseUnit> _opponentUnits = new();
+        private readonly Dictionary<BaseUnit, float> _idleStateStartTimes = new();
+
+        private const float MAX_IDLE_STATE_TIME = 10f;
         
         public async Task Init(object[] args)
         {
             
+        }
+
+        private void Update()
+        {
+            CheckBuggedIdleUnits(_playerUnits);
+            CheckBuggedIdleUnits(_opponentUnits);
+        }
+
+        private void CheckBuggedIdleUnits(List<BaseUnit> units)
+        {
+            for (var i = units.Count - 1; i >= 0; i--)
+            {
+                var unit = units[i];
+                if (!unit)
+                    continue;
+
+                if (unit.UnitCurrentState != BaseUnit.UnitState.Idle)
+                {
+                    _idleStateStartTimes.Remove(unit);
+                    continue;
+                }
+
+                if (!_idleStateStartTimes.TryGetValue(unit, out var idleStartTime))
+                {
+                    _idleStateStartTimes[unit] = Time.time;
+                    continue;
+                }
+
+                if (Time.time - idleStartTime < MAX_IDLE_STATE_TIME)
+                    continue;
+
+                Debug.LogWarning($"Destroying bugged idle unit: {unit.name}");
+                UnRegisterUnit(unit);
+                _idleStateStartTimes.Remove(unit);
+            }
         }
 
         public void OnGameEnded(string winnerId)
@@ -71,6 +109,9 @@ namespace Managers
             
             unit.Init(playerId, startState, () => OnUnitDeath(unit));
             
+            if (startState == BaseUnit.UnitState.Idle)
+                _idleStateStartTimes[unit] = Time.time;
+            
             return unit;
         }
 
@@ -108,10 +149,15 @@ namespace Managers
                 
                 unit.SetUnitTarget(closestEnemy, newState);
             }
+            else
+            {
+                Debug.LogError("Couldnt find closest enemy??");
+            }
         }
 
         private void UnRegisterUnit(BaseUnit unit)
         {
+            _idleStateStartTimes.Remove(unit);
             unit.CleanUp();
             
             if (unit.PlayerId == Keys.PLAYER_ID)
@@ -142,6 +188,7 @@ namespace Managers
                 Destroy(unit.gameObject);
             }
 
+            _idleStateStartTimes.Clear();
             _playerUnits.Clear();
             _opponentUnits.Clear();
         }
@@ -159,8 +206,7 @@ namespace Managers
                     continue;
                 }
 
-                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead &&
-                                     attacker.UnitCurrentState != BaseUnit.UnitState.Climbing;
+                var canAttackAgain = attacker.UnitCurrentState != BaseUnit.UnitState.Dead;
 
                 if (canAttackAgain)
                     FindNewTargetFor(attacker);
