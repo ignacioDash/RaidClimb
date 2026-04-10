@@ -17,4 +17,4 @@ MonoBehaviour:
   range: 15
   movementSpeed: 0
   climbSpeed: 0
-  attackSpeed: 0.8
+  attackSpeed: 2

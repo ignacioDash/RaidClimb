@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
   m_Name: MeleeUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
-  health: 120
+  health: 40
   damage: 18
   range: 1
   movementSpeed: 2.2

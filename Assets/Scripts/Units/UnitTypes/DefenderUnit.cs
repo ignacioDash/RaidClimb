@@ -66,7 +66,7 @@ namespace Units.UnitTypes
 
         protected override void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Unit"))
+            /*if (other.CompareTag("Unit"))
             {
                 var exitUnit = other.GetComponent<BaseUnit>();
                 if (exitUnit)
@@ -83,7 +83,7 @@ namespace Units.UnitTypes
                         _attackers.Remove(exitUnit);
                     }
                 }
-            }
+            }*/
         }
     }
 }

@@ -90,8 +90,8 @@ namespace Managers
 
             var isPlayerUnit = playerId == Keys.PLAYER_ID;
             var unitRotation = isPlayerUnit
-                ? Quaternion.Euler(new Vector3(0, -90, 0))
-                : Quaternion.Euler(new Vector3(0, 90, 0));
+                ? Quaternion.Euler(new Vector3(0, 90, 0))
+                : Quaternion.Euler(new Vector3(0, -90, 0));
             
             var unit = Instantiate(unitPrefab, spawnPoint, unitRotation, unitsContainer);
             

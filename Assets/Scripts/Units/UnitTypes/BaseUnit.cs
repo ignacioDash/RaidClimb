@@ -270,8 +270,8 @@ namespace Units.UnitTypes
         {
             if (!_target)
                 return;
-            
-            _nextAttackTime = Time.time + unitConfig.AttackSpeed;
+
+            _nextAttackTime = Time.time + (1f / unitConfig.AttackSpeed);
 
             _target.TakeDamage(unitConfig.Damage);
         }

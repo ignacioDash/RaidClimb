@@ -24,13 +24,12 @@ namespace UI
 
         private UnitManager _unitManager;
         private InputManager _inputManager;
-        private readonly List<BaseUnit> _pendingTargetUnits = new();
         
         // ranges
         private float _holdProgress;
         private int _currentRange = -1;
         private float _holdStartTime;
-        private const float MIN_HOLD = 0.2f;
+        private const float MIN_HOLD = 0.25f;
         
         protected override void OnEnable()
         {
@@ -65,7 +64,6 @@ namespace UI
             unPauseButton.onClick.RemoveListener(OnUnPause);
             exitButton.onClick.RemoveListener(OnExitButton);
             StopAllCoroutines();
-            _pendingTargetUnits.Clear();
         }
 
         private void SetButtons(bool on)
@@ -141,7 +139,7 @@ namespace UI
 
         private void OnReleaseInput(Vector3 worldPos)
         {
-            if (_holdStartTime <= 0f || Time.time - _holdStartTime < MIN_HOLD + 0.1f)
+            if (_holdStartTime <= 0f || Time.time - _holdStartTime < MIN_HOLD + 0.05f)
             {
                 _holdStartTime = 0f;
                 _holdProgress = 0f;
@@ -178,7 +176,6 @@ namespace UI
             if (unitToSpawn)
             {
                 unitToSpawn.transform.position = unitPosition;
-                _pendingTargetUnits.Add(unitToSpawn);
                 StartCoroutine(SetDelayedTarget(unitToSpawn, 1.5f));
             }
         }
@@ -236,9 +233,7 @@ namespace UI
         private IEnumerator SetDelayedTarget(BaseUnit unitToSpawn, float delay)
         {
             yield return new WaitForSeconds(delay);
-
-            _pendingTargetUnits.Remove(unitToSpawn);
-
+            
             if (!unitToSpawn)
                 yield break;
 
