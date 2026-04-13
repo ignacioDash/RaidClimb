@@ -21,14 +21,13 @@ namespace Units.Traps
             base.Init(playerId);
 
             _trapLoop = null;
-            ChangeState(TrapState.Active);
         }
 
         private async Task ThornHedgeTrapLoop()
         {
             _cts = new CancellationTokenSource();
 
-            while (_trapState == TrapState.Active && !_cts.Token.IsCancellationRequested)
+            while (CurrentTrapState == TrapState.Active && !_cts.Token.IsCancellationRequested)
             {
                 if (Time.time >= _nextAttackTime)
                 {
@@ -64,12 +63,18 @@ namespace Units.Traps
 
         protected override void OnEnemyUnitEnteredTrap(BaseUnit unit)
         {
+            if (CurrentTrapState != TrapState.Active)
+                return;
+            
             if (!_unitsInTrap.Contains(unit))
                 _unitsInTrap.Add(unit);
         }
 
         protected override void OnEnemyUnitExitedTrap(BaseUnit unit)
         {
+            if (CurrentTrapState != TrapState.Active)
+                return;
+            
             if (_unitsInTrap.Contains(unit))
                 _unitsInTrap.Remove(unit);
         }

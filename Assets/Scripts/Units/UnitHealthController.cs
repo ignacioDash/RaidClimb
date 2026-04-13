@@ -1,6 +1,8 @@
 using System;
 using Config;
+using Constants;
 using DG.Tweening;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,18 +16,21 @@ namespace Units
         
         private Action _onDeath;
         private UnitBaseConfig _config;
-        private Camera _mainCamera;
+        private Camera _playerCamera;
         
         public Canvas WorldCanvas => worldCanvas;
         public float UnitHealth { get; private set; }
         
-        public void Init(UnitBaseConfig config, Action onDeath)
+        public void Init(UnitBaseConfig config, Action onDeath, bool useAttackCamera)
         {
             _config = config;
             UnitHealth = _config.Health;
 
-            _mainCamera = Camera.main;
-            worldCanvas.worldCamera = _mainCamera;
+            var cameraManager = GameManager.Instance.GetManager<CameraManager>();
+
+            _playerCamera = useAttackCamera ? cameraManager.MainCamera : cameraManager.PlayerCamera;
+            
+            worldCanvas.worldCamera = _playerCamera;
             
             healthBar.fillAmount = 1;
             _onDeath += onDeath;
@@ -47,7 +52,7 @@ namespace Units
 
         private void LateUpdate()
         {
-            worldCanvas.transform.forward = _mainCamera.transform.forward;
+            worldCanvas.transform.forward = _playerCamera.transform.forward;
         }
     }
 }

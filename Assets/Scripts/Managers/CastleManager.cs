@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Units;
 using Units.Traps;
 using Units.UnitTypes;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Managers
     public abstract class CastleManager : MonoBehaviour, IManager
     {
         [SerializeField] protected List<CastleSlotReference> castleSlots;
+
 
         protected abstract string _playerId { get; set; }
         protected abstract CastleData _castleData { get; set; }
@@ -25,7 +27,10 @@ namespace Managers
 
         public virtual void Cleanup()
         {
-            
+        }
+
+        public void OnDissolveCompleted(IDissolve dissolvedUnit)
+        {
         }
 
         protected void UpdateCastleWithCastleData()
@@ -44,19 +49,15 @@ namespace Managers
                 
                 if (slot.SlotUnit != BaseUnit.UnitTypes.None)
                 {
-                    var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId,
-                        BaseUnit.UnitState.Defending);
+                    var unit = unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId);
 
                     if (!unit) continue;
-
-                    unit.ChangeUnitStateTo(BaseUnit.UnitState.Defending);
                 }
                 else if (slot.SlotTrap != BaseTrap.TrapTypes.None)
                 {
                     var trap = trapsManager.SpawnTrap(slot.SlotTrap, spawnPosition.SlotPosition, _playerId);
 
                     if (!trap) continue;
-                    
                 }
             }
         }

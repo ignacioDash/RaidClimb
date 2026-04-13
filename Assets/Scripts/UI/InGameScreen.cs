@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Linq;
+using Castles;
 using Constants;
 using Input;
 using Managers;
+using Units;
+using Units.Traps;
 using Units.UnitTypes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +25,11 @@ namespace UI
         [SerializeField] private HoldRanges[] holdRanges;
 
         private UnitManager _unitManager;
+        private TrapsManager _trapsManager;
         private InputManager _inputManager;
+        
+        private IDissolve _currentDefenderToSpawn;
+        private bool _currentDissolveCompleted;
         
         // ranges
         private float _holdProgress;
@@ -37,9 +43,13 @@ namespace UI
 
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
             _inputManager = GameManager.Instance.GetManager<InputManager>();
+            _trapsManager = GameManager.Instance.GetManager<TrapsManager>();
 
-            _inputManager.OnHold += OnHoldInput;
-            _inputManager.OnRelease += OnReleaseInput;
+            _inputManager.OnHoldRight += OnHoldAttack;
+            _inputManager.OnReleaseRight += OnReleaseAttack;
+
+            _inputManager.OnHoldLeft += OnHoldDefense;
+            _inputManager.OnReleaseLeft += OnReleaseDefense;
 
             pauseButton.onClick.AddListener(OnPaused);
             unPauseButton.onClick.AddListener(OnUnPause);
@@ -57,8 +67,11 @@ namespace UI
 
         private void OnDisable()
         {
-            _inputManager.OnHold -= OnHoldInput;
-            _inputManager.OnRelease -= OnReleaseInput;
+            _inputManager.OnHoldRight -= OnHoldAttack;
+            _inputManager.OnReleaseRight -= OnReleaseAttack;
+            
+            _inputManager.OnHoldLeft -= OnHoldDefense;
+            _inputManager.OnReleaseLeft -= OnReleaseDefense;
             
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
@@ -96,7 +109,50 @@ namespace UI
             pauseMenu.SetActive(true);
         }
 
-        private void OnHoldInput()
+        private void OnHoldDefense()
+        {
+            if (_currentDissolveCompleted)
+                return;
+            
+            if (_currentDefenderToSpawn == null)
+            {
+                var defenders =
+                    _unitManager.PlayerUnits.Where(u => u.IsDefender && u.UnitCurrentState == BaseUnit.UnitState.Idle)
+                        .ToList();
+
+                var traps = _trapsManager.PlayerTraps.Where(t => t.CurrentTrapState == BaseTrap.TrapState.Idle)
+                    .ToList();
+
+                var defendersCombined = defenders
+                    .OfType<IDissolve>()
+                    .Concat(traps)
+                    .OrderBy(_ => UnityEngine.Random.value)
+                    .ToList();
+                
+                if (!defendersCombined.Any())
+                    return;
+
+                _currentDefenderToSpawn = defendersCombined[0];
+            }
+            else
+            {
+                _currentDissolveCompleted =  _currentDefenderToSpawn.OnFillElementPressed();
+            }
+        }
+
+        private void OnReleaseDefense(Vector3 _)
+        {
+            _currentDissolveCompleted = false;
+            
+            if (_currentDefenderToSpawn == null)
+                return;
+            
+            _currentDefenderToSpawn.OnFillElementReleased();
+
+            _currentDefenderToSpawn = null;
+        }
+
+        private void OnHoldAttack()
         {
             if (holdRanges == null || holdRanges.Length == 0)
                 return;
@@ -137,7 +193,7 @@ namespace UI
             }
         }
 
-        private void OnReleaseInput(Vector3 worldPos)
+        private void OnReleaseAttack(Vector3 worldPos)
         {
             if (_holdStartTime <= 0f || Time.time - _holdStartTime < MIN_HOLD + 0.05f)
             {

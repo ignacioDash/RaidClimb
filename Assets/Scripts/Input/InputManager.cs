@@ -35,9 +35,12 @@ namespace Input
 
         private GameObject _holdPreviewInstance;
         private GameStateManager _gameStateManager;
+        private Vector2 _lastHoldScreenPos;
         
-        public Action OnHold;
-        public Action<Vector3> OnRelease;
+        public Action OnHoldLeft;
+        public Action OnHoldRight;
+        public Action<Vector3> OnReleaseLeft;
+        public Action<Vector3> OnReleaseRight;
         
         public bool Inited { get; private set; }
         
@@ -110,6 +113,14 @@ namespace Input
                 if (!activeTouch.HasValue)
                     return;
             }
+
+#if UNITY_EDITOR
+            if (Pointer.current != null)
+                _lastHoldScreenPos = Pointer.current.position.ReadValue();
+#else
+            if (activeTouch.HasValue)
+                _lastHoldScreenPos = activeTouch.Value.screenPosition;
+#endif
 
             DropUnitAtRandom(activeTouch);
             // DropUnitAtPath(activeTouch);
@@ -247,6 +258,11 @@ namespace Input
         
 #endregion
 
+        private static bool IsLeftHalf(Vector2 screenPos)
+        {
+            return screenPos.x < Screen.width * 0.5f;
+        }
+
         private void OnHolding()
         {
             /*if (!_holdPreviewInstance)
@@ -254,7 +270,10 @@ namespace Input
 
             _holdPreviewInstance.transform.position = _lastValidDropPosition;*/
             
-            OnHold?.Invoke();
+            if (IsLeftHalf(_lastHoldScreenPos))
+                OnHoldLeft?.Invoke();
+            else
+                OnHoldRight?.Invoke();
         }
 
         private void EndHold()
@@ -263,8 +282,12 @@ namespace Input
                 Destroy(_holdPreviewInstance.gameObject);*/
             
             var randomPos = GetRandomPositionInDropArea();
-                
-            OnRelease?.Invoke(new Vector3(randomPos.x, 1f, randomPos.z));
+            var releasePos = new Vector3(randomPos.x, 1f, randomPos.z);
+            
+            if (IsLeftHalf(_lastHoldScreenPos))
+                OnReleaseLeft?.Invoke(releasePos);
+            else
+                OnReleaseRight?.Invoke(releasePos);
         }
     }
 }

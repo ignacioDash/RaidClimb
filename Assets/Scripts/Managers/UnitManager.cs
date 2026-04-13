@@ -16,63 +16,25 @@ namespace Managers
         
         [Header("Settings")]
         [SerializeField] private UnitReferences unitReferences;
-        
-        private readonly List<BaseUnit> _playerUnits = new();
-        private readonly List<BaseUnit> _opponentUnits = new();
-        private readonly Dictionary<BaseUnit, float> _idleStateStartTimes = new();
 
-        private const float MAX_IDLE_STATE_TIME = 10f;
+        public readonly List<BaseUnit> PlayerUnits = new();
+        public readonly List<BaseUnit> OpponentUnits = new();
         
         public async Task Init(object[] args)
         {
             
         }
 
-        private void Update()
-        {
-            CheckBuggedIdleUnits(_playerUnits);
-            CheckBuggedIdleUnits(_opponentUnits);
-        }
-
-        private void CheckBuggedIdleUnits(List<BaseUnit> units)
-        {
-            for (var i = units.Count - 1; i >= 0; i--)
-            {
-                var unit = units[i];
-                if (!unit)
-                    continue;
-
-                if (unit.UnitCurrentState != BaseUnit.UnitState.Idle)
-                {
-                    _idleStateStartTimes.Remove(unit);
-                    continue;
-                }
-
-                if (!_idleStateStartTimes.TryGetValue(unit, out var idleStartTime))
-                {
-                    _idleStateStartTimes[unit] = Time.time;
-                    continue;
-                }
-
-                if (Time.time - idleStartTime < MAX_IDLE_STATE_TIME)
-                    continue;
-
-                Debug.LogWarning($"Destroying bugged idle unit: {unit.name}");
-                UnRegisterUnit(unit);
-                _idleStateStartTimes.Remove(unit);
-            }
-        }
-
         public void OnGameEnded(string winnerId)
         {
             var playerWon = winnerId == Keys.PLAYER_ID;
             
-            foreach (var unit in _playerUnits)
+            foreach (var unit in PlayerUnits)
             {
                 unit.ChangeUnitStateTo(playerWon ? BaseUnit.UnitState.Won : BaseUnit.UnitState.Lost);
             }
 
-            foreach (var unit in _opponentUnits)
+            foreach (var unit in OpponentUnits)
             {
                 unit.ChangeUnitStateTo(!playerWon ? BaseUnit.UnitState.Won : BaseUnit.UnitState.Lost);
             }
@@ -104,13 +66,10 @@ namespace Managers
                 transform1.position = pos;
             }
             
-            if (isPlayerUnit) _playerUnits.Add(unit);
-            else _opponentUnits.Add(unit);
+            if (isPlayerUnit) PlayerUnits.Add(unit);
+            else OpponentUnits.Add(unit);
             
             unit.Init(playerId, startState, () => OnUnitDeath(unit));
-            
-            if (startState == BaseUnit.UnitState.Idle)
-                _idleStateStartTimes[unit] = Time.time;
             
             return unit;
         }
@@ -118,7 +77,7 @@ namespace Managers
         public void FindNewTargetFor(BaseUnit unit)
         {
             var isPlayerUnit = unit.PlayerId == Keys.PLAYER_ID;
-            var enemyUnits = isPlayerUnit ? _opponentUnits : _playerUnits;
+            var enemyUnits = isPlayerUnit ? OpponentUnits : PlayerUnits;
 
             BaseUnit closestEnemy = null;
             var closestDistance = float.MaxValue;
@@ -157,18 +116,17 @@ namespace Managers
 
         private void UnRegisterUnit(BaseUnit unit)
         {
-            _idleStateStartTimes.Remove(unit);
             unit.CleanUp();
             
             if (unit.PlayerId == Keys.PLAYER_ID)
             {
-                if (_playerUnits.Contains(unit))
-                    _playerUnits.Remove(unit);
+                if (PlayerUnits.Contains(unit))
+                    PlayerUnits.Remove(unit);
             }
             else
             {
-                if (_opponentUnits.Contains(unit))
-                    _opponentUnits.Remove(unit);
+                if (OpponentUnits.Contains(unit))
+                    OpponentUnits.Remove(unit);
             }
 
             if (unit) Destroy(unit.gameObject);
@@ -176,21 +134,20 @@ namespace Managers
 
         public void Cleanup()
         {
-            foreach (var unit in _playerUnits.Where(unit => unit))
+            foreach (var unit in PlayerUnits.Where(unit => unit))
             {
                 unit.CleanUp();
                 Destroy(unit.gameObject);
             }
 
-            foreach (var unit in _opponentUnits.Where(unit => unit))
+            foreach (var unit in OpponentUnits.Where(unit => unit))
             {
                 unit.CleanUp();
                 Destroy(unit.gameObject);
             }
 
-            _idleStateStartTimes.Clear();
-            _playerUnits.Clear();
-            _opponentUnits.Clear();
+            PlayerUnits.Clear();
+            OpponentUnits.Clear();
         }
 
         private void OnUnitDeath(BaseUnit unit)
@@ -199,6 +156,8 @@ namespace Managers
 
             foreach (var attacker in unit.TargetInfo.TargetedBy)
             {
+                if (!attacker)continue;
+                
                 if (attacker.IsDefender)
                 {
                     // keep defending

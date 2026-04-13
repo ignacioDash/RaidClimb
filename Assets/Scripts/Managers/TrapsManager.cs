@@ -15,8 +15,8 @@ namespace Managers
         [Header("Settings")]
         [SerializeField] private List<TrapsReference> trapReferences;
 
-        private readonly List<BaseTrap> _playerTraps = new();
-        private readonly List<BaseTrap> _opponentTraps = new();
+        public readonly List<BaseTrap> PlayerTraps = new();
+        public readonly List<BaseTrap> OpponentTraps = new();
         
         public async Task Init(object[] args)
         {
@@ -37,30 +37,30 @@ namespace Managers
 
             var isPlayerUnit = playerId == Keys.PLAYER_ID;
             
-            if (isPlayerUnit) _playerTraps.Add(trapInstance);
-            else _opponentTraps.Add(trapInstance);
+            if (isPlayerUnit) PlayerTraps.Add(trapInstance);
+            else OpponentTraps.Add(trapInstance);
 
             return trapInstance;
         }
 
         public void Cleanup()
         {
-            foreach (var trap in _playerTraps)
+            foreach (var trap in PlayerTraps)
             {
                 trap.CleanUp();
                 if (trap)
                     Destroy(trap.gameObject);
             }
 
-            foreach (var trap in _opponentTraps)
+            foreach (var trap in OpponentTraps)
             {
                 trap.CleanUp();
                 if (trap)
                     Destroy(trap.gameObject);
             }
 
-            _playerTraps.Clear();
-            _opponentTraps.Clear();
+            PlayerTraps.Clear();
+            OpponentTraps.Clear();
         }
     }
     

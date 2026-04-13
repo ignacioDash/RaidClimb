@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace Units.UnitTypes
 {
-    public class DefenderUnit : BaseUnit
+    public class DefenderUnit : BaseUnit, IDissolve
     {
+        [SerializeField] private DissolveController dissolveController;
+        
         private SphereCollider _sphereCollider;
         private List<BaseUnit> _attackers;
         
@@ -14,7 +16,7 @@ namespace Units.UnitTypes
         {
             unitType = UnitTypes.Defender;
             _sphereCollider = GetComponent<SphereCollider>();
-            startState = UnitState.Defending;
+            startState = UnitState.Idle;
             _attackers = new List<BaseUnit>();
             
             base.Init(playerId, startState, onUnitDeath);
@@ -84,6 +86,21 @@ namespace Units.UnitTypes
                     }
                 }
             }*/
+        }
+
+        public bool OnFillElementPressed()
+        {
+            var completed = dissolveController.Fill();
+
+            if (completed)
+                ChangeUnitStateTo(UnitState.Defending);
+                
+            return completed;
+        }
+
+        public void OnFillElementReleased()
+        {
+            dissolveController.Release();
         }
     }
 }

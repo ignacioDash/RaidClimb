@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Config;
+using Constants;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -102,8 +103,11 @@ namespace Units.UnitTypes
             
             if (navMeshAgent)
                 navMeshAgent.enabled = false;
+
+            var useAttackCamera = (PlayerId == Keys.PLAYER_ID && !IsDefender) ||
+                                  (PlayerId == Keys.OPPONENT_ID && IsDefender);
             
-            healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead));
+            healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead), useAttackCamera);
         }
 
         public void SetUnitTarget(BaseUnit target, UnitState state)
@@ -139,7 +143,8 @@ namespace Units.UnitTypes
             switch (unitCurrentState)
             {
                 case UnitState.Idle:
-                    animatorController.SetTrigger(Falling);
+                    if (animatorController && unitType != UnitTypes.Defender)
+                        animatorController.SetTrigger(Falling);
                     break;
                 case UnitState.Moving:
                     if (animatorController)
@@ -174,7 +179,7 @@ namespace Units.UnitTypes
                     OnTriggerAttacking();
                     break;
                 case UnitState.Dead:
-                    if (animatorController.runtimeAnimatorController)
+                    if (animatorController && animatorController.runtimeAnimatorController)
                         animatorController.SetTrigger(Death);
                     
                     if (_target && _target.unitTargetController)
@@ -276,7 +281,7 @@ namespace Units.UnitTypes
             _target.TakeDamage(unitConfig.Damage);
         }
 
-        public void CleanUp()
+        public virtual void CleanUp()
         {
             _climbCts?.Cancel();
             _climbCts = null;

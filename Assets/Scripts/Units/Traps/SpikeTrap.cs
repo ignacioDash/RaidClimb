@@ -13,8 +13,6 @@ namespace Units.Traps
             trapType = TrapTypes.Spikes;
             
             base.Init(playerId);
-            
-            ChangeState(TrapState.Active);
         }
 
         protected override void OnTrapDisabled() {}
@@ -25,7 +23,7 @@ namespace Units.Traps
 
         protected override void OnEnemyUnitEnteredTrap(BaseUnit unit)
         {
-            if (_trapState != TrapState.Active)
+            if (CurrentTrapState != TrapState.Active)
                 return;
             
             if (!_affectedUnits.Contains(unit))

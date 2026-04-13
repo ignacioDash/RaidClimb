@@ -1,12 +1,12 @@
-using System;
 using Config;
 using Units.UnitTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Units.Traps
 {
     [RequireComponent(typeof(Collider))]
-    public abstract class BaseTrap : MonoBehaviour
+    public abstract class BaseTrap : MonoBehaviour, IDissolve
     {
         public enum TrapTypes
         {
@@ -24,11 +24,12 @@ namespace Units.Traps
 
         [SerializeField] protected TrapTypes trapType;
         [SerializeField] protected UnitBaseConfig trapConfig;
+        [SerializeField] private DissolveController dissolveController;
         
         private Collider _trapCollider;
         private string _playerId;
 
-        protected TrapState _trapState;
+        public TrapState CurrentTrapState { get; private set; }
 
         private void OnEnable()
         {
@@ -44,12 +45,12 @@ namespace Units.Traps
 
         protected void ChangeState(TrapState trapState)
         {
-            if (trapState == _trapState)
+            if (trapState == CurrentTrapState)
                 return;
 
-            _trapState = trapState;
+            CurrentTrapState = trapState;
             
-            switch (_trapState)
+            switch (CurrentTrapState)
             {
                 case TrapState.Idle:
                     OnTrapDisabled();
@@ -91,6 +92,21 @@ namespace Units.Traps
             {
                 OnEnemyUnitExitedTrap(unit);
             }
+        }
+
+        public bool OnFillElementPressed()
+        {
+            var completed = dissolveController.Fill();
+
+            if (completed)
+                ChangeState(TrapState.Active);
+                
+            return completed;
+        }
+
+        public void OnFillElementReleased()
+        {
+            dissolveController.Release();
         }
     }
 }
