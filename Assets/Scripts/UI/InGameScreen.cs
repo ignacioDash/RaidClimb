@@ -48,9 +48,6 @@ namespace UI
             _inputManager.OnHoldRight += OnHoldAttack;
             _inputManager.OnReleaseRight += OnReleaseAttack;
 
-            _inputManager.OnHoldLeft += OnHoldDefense;
-            _inputManager.OnReleaseLeft += OnReleaseDefense;
-
             pauseButton.onClick.AddListener(OnPaused);
             unPauseButton.onClick.AddListener(OnUnPause);
             exitButton.onClick.AddListener(OnExitButton);
@@ -69,9 +66,6 @@ namespace UI
         {
             _inputManager.OnHoldRight -= OnHoldAttack;
             _inputManager.OnReleaseRight -= OnReleaseAttack;
-            
-            _inputManager.OnHoldLeft -= OnHoldDefense;
-            _inputManager.OnReleaseLeft -= OnReleaseDefense;
             
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
@@ -107,49 +101,6 @@ namespace UI
             Time.timeScale = 0;
 
             pauseMenu.SetActive(true);
-        }
-
-        private void OnHoldDefense()
-        {
-            if (_currentDissolveCompleted)
-                return;
-            
-            if (_currentDefenderToSpawn == null)
-            {
-                var defenders =
-                    _unitManager.PlayerUnits.Where(u => u.IsDefender && u.UnitCurrentState == BaseUnit.UnitState.Idle)
-                        .ToList();
-
-                var traps = _trapsManager.PlayerTraps.Where(t => t.CurrentTrapState == BaseTrap.TrapState.Idle)
-                    .ToList();
-
-                var defendersCombined = defenders
-                    .OfType<IDissolve>()
-                    .Concat(traps)
-                    .OrderBy(_ => UnityEngine.Random.value)
-                    .ToList();
-                
-                if (!defendersCombined.Any())
-                    return;
-
-                _currentDefenderToSpawn = defendersCombined[0];
-            }
-            else
-            {
-                _currentDissolveCompleted =  _currentDefenderToSpawn.OnFillElementPressed();
-            }
-        }
-
-        private void OnReleaseDefense(Vector3 _)
-        {
-            _currentDissolveCompleted = false;
-            
-            if (_currentDefenderToSpawn == null)
-                return;
-            
-            _currentDefenderToSpawn.OnFillElementReleased();
-
-            _currentDefenderToSpawn = null;
         }
 
         private void OnHoldAttack()

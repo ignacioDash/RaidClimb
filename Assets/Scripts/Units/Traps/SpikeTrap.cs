@@ -13,6 +13,7 @@ namespace Units.Traps
             trapType = TrapTypes.Spikes;
             
             base.Init(playerId);
+            ChangeState(TrapState.Active);
         }
 
         protected override void OnTrapDisabled() {}

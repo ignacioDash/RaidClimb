@@ -18,7 +18,6 @@ namespace Managers
         }
         
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private Camera playerCamera;
 
         [SerializeField] private Transform defaultCameraPosition,
             playCameraPosition,
@@ -28,25 +27,16 @@ namespace Managers
             opponentCastlePosition;
 
         public Camera MainCamera => mainCamera;
-        public Camera PlayerCamera => playerCamera;
 
         private CameraPosition _currentCameraPosition = CameraPosition.None;
         private Tween _cameraPositionTween, _cameraRotationTween;
         private Tween _mainCameraTween, _playerCameraTween;
-
-        private static readonly Rect _mainCameraFullRect = new (0f, 0f, 1f, 1f);
-        private static readonly Rect _mainCameraCastleRect = new (0.5f, 0f, 0.5f, 1f);
-        private static readonly Rect _playerCameraHiddenRect = new (0f, 0f, 0.01f, 1f);
-        private static readonly Rect _playerCameraCastleRect = new (0f, 0f, 0.5f, 1f);
         
         private const float CAMERA_ANIMATION_DURATION = 0.4f;
         private const float SPLIT_SCREEN_TWEEN_DURATION = 0.4f;
         
         public async Task Init(object[] args)
         {
-            mainCamera.rect = _mainCameraFullRect;
-            playerCamera.rect = _playerCameraHiddenRect;
-            playerCamera.enabled = false;
         }
 
         public async Task SetCameraAt(CameraPosition cameraPosition)
@@ -56,35 +46,29 @@ namespace Managers
             
             _currentCameraPosition = cameraPosition;
             var cameraAnimation = Task.CompletedTask;
-            var splitScreenAnimation = Task.CompletedTask;
             switch (_currentCameraPosition)
             {
                 case CameraPosition.Default:
-                    splitScreenAnimation = HideSplitScreen();
                     cameraAnimation = AnimateCameraTowardsPosition(defaultCameraPosition);
                     break;
                 case CameraPosition.Play:
-                    splitScreenAnimation = ShowSplitScreen();
                     cameraAnimation = AnimateCameraTowardsPosition(playCameraPosition);
                     break;
                 case CameraPosition.Castle:
                     cameraAnimation = AnimateCameraTowardsPosition(editCastleCameraPosition);
                     break;
                 case CameraPosition.Win:
-                    splitScreenAnimation = HideSplitScreen();
                     cameraAnimation = AnimateCameraTowardsPosition(winCameraPosition);
                     break;
                 case CameraPosition.Lose:
-                    splitScreenAnimation = HideSplitScreen();
                     cameraAnimation = AnimateCameraTowardsPosition(loseCameraPosition);
                     break;
                 case CameraPosition.Opponent:
-                    splitScreenAnimation = ShowSplitScreen();
                     cameraAnimation = AnimateCameraTowardsPosition(opponentCastlePosition);
                     break;
             }
 
-            await Task.WhenAll(splitScreenAnimation, cameraAnimation);
+            await Task.WhenAll(cameraAnimation);
         }
 
         private Task AnimateCameraTowardsPosition(Transform targetPosition)
@@ -133,33 +117,6 @@ namespace Managers
                 .SetEase(Ease.OutCubic);
 
             await tween.AsyncWaitForCompletion();
-        }
-
-        private async Task ShowSplitScreen()
-        {
-            _mainCameraTween?.Kill();
-            _playerCameraTween?.Kill();
-
-            playerCamera.enabled = true;
-            playerCamera.rect = _playerCameraHiddenRect;
-
-            var mainTask = AnimateCameraRect(mainCamera, _mainCameraCastleRect);
-            var playerTask = AnimateCameraRect(playerCamera, _playerCameraCastleRect);
-
-            await Task.WhenAll(mainTask, playerTask);
-        }
-
-        public async Task HideSplitScreen()
-        {
-            _mainCameraTween?.Kill();
-            _playerCameraTween?.Kill();
-
-            var mainTask = AnimateCameraRect(mainCamera, _mainCameraFullRect);
-            var playerTask = AnimateCameraRect(playerCamera, _playerCameraHiddenRect);
-
-            await Task.WhenAll(mainTask, playerTask);
-
-            playerCamera.enabled = false;
         }
 
         private static Rect LerpRect(Rect from, Rect to, float t)

@@ -21,6 +21,7 @@ namespace Units.Traps
             base.Init(playerId);
 
             _trapLoop = null;
+            ChangeState(TrapState.Active);
         }
 
         private async Task ThornHedgeTrapLoop()

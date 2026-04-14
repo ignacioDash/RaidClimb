@@ -19,16 +19,16 @@ namespace Units
         private Camera _playerCamera;
         
         public Canvas WorldCanvas => worldCanvas;
-        public float UnitHealth { get; private set; }
+        private float _unitHealth;
         
         public void Init(UnitBaseConfig config, Action onDeath, bool useAttackCamera)
         {
             _config = config;
-            UnitHealth = _config.Health;
+            _unitHealth = _config.Health;
 
             var cameraManager = GameManager.Instance.GetManager<CameraManager>();
 
-            _playerCamera = useAttackCamera ? cameraManager.MainCamera : cameraManager.PlayerCamera;
+            _playerCamera = cameraManager.MainCamera;
             
             worldCanvas.worldCamera = _playerCamera;
             
@@ -38,12 +38,12 @@ namespace Units
 
         public void OnUnitHealthChanged(float healthDelta)
         {
-            UnitHealth += healthDelta;
+            _unitHealth += healthDelta;
 
-            var sliderValue = UnitHealth / _config.Health;
+            var sliderValue = _unitHealth / _config.Health;
             healthBar.fillAmount = Mathf.Clamp(sliderValue, 0f, 1f);
 
-            if (UnitHealth <= 0)
+            if (_unitHealth <= 0)
             {
                 healthCanvasGroup.DOFade(0, 0.4f).SetLink(gameObject);
                 _onDeath?.Invoke();

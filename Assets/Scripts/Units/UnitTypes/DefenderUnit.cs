@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace Units.UnitTypes
 {
-    public class DefenderUnit : BaseUnit, IDissolve
+    public class DefenderUnit : BaseUnit
     {
-        [SerializeField] private DissolveController dissolveController;
-        
         private SphereCollider _sphereCollider;
         private List<BaseUnit> _attackers;
         
@@ -22,6 +20,7 @@ namespace Units.UnitTypes
             base.Init(playerId, startState, onUnitDeath);
 
             _sphereCollider.radius = unitConfig.Range;
+            ChangeUnitStateTo(UnitState.Defending);
         }
 
         protected override void OnTriggerDefending()
@@ -86,21 +85,6 @@ namespace Units.UnitTypes
                     }
                 }
             }*/
-        }
-
-        public bool OnFillElementPressed()
-        {
-            var completed = dissolveController.Fill();
-
-            if (completed)
-                ChangeUnitStateTo(UnitState.Defending);
-                
-            return completed;
-        }
-
-        public void OnFillElementReleased()
-        {
-            dissolveController.Release();
         }
     }
 }

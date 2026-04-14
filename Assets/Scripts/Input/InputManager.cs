@@ -37,9 +37,7 @@ namespace Input
         private GameStateManager _gameStateManager;
         private Vector2 _lastHoldScreenPos;
         
-        public Action OnHoldLeft;
         public Action OnHoldRight;
-        public Action<Vector3> OnReleaseLeft;
         public Action<Vector3> OnReleaseRight;
         
         public bool Inited { get; private set; }
@@ -258,11 +256,6 @@ namespace Input
         
 #endregion
 
-        private static bool IsLeftHalf(Vector2 screenPos)
-        {
-            return screenPos.x < Screen.width * 0.5f;
-        }
-
         private void OnHolding()
         {
             /*if (!_holdPreviewInstance)
@@ -270,10 +263,7 @@ namespace Input
 
             _holdPreviewInstance.transform.position = _lastValidDropPosition;*/
             
-            if (IsLeftHalf(_lastHoldScreenPos))
-                OnHoldLeft?.Invoke();
-            else
-                OnHoldRight?.Invoke();
+            OnHoldRight?.Invoke();
         }
 
         private void EndHold()
@@ -284,10 +274,7 @@ namespace Input
             var randomPos = GetRandomPositionInDropArea();
             var releasePos = new Vector3(randomPos.x, 1f, randomPos.z);
             
-            if (IsLeftHalf(_lastHoldScreenPos))
-                OnReleaseLeft?.Invoke(releasePos);
-            else
-                OnReleaseRight?.Invoke(releasePos);
+            OnReleaseRight?.Invoke(releasePos);
         }
     }
 }
