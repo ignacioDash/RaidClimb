@@ -22,7 +22,6 @@ namespace Input
 
         [SerializeField] private Collider[] pathsCollider;
         [SerializeField] private Collider spawnArea;
-        [SerializeField] private JoystickCameraMovement joystickCameraMovement;
 
         [SerializeField] private float holdDelay = 0.5f;
         [SerializeField] private LayerMask pathLayer;
@@ -37,7 +36,7 @@ namespace Input
         private GameStateManager _gameStateManager;
         private Vector2 _lastHoldScreenPos;
         
-        public Action OnHoldRight;
+        public Action<Vector2> OnHoldRight;
         public Action<Vector3> OnReleaseRight;
         
         public bool Inited { get; private set; }
@@ -92,9 +91,6 @@ namespace Input
                 foreach (var touch in Touch.activeTouches)
                 {
                     if (!touch.isInProgress)
-                        continue;
-
-                    if (joystickCameraMovement.ActiveFingerId == touch.touchId)
                         continue;
 
                     /*if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.touchId))
@@ -263,7 +259,7 @@ namespace Input
 
             _holdPreviewInstance.transform.position = _lastValidDropPosition;*/
             
-            OnHoldRight?.Invoke();
+            OnHoldRight?.Invoke(_lastHoldScreenPos);
         }
 
         private void EndHold()

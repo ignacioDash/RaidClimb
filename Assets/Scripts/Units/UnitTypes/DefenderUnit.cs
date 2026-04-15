@@ -14,7 +14,7 @@ namespace Units.UnitTypes
         {
             unitType = UnitTypes.Defender;
             _sphereCollider = GetComponent<SphereCollider>();
-            startState = UnitState.Idle;
+            startState = UnitState.Defending;
             _attackers = new List<BaseUnit>();
             
             base.Init(playerId, startState, onUnitDeath);

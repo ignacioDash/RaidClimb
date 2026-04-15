@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private InputManager inputManager;
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] private OpponentManager opponentManager;
+    [SerializeField] private CurrencyManager currencyManager;
     [SerializeField] private CastleManager playerCastle, opponentCastle;
 
     private GameStateManager _gameStateManager;
@@ -74,7 +75,13 @@ public class GameManager : MonoBehaviour
     {
         var playerWon = winnerId == Keys.PLAYER_ID;
 
-        // todo: selfie anim, here or at king unit?
+        if (playerWon)
+        {
+            // todo: add trophies
+            // todo: add coins
+
+            await _dataManager.Save();
+        }
         
         var cameraAnimation =
             cameraManager.SetCameraAt(playerWon ? CameraManager.CameraPosition.Win : CameraManager.CameraPosition.Lose);
@@ -114,6 +121,7 @@ public class GameManager : MonoBehaviour
         _managers.Add(typeof(TrapsManager), trapsManager);
         _managers.Add(typeof(CameraManager), cameraManager);
         _managers.Add(typeof(OpponentManager), opponentManager);
+        _managers.Add(typeof(CurrencyManager), currencyManager);
         
         await _dataManager.Init(null);
 
@@ -128,6 +136,7 @@ public class GameManager : MonoBehaviour
             trapsManager.Init(null),
             cameraManager.Init(null),
             opponentManager.Init(null),
+            currencyManager.Init(null),
         };
 
         await Task.WhenAll(managersInit);

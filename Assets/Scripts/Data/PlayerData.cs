@@ -10,13 +10,6 @@ namespace Data
     {
         public UserData UserData;
         public CastleData PlayerCastleData;
-        public TrophiesData TrophiesData;
-    }
-
-    [Serializable]
-    public class TrophiesData
-    {
-        // todo
     }
 
     [Serializable]
@@ -24,6 +17,8 @@ namespace Data
     {
         public int UserLevel;
         public string UserName;
+        public int coins;
+        public int trophies;
     }
 
     [Serializable]

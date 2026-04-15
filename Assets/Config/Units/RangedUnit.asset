@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RangedUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
   health: 120
-  damage: 22
-  range: 10
+  damage: 10
+  range: 8
   movementSpeed: 2
   climbSpeed: 0.7
   attackSpeed: 1

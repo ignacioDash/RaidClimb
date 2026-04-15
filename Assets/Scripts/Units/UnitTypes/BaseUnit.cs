@@ -188,11 +188,13 @@ namespace Units.UnitTypes
                     DelayedDeath();
                     break;
                 case UnitState.Won:
-                    animatorController.SetTrigger(Victory);
+                    if (animatorController)
+                        animatorController.SetTrigger(Victory);
                     OnGameEnded();
                     break;
                 case UnitState.Lost:
-                    animatorController.SetTrigger(Defeat);
+                    if (animatorController)
+                        animatorController.SetTrigger(Defeat);
                     OnGameEnded();
                     break;
                 default:

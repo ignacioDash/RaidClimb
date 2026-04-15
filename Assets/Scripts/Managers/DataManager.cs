@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Data;
 using Newtonsoft.Json;
-using Units.Traps;
 using Units.UnitTypes;
 using UnityEngine;
 
@@ -14,6 +13,8 @@ namespace Managers
     {
         public PlayerData PlayerData { get; private set; }
         public bool Initialized { get; private set; }
+
+        private CurrencyManager _currencyManager;
 
         private const string SAVE_DATA_FILE = "SaveData.txt";
         
@@ -25,16 +26,7 @@ namespace Managers
                 CastleSlots = new List<CastleSlot>
                 {
                     new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
-                    new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes},
-                    new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes},
-                    new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
-                    new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
                     new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
-                    new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
-                    new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
-                    new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
-                    new() { SlotId = CastleSlotId.Stage2Wall3, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
-                    new() { SlotId = CastleSlotId.Stage2Wall4, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
                 }
             };
             
@@ -42,7 +34,6 @@ namespace Managers
             {
                 UserData = new UserData(),
                 PlayerCastleData = initCastleData,
-                TrophiesData = new TrophiesData()
             };
             
             var path = Path.Combine(Application.persistentDataPath, SAVE_DATA_FILE);

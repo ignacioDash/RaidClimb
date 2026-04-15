@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
   health: 160
   damage: 22
-  range: 15
+  range: 11
   movementSpeed: 0
   climbSpeed: 0
   attackSpeed: 2

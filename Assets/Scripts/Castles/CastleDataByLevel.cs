@@ -8,11 +8,21 @@ namespace Castles
 {
     public static class CastleDataByLevel
     {
-        public static CastleData GetCastleDataForLevel(int level) // todo: change to data json format
+        public static CastleData GetCastleDataForLevel(int level)
         {
             switch (level)
             {
                 case 1:
+                    return new CastleData
+                    {
+                        CastleLevel = 1,
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                        }
+                    };
+                case 5:
                     return new CastleData
                     {
                         CastleLevel = 1,

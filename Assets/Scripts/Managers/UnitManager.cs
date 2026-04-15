@@ -114,6 +114,40 @@ namespace Managers
             }
         }
 
+        public float GetPlayerKingDistance()
+        {
+            return GetNormalizedDistanceToOpponentKing(PlayerUnits, OpponentUnits);
+        }
+
+        public float GetOpponentKingDistance()
+        {
+            return GetNormalizedDistanceToOpponentKing(OpponentUnits, PlayerUnits);
+        }
+
+        private static float GetNormalizedDistanceToOpponentKing(List<BaseUnit> sourceUnits, List<BaseUnit> targetUnits)
+        {
+            var targetKing = targetUnits.FirstOrDefault(u => u && u.UnitType == BaseUnit.UnitTypes.King);
+            if (!targetKing)
+                return 1f;
+
+            var closestDistance = float.MaxValue;
+
+            foreach (var unit in sourceUnits)
+            {
+                if (!unit)
+                    continue;
+
+                var distance = Vector3.Distance(unit.transform.position, targetKing.transform.position);
+                if (distance < closestDistance)
+                    closestDistance = distance;
+            }
+
+            if (Math.Abs(closestDistance - float.MaxValue) < 0.01f)
+                return 1f;
+            
+            return Mathf.Clamp01(closestDistance / 50f);
+        }
+
         private void UnRegisterUnit(BaseUnit unit)
         {
             unit.CleanUp();
