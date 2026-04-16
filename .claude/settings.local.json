@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/iballes/RaidClimb log --oneline -1 --format=\"%H %s\")",
+      "Bash(git -C /Users/iballes/RaidClimb status --short)",
+      "Bash(claude mcp *)",
+      "mcp__UnityMCP__find_gameobjects",
+      "mcp__UnityMCP__manage_gameobject",
+      "WebFetch(domain:docs.google.com)",
+      "WebFetch(domain:doc-08-08-docstext.googleusercontent.com)"
+    ]
+  }
+}
