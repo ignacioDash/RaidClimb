@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Castles;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,8 @@ namespace UI
         private async void OnExit()
         {
             exitButton.interactable = false;
+            
+            GameManager.Instance.GetManager<PlayerCastleManager>().OnCastleScreenClosed();
 
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
                 .SetCameraAt(CameraManager.CameraPosition.Default);

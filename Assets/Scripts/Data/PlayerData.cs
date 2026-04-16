@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Units.Traps;
 using Units.UnitTypes;
 
@@ -26,6 +27,17 @@ namespace Data
     {
         public int CastleLevel;
         public List<CastleSlot> CastleSlots;
+
+        public void AddSlot(CastleSlot slot)
+        {
+            if (CastleSlots.Any(s => s.SlotId == slot.SlotId))
+            {
+                var existingSlot = CastleSlots.First(s => s.SlotId == slot.SlotId);
+                CastleSlots.Remove(existingSlot);
+            }
+
+            CastleSlots.Add(slot);
+        }
     }
 
     [Serializable]

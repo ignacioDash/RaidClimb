@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalPosition.y
@@ -42,23 +42,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.2588191
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.9659258
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1318494500211263967, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -271,58 +271,247 @@ MonoBehaviour:
   castleSlots:
   - slotId: 0
     slotPosition: {fileID: 3676412108764481109}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 1
     slotPosition: {fileID: 1012799179649807746}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 2
     slotPosition: {fileID: 1670285530841019156}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 3
     slotPosition: {fileID: 8907821111531163251}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 4
     slotPosition: {fileID: 6302801985337782569}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 5
     slotPosition: {fileID: 1277494117273366067}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 6
     slotPosition: {fileID: 5469743104588232205}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 7
     slotPosition: {fileID: 8584471535807253081}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 8
     slotPosition: {fileID: 2289675667504896783}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 9
     slotPosition: {fileID: 2860240321879817198}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 10
     slotPosition: {fileID: 7802500458742288395}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 11
     slotPosition: {fileID: 4671192243571203337}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 12
     slotPosition: {fileID: 5964819742641070120}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 13
     slotPosition: {fileID: 6828269797940507254}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 14
     slotPosition: {fileID: 6473997644818154019}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 15
     slotPosition: {fileID: 3434514329198185214}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 16
     slotPosition: {fileID: 6113759661183207807}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 17
     slotPosition: {fileID: 7422112986404665012}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 18
     slotPosition: {fileID: 8329624010560721549}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 19
     slotPosition: {fileID: 1192971239716673110}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 20
     slotPosition: {fileID: 4733809500796774975}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 21
     slotPosition: {fileID: 530103647970758676}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 22
     slotPosition: {fileID: 9137530041972115598}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 23
     slotPosition: {fileID: 1374967052104426804}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
   - slotId: 24
     slotPosition: {fileID: 3910306068650788259}
-  - slotId: 1
-    slotPosition: {fileID: 4252742860455294674}
-  - slotId: 2
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
+  - slotId: 26
     slotPosition: {fileID: 4089300003086264234}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
+  - slotId: 25
+    slotPosition: {fileID: 4252742860455294674}
+    slotPurchase:
+      purchasable: 0
+      purchaseButton: {fileID: 0}
+      prizeText: {fileID: 0}
+      prize: 0
+      unitType: 0
+      trapType: 0
 --- !u!4 &2860240321879817198 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4730714069684553331, guid: 0d78f3f408a9c4bf3994d5077be8e337, type: 3}

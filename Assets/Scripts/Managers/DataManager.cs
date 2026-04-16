@@ -32,7 +32,7 @@ namespace Managers
             
             PlayerData = new PlayerData
             {
-                UserData = new UserData(),
+                UserData = new UserData {coins = 9999},
                 PlayerCastleData = initCastleData,
             };
             

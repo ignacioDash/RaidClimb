@@ -3421,8 +3421,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.15545806, y: -0.3756449, z: 0.06407521, w: -0.91138256}
-  m_LocalPosition: {x: 8, y: 28.5, z: -35.8}
+  m_LocalRotation: {x: 0.44853926, y: 0, z: 0, w: 0.8937632}
+  m_LocalPosition: {x: -3.11, y: 68, z: -45.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8925,7 +8925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -75.7}
+  m_AnchoredPosition: {x: -72.999985, y: -75.7}
   m_SizeDelta: {x: 124.68, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009427153
@@ -11273,7 +11273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -73, y: 0}
   m_SizeDelta: {x: 100, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1394576434
@@ -22308,6 +22308,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCastle
       objectReference: {fileID: 0}
+    - target: {fileID: 4211572849971483311, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 330585545}
     - target: {fileID: 4731352426398732569, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25
