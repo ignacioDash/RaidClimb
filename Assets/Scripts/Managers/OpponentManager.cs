@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Config;
 using Constants;
 using Units.UnitTypes;
 using UnityEngine;
@@ -11,14 +11,16 @@ namespace Managers
     public class OpponentManager : MonoBehaviour, IManager
     {
         [SerializeField] private Collider spawnArea;
-        
+        [SerializeField] private BotDifficultyConfig botDifficultyConfig;
+
         private DataManager _dataManager;
         private UnitManager _unitManager;
+        private CurrencyManager _currencyManager;
         private CancellationTokenSource _cts;
-        
+
         private bool _isPlaying;
-        private int _gameplayLevel; // todo: use it to define the opponent behaviour/difficulty
-        
+        private BotDifficultyTier _currentTier;
+
         public async Task Init(object[] args)
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
@@ -27,14 +29,17 @@ namespace Managers
             {
                 await Task.Yield();
             }
-            
+
             _isPlaying = false;
         }
 
         public void OnGameStarted()
         {
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
-            _gameplayLevel = _dataManager.PlayerData.UserData.UserLevel;
+            _currencyManager = GameManager.Instance.GetManager<CurrencyManager>();
+
+            var arena = _currencyManager.GetArenaForTrophies(_dataManager.PlayerData.UserData.trophies);
+            _currentTier = botDifficultyConfig.GetTierForArena(arena);
 
             _isPlaying = true;
             _ = PlayingLoop();
@@ -69,7 +74,7 @@ namespace Managers
                 var delay = GetDelayForUnit(unitToSpawn);
                 await Task.Delay(delay, _cts.Token);
 
-                var randomDelay = Random.Range(2000, 5000); // todo based on difficulty
+                var randomDelay = Random.Range(_currentTier.minSpawnIntervalMs, _currentTier.maxSpawnIntervalMs);
                 await Task.Delay(randomDelay, _cts.Token);
             }
         }
@@ -95,12 +100,7 @@ namespace Managers
 
         private BaseUnit.UnitTypes GetRandomUnit()
         {
-            // todo:
-            var opponentUnits = new List<BaseUnit.UnitTypes>
-                { BaseUnit.UnitTypes.Melee, BaseUnit.UnitTypes.Ranged, BaseUnit.UnitTypes.Tank };
-
-            var randomUnit = opponentUnits[Random.Range(0, opponentUnits.Count - 1)];
-            return randomUnit;
+            return _currentTier.availableUnits[Random.Range(0, _currentTier.availableUnits.Count)];
         }
         
         private Vector3 GetRandomSpawnPosition()

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df28947ec572c4372b2b7320c1a749f2, type: 3}
+  m_Name: EconomyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Config.EconomyConfig
+  trophiesPerWin: 30
+  trophiesPerLoss: 20
+  tutorialBonusCoins: 200
+  newPlayerShieldGames: 10
+  demotionShieldChargesOnPromotion: 1
+  arenaRewardTiers:
+  - minTrophies: 0
+    coinsPerWin: 30
+  - minTrophies: 90
+    coinsPerWin: 50
+  - minTrophies: 180
+    coinsPerWin: 75
+  - minTrophies: 300
+    coinsPerWin: 100
+  - minTrophies: 420
+    coinsPerWin: 150
+  arenaTrophyThresholds: 64000000c80000005e010000f4010000bc020000840300007e04000078050000a4060000d00700002e0900008c0a00001c0c0000ac0d0000

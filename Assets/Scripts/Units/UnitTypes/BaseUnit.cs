@@ -190,11 +190,15 @@ namespace Units.UnitTypes
                 case UnitState.Won:
                     if (animatorController)
                         animatorController.SetTrigger(Victory);
+
+                    healthController.gameObject.SetActive(false);
                     OnGameEnded();
                     break;
                 case UnitState.Lost:
                     if (animatorController)
                         animatorController.SetTrigger(Defeat);
+                    
+                    healthController.gameObject.SetActive(false);
                     OnGameEnded();
                     break;
                 default:

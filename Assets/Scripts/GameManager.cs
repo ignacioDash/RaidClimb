@@ -75,14 +75,21 @@ public class GameManager : MonoBehaviour
     {
         var playerWon = winnerId == Keys.PLAYER_ID;
 
+        int coinsEarned, trophiesEarned;
         if (playerWon)
         {
-            // todo: add trophies
-            // todo: add coins
-
-            await _dataManager.Save();
+            var rewards = currencyManager.AwardWinRewards();
+            coinsEarned = rewards.coins;
+            trophiesEarned = rewards.trophies;
         }
-        
+        else
+        {
+            coinsEarned = 0;
+            trophiesEarned = currencyManager.HandleDefeat();
+        }
+
+        await _dataManager.Save();
+
         var cameraAnimation =
             cameraManager.SetCameraAt(playerWon ? CameraManager.CameraPosition.Win : CameraManager.CameraPosition.Lose);
 
@@ -92,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         unitManager.OnGameEnded(winnerId);
 
-        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon });
+        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon, coinsEarned, trophiesEarned });
     }
 
     // user leaves / finishes the game

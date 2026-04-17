@@ -20,6 +20,9 @@ namespace Data
         public string UserName;
         public int coins;
         public int trophies;
+        public bool isFirstWin = true;
+        public int gamesPlayed;
+        public int demotionShieldCharges;
     }
 
     [Serializable]

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Castles;
 using Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ namespace UI
     public class MainScreenUI : BaseScreen
     {
         [SerializeField] private Button playButton, settingsButton, leaderboardButton, collectionButton, towerButton;
+        [SerializeField] private TextMeshProUGUI leaderboardButtonText;
 
         private UIManager _uiManager;
 
@@ -38,7 +40,11 @@ namespace UI
         public override async Task OpenScreen(object[] args)
         {
             await base.OpenScreen(args);
-            
+
+            var currencyManager = GameManager.Instance.GetManager<CurrencyManager>();
+            var trophies = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.trophies;
+            leaderboardButtonText.text = $"#{currencyManager.GetArenaForTrophies(trophies)}";
+
             SetButtons(true);
         }
 

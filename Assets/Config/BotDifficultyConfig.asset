@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca30cc754892c4f7483d68d501444f97, type: 3}
+  m_Name: BotDifficultyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Config.BotDifficultyConfig
+  tiers:
+  - minArena: 1
+    minSpawnIntervalMs: 3000
+    maxSpawnIntervalMs: 5000
+    availableUnits: 01000000
+  - minArena: 2
+    minSpawnIntervalMs: 2000
+    maxSpawnIntervalMs: 4000
+    availableUnits: 0100000002000000
+  - minArena: 4
+    minSpawnIntervalMs: 2000
+    maxSpawnIntervalMs: 3000
+    availableUnits: 010000000200000003000000
+  - minArena: 10
+    minSpawnIntervalMs: 1000
+    maxSpawnIntervalMs: 3000
+    availableUnits: 010000000200000003000000
+  - minArena: 13
+    minSpawnIntervalMs: 1000
+    maxSpawnIntervalMs: 2000
+    availableUnits: 010000000200000003000000
