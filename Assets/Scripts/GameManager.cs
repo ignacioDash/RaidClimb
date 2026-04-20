@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     [SerializeField] private UnitManager unitManager;
     [SerializeField] private TrapsManager trapsManager;
-    [SerializeField] private InputManager inputManager;
     [SerializeField] private CameraManager cameraManager;
     [SerializeField] private OpponentManager opponentManager;
     [SerializeField] private CurrencyManager currencyManager;
@@ -124,7 +123,6 @@ public class GameManager : MonoBehaviour
         _managers.Add(typeof(GameStateManager), _gameStateManager);
         _managers.Add(typeof(PlayerCastleManager), playerCastle);
         _managers.Add(typeof(OpponentCastleManager), opponentCastle);
-        _managers.Add(typeof(InputManager), inputManager);
         _managers.Add(typeof(TrapsManager), trapsManager);
         _managers.Add(typeof(CameraManager), cameraManager);
         _managers.Add(typeof(OpponentManager), opponentManager);
@@ -139,7 +137,6 @@ public class GameManager : MonoBehaviour
             _gameStateManager.Init(null),
             playerCastle.Init(null),
             opponentCastle.Init(null),
-            inputManager.Init(null),
             trapsManager.Init(null),
             cameraManager.Init(null),
             opponentManager.Init(null),

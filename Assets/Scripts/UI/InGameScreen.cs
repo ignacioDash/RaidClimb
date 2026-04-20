@@ -1,61 +1,76 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Constants;
-using Input;
 using Managers;
-using Units;
+using TMPro;
 using Units.UnitTypes;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI
 {
     public class InGameScreen : BaseScreen
     {
         [SerializeField] private Button pauseButton, unPauseButton, exitButton;
-        [SerializeField] private Image[] rangeImages;
         [SerializeField] private GameObject pauseMenu;
         [SerializeField] private RectTransform unitPreviewContainer;
 
-        [Header("Progress bar")] 
+        [SerializeField] private ButtonPointerComponent unit1Pointer, unit2Pointer, unit3Pointer;
+
+        [SerializeField] private TextMeshProUGUI unitName1, unitName2, unitName3;
+        [SerializeField] private Image[] rangeImages;
+        [SerializeField] private Image[] range2Images;
+        [SerializeField] private Image[] range3Images;
+
+        [Header("Progress bar")]
         [SerializeField] private RectTransform playerCastleTarget;
         [SerializeField] private RectTransform opponentCastleTarget;
         [SerializeField] private RectTransform playerUnit, opponentUnit;
 
         [Header("Settings")]
         [SerializeField] private HoldRanges[] holdRanges;
-        [SerializeField] private List<UnitPreviewReferences> previewReferences;
+        [SerializeField] private Collider playerSpawnArea;
 
         private UnitManager _unitManager;
-        private InputManager _inputManager;
-        
-        private IDissolve _currentDefenderToSpawn;
-        private bool _currentDissolveCompleted;
+
         private Vector3 _playerUnitStartPosition;
         private Vector3 _opponentUnitStartPosition;
-        
-        // ranges
-        private float _holdProgress;
-        private float _holdStartTime;
-        private const float MIN_HOLD = 0.25f;
-        
+
+        private int _activeButtonIndex = -1;
+        private float _fillProgress;
+        private float _fillStartTime;
+
+        private Action _onUnit1Down, _onUnit1Up;
+        private Action _onUnit2Down, _onUnit2Up;
+        private Action _onUnit3Down, _onUnit3Up;
+
+        private void Awake()
+        {
+            // Cache lambdas so OnDisable can unsubscribe the same instances
+            _onUnit1Down = () => OnButtonPressed(0); _onUnit1Up = () => OnButtonReleased(0);
+            _onUnit2Down = () => OnButtonPressed(1); _onUnit2Up = () => OnButtonReleased(1);
+            _onUnit3Down = () => OnButtonPressed(2); _onUnit3Up = () => OnButtonReleased(2);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
 
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
-            _inputManager = GameManager.Instance.GetManager<InputManager>();
 
-            _inputManager.OnHoldRight += OnHoldAttack;
-            _inputManager.OnReleaseRight += OnReleaseAttack;
+            unit1Pointer.PointerDown += _onUnit1Down;
+            unit1Pointer.PointerUp   += _onUnit1Up;
+            unit2Pointer.PointerDown += _onUnit2Down;
+            unit2Pointer.PointerUp   += _onUnit2Up;
+            unit3Pointer.PointerDown += _onUnit3Down;
+            unit3Pointer.PointerUp   += _onUnit3Up;
 
             pauseButton.onClick.AddListener(OnPaused);
             unPauseButton.onClick.AddListener(OnUnPause);
             exitButton.onClick.AddListener(OnExitButton);
 
-            pauseMenu.gameObject.SetActive(false);
+            pauseMenu.SetActive(false);
 
             if (playerUnit)
                 _playerUnitStartPosition = playerUnit.position;
@@ -63,24 +78,113 @@ namespace UI
             if (opponentUnit)
                 _opponentUnitStartPosition = opponentUnit.position;
 
-            _holdProgress = 0f;
+            _activeButtonIndex = -1;
+            _fillProgress = 0f;
             UpdateRangeVisuals();
+
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
-            UpdateUnitPreview(BaseUnit.UnitTypes.None);
-            
+
             SetButtons(true);
         }
 
         private void OnDisable()
         {
-            _inputManager.OnHoldRight -= OnHoldAttack;
-            _inputManager.OnReleaseRight -= OnReleaseAttack;
-            
+            unit1Pointer.PointerDown -= _onUnit1Down;
+            unit1Pointer.PointerUp   -= _onUnit1Up;
+            unit2Pointer.PointerDown -= _onUnit2Down;
+            unit2Pointer.PointerUp   -= _onUnit2Up;
+            unit3Pointer.PointerDown -= _onUnit3Down;
+            unit3Pointer.PointerUp   -= _onUnit3Up;
+
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
             exitButton.onClick.RemoveListener(OnExitButton);
             StopAllCoroutines();
+        }
+
+        private void Update()
+        {
+            if (_activeButtonIndex < 0) return;
+
+            _fillProgress = Mathf.Clamp01((Time.time - _fillStartTime) / holdRanges[_activeButtonIndex].RangeDuration);
+
+            UpdateRangeVisuals();
+
+            if (_fillProgress >= 1f)
+                OnFillCompleted(_activeButtonIndex);
+        }
+
+        private void OnButtonPressed(int index)
+        {
+            _activeButtonIndex = index;
+            _fillStartTime = Time.time;
+            _fillProgress = 0f;
+            UpdateRangeVisuals();
+        }
+
+        private void OnButtonReleased(int index)
+        {
+            if (_activeButtonIndex != index) return;
+            _activeButtonIndex = -1;
+            _fillProgress = 0f;
+            UpdateRangeVisuals();
+        }
+
+        private void OnFillCompleted(int buttonIndex)
+        {
+            var unitType = GetUnitTypeForButton(buttonIndex);
+            if (unitType != BaseUnit.UnitTypes.None)
+            {
+                var unitPosition = GetRandomSpawnPosition();
+                var unit = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
+                if (unit) StartCoroutine(SetDelayedTarget(unit, 1.5f));
+            }
+
+            _fillStartTime = Time.time;
+            _fillProgress = 0f;
+            UpdateRangeVisuals();
+        }
+
+        private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
+        {
+            // todo: drive from config
+            return index switch
+            {
+                0 => BaseUnit.UnitTypes.Melee,
+                1 => BaseUnit.UnitTypes.Ranged,
+                2 => BaseUnit.UnitTypes.Tank,
+                _ => BaseUnit.UnitTypes.None
+            };
+        }
+
+        private void UpdateRangeVisuals()
+        {
+            UpdateImageArray(rangeImages,  _activeButtonIndex == 0 ? _fillProgress : 0f);
+            UpdateImageArray(range2Images, _activeButtonIndex == 1 ? _fillProgress : 0f);
+            UpdateImageArray(range3Images, _activeButtonIndex == 2 ? _fillProgress : 0f);
+        }
+
+        private void UpdateImageArray(Image[] images, float progress)
+        {
+            if (images == null || images.Length == 0) return;
+            var filled = Mathf.Clamp(Mathf.FloorToInt(progress * images.Length), 0, images.Length);
+            for (var i = 0; i < images.Length; i++)
+                if (images[i]) images[i].gameObject.SetActive(i < filled);
+        }
+
+        private Vector3 GetRandomSpawnPosition()
+        {
+            var bounds = playerSpawnArea.bounds;
+            var x = Random.Range(bounds.min.x, bounds.max.x);
+            var z = Random.Range(bounds.min.z, bounds.max.z);
+            return new Vector3(x, Values.UNIT_SPAWN_Y, z);
+        }
+
+        private IEnumerator SetDelayedTarget(BaseUnit unit, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (unit) _unitManager.FindNewTargetFor(unit);
         }
 
         private void SetButtons(bool on)
@@ -93,163 +197,22 @@ namespace UI
         private async void OnExitButton()
         {
             Time.timeScale = 1;
-            
             SetButtons(false);
-            
             await GameManager.Instance.FinishGame();
         }
 
         private void OnUnPause()
         {
             pauseMenu.SetActive(false);
-
             Time.timeScale = 1;
         }
 
         private void OnPaused()
         {
             Time.timeScale = 0;
-
             pauseMenu.SetActive(true);
         }
 
-        private void OnHoldAttack(Vector2 screenPos)
-        {
-            if (holdRanges == null || holdRanges.Length == 0)
-                return;
-            if (unitPreviewContainer)
-            {
-                unitPreviewContainer.gameObject.SetActive(true);
-                unitPreviewContainer.position = screenPos;
-            }
-
-            if (_holdProgress == 0f)
-                _holdStartTime = Time.time;
-
-            var sectionSize = 1f / holdRanges.Length;
-
-            var sectionIndex = Mathf.Min(
-                Mathf.FloorToInt(_holdProgress / sectionSize),
-                holdRanges.Length - 1);
-
-            var targetValue = (sectionIndex + 1) * sectionSize;
-            var speed = sectionSize / holdRanges[sectionIndex].RangeDuration;
-
-            _holdProgress = Mathf.MoveTowards(
-                _holdProgress,
-                targetValue,
-                speed * Time.deltaTime);
-            
-            UpdateRangeVisuals();
-            UpdateUnitPreview(GetUnitTypeForRange(GetRangeIndex()));
-        }
-
-        private void OnReleaseAttack(Vector3 worldPos)
-        {
-            if (unitPreviewContainer)
-                unitPreviewContainer.gameObject.SetActive(false);
-            if (_holdStartTime <= 0f || Time.time - _holdStartTime < MIN_HOLD + 0.05f)
-            {
-                _holdStartTime = 0f;
-                _holdProgress = 0f;
-                UpdateRangeVisuals();
-                UpdateUnitPreview(BaseUnit.UnitTypes.None);
-                return;
-            }
-
-            var range = GetRangeIndex();
-            OnReleasedRange(range, worldPos);
-
-            _holdProgress = 0f;
-            _holdStartTime = 0f;
-            UpdateRangeVisuals();
-            UpdateUnitPreview(BaseUnit.UnitTypes.None);
-        }
-        
-
-        private void OnReleasedRange(int index, Vector3 worldPos)
-        {
-            var unitType = GetUnitTypeForRange(index);
-            if (unitType == BaseUnit.UnitTypes.None)
-                return;
-            
-            var unitPosition = GetUnitPosition(worldPos);
-            var unitToSpawn = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
-            
-            if (unitToSpawn)
-            {
-                unitToSpawn.transform.position = unitPosition;
-                StartCoroutine(SetDelayedTarget(unitToSpawn, 1.5f));
-            }
-        }
-
-        private BaseUnit.UnitTypes GetUnitTypeForRange(int range)
-        {
-            if (Time.time - _holdStartTime < MIN_HOLD)
-                return BaseUnit.UnitTypes.None;
-
-            // todo
-            return range switch
-            {
-                0 => BaseUnit.UnitTypes.Melee,
-                1 => BaseUnit.UnitTypes.Ranged,
-                2 => BaseUnit.UnitTypes.Tank,
-                3 => BaseUnit.UnitTypes.Melee,
-                _ => BaseUnit.UnitTypes.Melee
-            };
-        }
-        
-        private int GetRangeIndex()
-        {
-            if (holdRanges == null || holdRanges.Length == 0)
-                return -1;
-
-            var sectionSize = 1f / holdRanges.Length;
-            return Mathf.Min(Mathf.FloorToInt(_holdProgress / sectionSize), holdRanges.Length - 1);
-        }
-
-        private void UpdateRangeVisuals()
-        {
-            if (rangeImages == null || rangeImages.Length == 0)
-                return;
-
-            var filledCount = Mathf.Clamp(Mathf.FloorToInt(_holdProgress * rangeImages.Length), 0, rangeImages.Length);
-
-            for (var i = 0; i < rangeImages.Length; i++)
-            {
-                if (!rangeImages[i])
-                    continue;
-
-                rangeImages[i].gameObject.SetActive(i < filledCount);
-            }
-        }
-
-        private IEnumerator SetDelayedTarget(BaseUnit unitToSpawn, float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            
-            if (!unitToSpawn)
-                yield break;
-
-            _unitManager.FindNewTargetFor(unitToSpawn);
-        }
-
-        private Vector3 GetUnitPosition(Vector3 worldPos)
-        {
-            return new Vector3(worldPos.x, Values.UNIT_SPAWN_Y, worldPos.z);
-        }
-        
-        private void UpdateUnitPreview(BaseUnit.UnitTypes unitType)
-        {
-            if (previewReferences == null || previewReferences.Count == 0)
-                return;
-
-            foreach (var preview in previewReferences.Where(preview => preview != null && preview.unitReference))
-            {
-                preview.unitReference.SetActive(preview.unitType == unitType && unitType != BaseUnit.UnitTypes.None);
-            }
-        }
-        
         private void FixedUpdate()
         {
             var playerDistance = _unitManager.GetPlayerKingDistance();
@@ -267,12 +230,5 @@ namespace UI
     public class HoldRanges
     {
         public float RangeDuration;
-    }
-
-    [Serializable]
-    public class UnitPreviewReferences
-    {
-        public BaseUnit.UnitTypes unitType;
-        public GameObject unitReference;
     }
 }
