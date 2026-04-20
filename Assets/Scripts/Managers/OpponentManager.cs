@@ -93,6 +93,7 @@ namespace Managers
             {
                 BaseUnit.UnitTypes.Melee => 2000,
                 BaseUnit.UnitTypes.Ranged => 4000,
+                BaseUnit.UnitTypes.Hunter => 4000,
                 BaseUnit.UnitTypes.Tank => 6000,
                 _ => 2000
             };

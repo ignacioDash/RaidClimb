@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Config;
 using Constants;
+using Data;
 using JetBrains.Annotations;
 using Units.UnitTypes;
 using UnityEngine;
@@ -114,6 +115,12 @@ namespace Managers
             }
         }
 
+        public List<BaseUnit.UnitTypes> GetUnitsUnlockingAtArena(int arena) =>
+            unitReferences.GetUnitsUnlockingAtArena(arena);
+
+        public string GetUnitDisplayName(BaseUnit.UnitTypes unitType) =>
+            unitReferences.GetDisplayName(unitType);
+
         public float GetPlayerKingDistance()
         {
             return GetNormalizedDistanceToOpponentKing(PlayerUnits, OpponentUnits);
@@ -213,8 +220,10 @@ namespace Managers
     {
         [SerializeField] private BaseUnit.UnitTypes unitType;
         [SerializeField] private BaseUnit unitPrefab;
+        [SerializeField] private UnitBaseConfig unitConfig;
 
         public BaseUnit.UnitTypes UnitType => unitType;
         public BaseUnit UnitPrefab => unitPrefab;
+        public UnitBaseConfig Config => unitConfig;
     }
 }

@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
   m_Name: RangedUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
-  health: 120
+  unitName: Archer
+  arenaUnlock: 1
+  squadCost: 3
+  health: 100
   damage: 10
   range: 8
   movementSpeed: 2

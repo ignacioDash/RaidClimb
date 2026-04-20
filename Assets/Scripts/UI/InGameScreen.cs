@@ -85,6 +85,7 @@ namespace UI
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
 
+            UpdateUnitNames();
             SetButtons(true);
         }
 
@@ -148,14 +149,25 @@ namespace UI
 
         private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
         {
-            // todo: drive from config
-            return index switch
+            var equipped = GameManager.Instance.GetManager<DataManager>()
+                .PlayerData.SquadData.EquippedUnits;
+            return index < equipped.Count ? equipped[index] : BaseUnit.UnitTypes.None;
+        }
+
+        private void UpdateUnitNames()
+        {
+            var equipped = GameManager.Instance.GetManager<DataManager>()
+                .PlayerData.SquadData.EquippedUnits;
+            var nameTexts = new[] { unitName1, unitName2, unitName3 };
+
+            for (var i = 0; i < nameTexts.Length; i++)
             {
-                0 => BaseUnit.UnitTypes.Melee,
-                1 => BaseUnit.UnitTypes.Ranged,
-                2 => BaseUnit.UnitTypes.Tank,
-                _ => BaseUnit.UnitTypes.None
-            };
+                if (nameTexts[i] == null) continue;
+                var unitType = i < equipped.Count ? equipped[i] : BaseUnit.UnitTypes.None;
+                nameTexts[i].text = unitType != BaseUnit.UnitTypes.None
+                    ? _unitManager.GetUnitDisplayName(unitType)
+                    : string.Empty;
+            }
         }
 
         private void UpdateRangeVisuals()

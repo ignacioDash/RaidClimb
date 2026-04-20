@@ -15,5 +15,17 @@ namespace Config
         [CanBeNull]
         public BaseUnit GetUnit(BaseUnit.UnitTypes unitType) =>
             unitReferences.FirstOrDefault(u => u.UnitType == unitType)?.UnitPrefab;
+
+        public string GetDisplayName(BaseUnit.UnitTypes unitType)
+        {
+            var entry = unitReferences.FirstOrDefault(u => u.UnitType == unitType);
+            return entry?.Config != null ? entry.Config.UnitName : unitType.ToString();
+        }
+
+        public List<BaseUnit.UnitTypes> GetUnitsUnlockingAtArena(int arena) =>
+            unitReferences
+                .Where(u => u.Config != null && u.Config.ArenaUnlock == arena)
+                .Select(u => u.UnitType)
+                .ToList();
     }
 }

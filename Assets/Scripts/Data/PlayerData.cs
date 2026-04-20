@@ -11,6 +11,14 @@ namespace Data
     {
         public UserData UserData;
         public CastleData PlayerCastleData;
+        public SquadData SquadData;
+    }
+
+    [Serializable]
+    public class SquadData
+    {
+        public List<BaseUnit.UnitTypes> UnlockedUnits = new();
+        public List<BaseUnit.UnitTypes> EquippedUnits = new();
     }
 
     [Serializable]

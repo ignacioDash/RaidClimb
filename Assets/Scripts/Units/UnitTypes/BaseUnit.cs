@@ -28,10 +28,9 @@ namespace Units.UnitTypes
             Melee,
             Ranged,
             Tank,
-            Swat,
-            Sapper,
             King,
             Defender,
+            Hunter,
             // todo: other defender types?
         }
         

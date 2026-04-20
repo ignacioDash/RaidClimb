@@ -16,9 +16,25 @@ namespace Managers
         
         public void AddTrophies(int trophies)
         {
+            var arenaBefore = GetArenaForTrophies(_trophiesAmount);
             _trophiesAmount += trophies;
             _dataManager.PlayerData.UserData.trophies = _trophiesAmount;
             trophiesAmount.text = _trophiesAmount.ToString();
+
+            var arenaAfter = GetArenaForTrophies(_trophiesAmount);
+            if (arenaAfter > arenaBefore)
+                CheckAndUnlockUnitsForArena(arenaAfter);
+        }
+
+        private void CheckAndUnlockUnitsForArena(int arena)
+        {
+            var unitManager = GameManager.Instance.GetManager<UnitManager>();
+            var newUnits = unitManager.GetUnitsUnlockingAtArena(arena);
+            var squad = _dataManager.PlayerData.SquadData;
+
+            foreach (var unit in newUnits)
+                if (!squad.UnlockedUnits.Contains(unit))
+                    squad.UnlockedUnits.Add(unit);
         }
         
         public void AddCoins(int coins)

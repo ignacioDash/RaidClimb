@@ -75,7 +75,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562ca5c9085545b882a8d0a03c95dd28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Units.UnitVisualsController
-  unitMesh: {fileID: 0}
+  unitMeshes: []
+  playerMaterial: {fileID: 0}
+  opponentMaterial: {fileID: 0}
 --- !u!1 &1009920855947369737
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Units.UnitTypes.KingUnit
   unitCurrentState: 0
-  unitType: 6
+  unitType: 4
   unitConfig: {fileID: 11400000, guid: a4d5f9cd95afe4974b40d6c4292fb05d, type: 2}
   healthController: {fileID: 978690181509329019}
   unitVisualsController: {fileID: 7517335555699643000}

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
   m_Name: DefenderUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
+  unitName: Slingshot
+  arenaUnlock: 1
+  squadCost: 0
   health: 160
   damage: 22
   range: 11

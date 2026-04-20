@@ -29,15 +29,16 @@ namespace Managers
                     new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
                 }
             };
-            
+
             PlayerData = new PlayerData
             {
-                UserData = new UserData {coins = 9999},
+                UserData = new UserData { coins = 0 },
                 PlayerCastleData = initCastleData,
+                SquadData = DefaultSquadData(),
             };
-            
+
             var path = Path.Combine(Application.persistentDataPath, SAVE_DATA_FILE);
-            
+
             if (File.Exists(path))
             {
                 var json = await File.ReadAllTextAsync(path);
@@ -45,6 +46,7 @@ namespace Managers
                 try
                 {
                     PlayerData = JsonConvert.DeserializeObject<PlayerData>(json);
+                    MigratePlayerData();
                 }
                 catch (Exception e)
                 {
@@ -57,6 +59,28 @@ namespace Managers
             }
 
             Initialized = true;
+        }
+
+        private static SquadData DefaultSquadData() => new()
+        {
+            UnlockedUnits = new List<BaseUnit.UnitTypes>
+            {
+                BaseUnit.UnitTypes.Melee,
+                BaseUnit.UnitTypes.Ranged,
+                BaseUnit.UnitTypes.Tank,
+            },
+            EquippedUnits = new List<BaseUnit.UnitTypes>
+            {
+                BaseUnit.UnitTypes.Melee,
+                BaseUnit.UnitTypes.Ranged,
+                BaseUnit.UnitTypes.Tank,
+            },
+        };
+
+        private void MigratePlayerData()
+        {
+            if (PlayerData.SquadData == null)
+                PlayerData.SquadData = DefaultSquadData();
         }
 
         public async Task Save()

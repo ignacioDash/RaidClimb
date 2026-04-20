@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
   m_Name: KingUnit
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
+  unitName: King
+  arenaUnlock: 0
+  squadCost: 0
   health: 999
   damage: 0
   range: 1.5
