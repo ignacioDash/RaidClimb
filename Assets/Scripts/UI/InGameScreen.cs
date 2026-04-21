@@ -25,6 +25,10 @@ namespace UI
         [SerializeField] private Image[] range2Images;
         [SerializeField] private Image[] range3Images;
 
+        [Header("Squad Meter")]
+        [SerializeField] private Image[] squadMeterImages;
+        [SerializeField] private TextMeshProUGUI unitCost1, unitCost2, unitCost3;
+
         [Header("Progress bar")]
         [SerializeField] private RectTransform playerCastleTarget;
         [SerializeField] private RectTransform opponentCastleTarget;
@@ -42,6 +46,7 @@ namespace UI
         private int _activeButtonIndex = -1;
         private float _fillProgress;
         private float _fillStartTime;
+        private int _squadUsed;
 
         private Action _onUnit1Down, _onUnit1Up;
         private Action _onUnit2Down, _onUnit2Up;
@@ -82,7 +87,9 @@ namespace UI
 
             _activeButtonIndex = -1;
             _fillProgress = 0f;
+            _squadUsed = 0;
             UpdateRangeVisuals();
+            UpdateSquadMeter();
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
@@ -139,9 +146,19 @@ namespace UI
             var unitType = GetUnitTypeForButton(buttonIndex);
             if (unitType != BaseUnit.UnitTypes.None)
             {
-                var unitPosition = GetRandomSpawnPosition();
-                var unit = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
-                if (unit) StartCoroutine(SetDelayedTarget(unit, 1.5f));
+                var cost = _unitManager.GetUnitSquadCost(unitType);
+                if (_squadUsed + cost <= squadMeterImages.Length)
+                {
+                    var unitPosition = GetRandomSpawnPosition();
+                    var unit = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
+                    if (unit)
+                    {
+                        _squadUsed += cost;
+                        unit.OnDeath += () => FreeSquadCost(cost);
+                        UpdateSquadMeter();
+                        StartCoroutine(SetDelayedTarget(unit, 1.5f));
+                    }
+                }
             }
 
             _fillStartTime = Time.time;
@@ -161,17 +178,37 @@ namespace UI
             var equipped = GameManager.Instance.GetManager<DataManager>()
                 .PlayerData.SquadData.EquippedUnits;
             var nameTexts = new[] { unitName1, unitName2, unitName3 };
+            var costTexts = new[] { unitCost1, unitCost2, unitCost3 };
 
             for (var i = 0; i < nameTexts.Length; i++)
             {
-                if (nameTexts[i] == null) continue;
                 var unitType = i < equipped.Count ? equipped[i] : BaseUnit.UnitTypes.None;
-                nameTexts[i].text = unitType != BaseUnit.UnitTypes.None
-                    ? _unitManager.GetUnitDisplayName(unitType)
-                    : string.Empty;
+
+                if (nameTexts[i] != null)
+                    nameTexts[i].text = unitType != BaseUnit.UnitTypes.None
+                        ? _unitManager.GetUnitDisplayName(unitType)
+                        : string.Empty;
+
+                if (costTexts[i] != null)
+                    costTexts[i].text = unitType != BaseUnit.UnitTypes.None
+                        ? _unitManager.GetUnitSquadCost(unitType).ToString()
+                        : string.Empty;
             }
 
             unitCamerasController.Init(equipped);
+        }
+
+        private void FreeSquadCost(int cost)
+        {
+            _squadUsed = Mathf.Max(0, _squadUsed - cost);
+            UpdateSquadMeter();
+        }
+
+        private void UpdateSquadMeter()
+        {
+            if (squadMeterImages == null) return;
+            for (var i = 0; i < squadMeterImages.Length; i++)
+                if (squadMeterImages[i]) squadMeterImages[i].gameObject.SetActive(i < _squadUsed);
         }
 
         private void UpdateRangeVisuals()

@@ -22,6 +22,12 @@ namespace Config
             return entry?.Config != null ? entry.Config.UnitName : unitType.ToString();
         }
 
+        public int GetSquadCost(BaseUnit.UnitTypes unitType)
+        {
+            var entry = unitReferences.FirstOrDefault(u => u.UnitType == unitType);
+            return entry?.Config != null ? entry.Config.SquadCost : 0;
+        }
+
         public List<BaseUnit.UnitTypes> GetUnitsUnlockingAtArena(int arena) =>
             unitReferences
                 .Where(u => u.Config != null && u.Config.ArenaUnlock == arena)

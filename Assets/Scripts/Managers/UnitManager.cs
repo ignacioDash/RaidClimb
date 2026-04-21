@@ -121,6 +121,9 @@ namespace Managers
         public string GetUnitDisplayName(BaseUnit.UnitTypes unitType) =>
             unitReferences.GetDisplayName(unitType);
 
+        public int GetUnitSquadCost(BaseUnit.UnitTypes unitType) =>
+            unitReferences.GetSquadCost(unitType);
+
         public float GetPlayerKingDistance()
         {
             return GetNormalizedDistanceToOpponentKing(PlayerUnits, OpponentUnits);

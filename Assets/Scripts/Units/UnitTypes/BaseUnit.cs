@@ -76,6 +76,7 @@ namespace Units.UnitTypes
         
         // death
         private Action _onUnitDeath;
+        public event Action OnDeath;
 
         // projectile pool
         private Queue<ProjectileController> _projectilePool;
@@ -252,6 +253,7 @@ namespace Units.UnitTypes
         private async void DelayedDeath()
         {
             await Task.Delay(2000);
+            OnDeath?.Invoke();
             _onUnitDeath?.Invoke();
         }
         

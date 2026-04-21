@@ -71,9 +71,9 @@ namespace Managers
             },
             EquippedUnits = new List<BaseUnit.UnitTypes>
             {
-                BaseUnit.UnitTypes.Melee,
-                BaseUnit.UnitTypes.Ranged,
-                BaseUnit.UnitTypes.Tank,
+                BaseUnit.UnitTypes.Raider,
+                BaseUnit.UnitTypes.Hunter,
+                BaseUnit.UnitTypes.Ogre,
             },
         };
 
