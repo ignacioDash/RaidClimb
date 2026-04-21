@@ -48,18 +48,21 @@ namespace Units.Traps
         {
             _cts?.Cancel();
             _trapLoop = null;
+            StopParticles();
         }
 
         protected override void OnTrapActivated()
         {
             if (_trapLoop == null)
                 _trapLoop = ThornHedgeTrapLoop();
+            PlayParticles();
         }
 
         protected override void OnTrapDestroyed()
         {
             _cts?.Cancel();
             _trapLoop = null;
+            StopParticles();
         }
 
         protected override void OnEnemyUnitEnteredTrap(BaseUnit unit)

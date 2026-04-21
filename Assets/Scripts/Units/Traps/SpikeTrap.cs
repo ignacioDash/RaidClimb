@@ -26,11 +26,11 @@ namespace Units.Traps
         {
             if (CurrentTrapState != TrapState.Active)
                 return;
-            
+
             if (!_affectedUnits.Contains(unit))
             {
                 unit.TakeDamage(trapConfig.Damage);
-                
+                PlayParticlesAtXZ(unit.transform.position.x, unit.transform.position.z);
                 _affectedUnits.Add(unit);
             }
         }

@@ -24,7 +24,8 @@ namespace Units.Traps
 
         [SerializeField] protected TrapTypes trapType;
         [SerializeField] protected UnitBaseConfig trapConfig;
-        
+        [SerializeField] private ParticleSystem trapParticles;
+
         private Collider _trapCollider;
         private string _playerId;
 
@@ -61,6 +62,24 @@ namespace Units.Traps
                     OnTrapDestroyed();
                     break;
             }
+        }
+
+        protected void PlayParticles()
+        {
+            if (trapParticles) trapParticles.Play();
+        }
+
+        protected void StopParticles()
+        {
+            if (trapParticles) trapParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        protected void PlayParticlesAtXZ(float x, float z)
+        {
+            if (!trapParticles) return;
+            var t = trapParticles.transform;
+            t.position = new Vector3(x, t.position.y, z);
+            trapParticles.Play();
         }
 
         protected abstract void OnTrapDisabled();
