@@ -96,6 +96,7 @@ namespace Managers
                 BaseUnit.UnitTypes.Ranged => 4000,
                 BaseUnit.UnitTypes.Hunter => 4000,
                 BaseUnit.UnitTypes.Tank => 6000,
+                BaseUnit.UnitTypes.Ogre => 6000,
                 _ => 2000
             };
         }

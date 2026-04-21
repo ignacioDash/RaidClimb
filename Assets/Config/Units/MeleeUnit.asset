@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
   unitName: Scout
   arenaUnlock: 1
-  squadCost: 2
+  squadCost: 1
   health: 70
   damage: 18
   range: 1

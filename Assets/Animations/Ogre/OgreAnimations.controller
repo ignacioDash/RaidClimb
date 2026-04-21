@@ -121,7 +121,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 672bd46c20105404cbbbc92d94a9132b, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: 59d644d8f12304a7fb624f92ae677d7c, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -308,7 +308,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CharactersAnimator
+  m_Name: OgreAnimations
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Walking

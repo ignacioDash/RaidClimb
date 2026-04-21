@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
   unitName: Raider
   arenaUnlock: 2
-  squadCost: 2
+  squadCost: 1
   health: 50
   damage: 25
   range: 1

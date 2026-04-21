@@ -32,6 +32,7 @@ namespace Units.UnitTypes
             Defender,
             Hunter,
             Raider,
+            Ogre,
             // todo: other defender types?
         }
         
