@@ -3,6 +3,7 @@ using System.Collections;
 using Constants;
 using Managers;
 using TMPro;
+using Units;
 using Units.UnitTypes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ namespace UI
         [SerializeField] private ButtonPointerComponent unit1Pointer, unit2Pointer, unit3Pointer;
 
         [SerializeField] private TextMeshProUGUI unitName1, unitName2, unitName3;
+        [SerializeField] private UnitCamerasController unitCamerasController;
         [SerializeField] private Image[] rangeImages;
         [SerializeField] private Image[] range2Images;
         [SerializeField] private Image[] range3Images;
@@ -168,6 +170,8 @@ namespace UI
                     ? _unitManager.GetUnitDisplayName(unitType)
                     : string.Empty;
             }
+
+            unitCamerasController.Init(equipped);
         }
 
         private void UpdateRangeVisuals()
@@ -187,10 +191,24 @@ namespace UI
 
         private Vector3 GetRandomSpawnPosition()
         {
+            var box = playerSpawnArea as BoxCollider;
+            if (box != null)
+            {
+                var localPoint = new Vector3(
+                    (Random.value - 0.5f) * box.size.x + box.center.x,
+                    box.center.y,
+                    (Random.value - 0.5f) * box.size.z + box.center.z
+                );
+                var worldPoint = box.transform.TransformPoint(localPoint);
+                return new Vector3(worldPoint.x, Values.UNIT_SPAWN_Y, worldPoint.z);
+            }
+
             var bounds = playerSpawnArea.bounds;
-            var x = Random.Range(bounds.min.x, bounds.max.x);
-            var z = Random.Range(bounds.min.z, bounds.max.z);
-            return new Vector3(x, Values.UNIT_SPAWN_Y, z);
+            return new Vector3(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Values.UNIT_SPAWN_Y,
+                Random.Range(bounds.min.z, bounds.max.z)
+            );
         }
 
         private IEnumerator SetDelayedTarget(BaseUnit unit, float delay)

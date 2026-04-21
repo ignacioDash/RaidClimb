@@ -92,6 +92,7 @@ namespace Managers
             return unitType switch
             {
                 BaseUnit.UnitTypes.Melee => 2000,
+                BaseUnit.UnitTypes.Raider => 2000,
                 BaseUnit.UnitTypes.Ranged => 4000,
                 BaseUnit.UnitTypes.Hunter => 4000,
                 BaseUnit.UnitTypes.Tank => 6000,
@@ -106,12 +107,24 @@ namespace Managers
         
         private Vector3 GetRandomSpawnPosition()
         {
+            var box = spawnArea as BoxCollider;
+            if (box != null)
+            {
+                var localPoint = new Vector3(
+                    (Random.value - 0.5f) * box.size.x + box.center.x,
+                    box.center.y,
+                    (Random.value - 0.5f) * box.size.z + box.center.z
+                );
+                var worldPoint = box.transform.TransformPoint(localPoint);
+                return new Vector3(worldPoint.x, Values.UNIT_SPAWN_Y, worldPoint.z);
+            }
+
             var bounds = spawnArea.bounds;
-
-            var x = Random.Range(bounds.min.x, bounds.max.x);
-            var z = Random.Range(bounds.min.z, bounds.max.z);
-
-            return new Vector3(x, Values.UNIT_SPAWN_Y, z);
+            return new Vector3(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Values.UNIT_SPAWN_Y,
+                Random.Range(bounds.min.z, bounds.max.z)
+            );
         }
 
         public void Cleanup()

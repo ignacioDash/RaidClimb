@@ -90,6 +90,7 @@ namespace Managers
         public Button purchaseButton;
         public TextMeshProUGUI prizeText;
         public int prize;
+        public int arenaUnlock = 1;
         public BaseUnit.UnitTypes unitType = BaseUnit.UnitTypes.None;
         public BaseTrap.TrapTypes trapType = BaseTrap.TrapTypes.None;
     }

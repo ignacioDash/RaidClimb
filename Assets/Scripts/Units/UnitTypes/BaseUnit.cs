@@ -31,6 +31,7 @@ namespace Units.UnitTypes
             King,
             Defender,
             Hunter,
+            Raider,
             // todo: other defender types?
         }
         
@@ -239,6 +240,7 @@ namespace Units.UnitTypes
             _rigidbody.isKinematic = true;
             
             navMeshAgent.enabled = true;
+            navMeshAgent.speed = unitConfig.MovementSpeed;
             navMeshAgent.isStopped = false;
         }
 

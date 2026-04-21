@@ -1,13 +1,19 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Constants;
 using Data;
 using Managers;
+using TMPro;
+using UnityEngine;
 
 namespace Castles
 {
     public class PlayerCastleManager : CastleManager
     {
+        [SerializeField] private List<RowLockVisual> rowLockVisuals;
+
         protected override string _playerId { get; set; }
         protected override CastleData _castleData { get; set; }
 
@@ -46,19 +52,34 @@ namespace Castles
         {
             UpdateCastleWithCastleData();
 
+            var currentArena = _currencyManager.GetArenaForTrophies(
+                _dataManager.PlayerData.UserData.trophies);
+
+            foreach (var row in rowLockVisuals)
+            {
+                var locked = currentArena < row.arenaUnlock;
+                row.lockedOverlay.SetActive(locked);
+                if (locked)
+                    row.lockedLabel.text = $"Arena {row.arenaUnlock}";
+            }
+
             foreach (var slot in castleSlots.Where(slot => slot.SlotPurchase.purchasable))
             {
-                // todo: this needs to be changed if we want upgrades
                 var isPurchased = _dataManager.PlayerData.PlayerCastleData.CastleSlots.Any(s => s.SlotId == slot.SlotId);
-                
-                slot.SlotPurchase.purchaseButton.gameObject.SetActive(!isPurchased);
+                var isUnlocked = currentArena >= slot.SlotPurchase.arenaUnlock;
+
+                slot.SlotPurchase.purchaseButton.gameObject.SetActive(!isPurchased && isUnlocked);
                 slot.SlotPurchase.prizeText.text = slot.SlotPurchase.prize.ToString();
-                slot.SlotPurchase.purchaseButton.onClick.AddListener(() => OnPurchaseButton(slot));
+                if (!isPurchased && isUnlocked)
+                    slot.SlotPurchase.purchaseButton.onClick.AddListener(() => OnPurchaseButton(slot));
             }
         }
 
         public void OnCastleScreenClosed()
         {
+            foreach (var row in rowLockVisuals)
+                row.lockedOverlay.SetActive(false);
+
             foreach (var slot in castleSlots.Where(slot => slot.SlotPurchase.purchasable))
             {
                 slot.SlotPurchase.purchaseButton.gameObject.SetActive(false);
@@ -86,5 +107,13 @@ namespace Castles
             
             _ = _dataManager.Save();
         }
+    }
+
+    [Serializable]
+    public class RowLockVisual
+    {
+        public int arenaUnlock;
+        public GameObject lockedOverlay;
+        public TextMeshProUGUI lockedLabel;
     }
 }

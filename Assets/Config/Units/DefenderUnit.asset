@@ -17,7 +17,7 @@ MonoBehaviour:
   squadCost: 0
   health: 160
   damage: 22
-  range: 11
+  range: 15
   movementSpeed: 0
   climbSpeed: 0
   attackSpeed: 2

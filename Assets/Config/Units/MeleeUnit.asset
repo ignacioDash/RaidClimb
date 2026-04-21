@@ -15,7 +15,7 @@ MonoBehaviour:
   unitName: Scout
   arenaUnlock: 1
   squadCost: 2
-  health: 40
+  health: 70
   damage: 18
   range: 1
   movementSpeed: 2.2
