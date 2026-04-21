@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Config;
 using Constants;
+using Units;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -74,6 +76,11 @@ namespace Units.UnitTypes
         
         // death
         private Action _onUnitDeath;
+
+        // projectile pool
+        private Queue<ProjectileController> _projectilePool;
+        private Transform _poolParent;
+        private const int POOL_SIZE = 3;
         
         private static readonly int Falling = Animator.StringToHash("Falling");
         private static readonly int Walking = Animator.StringToHash("Walking");
@@ -109,6 +116,41 @@ namespace Units.UnitTypes
                                   (PlayerId == Keys.OPPONENT_ID && IsDefender);
             
             healthController.Init(unitConfig, () => ChangeUnitStateTo(UnitState.Dead), useAttackCamera);
+
+            if (unitConfig.ProjectilePrefab != null)
+                InitProjectilePool();
+        }
+
+        private void InitProjectilePool()
+        {
+            _projectilePool = new Queue<ProjectileController>();
+            _poolParent = new GameObject($"{name}_ProjectilePool").transform;
+            _poolParent.SetParent(transform);
+
+            for (var i = 0; i < POOL_SIZE; i++)
+            {
+                _projectilePool.Enqueue(CreatePooledProjectile());
+            }
+        }
+
+        private ProjectileController CreatePooledProjectile()
+        {
+            var go = Instantiate(unitConfig.ProjectilePrefab, _poolParent);
+            go.SetActive(false);
+            return go.GetComponent<ProjectileController>() ?? go.AddComponent<ProjectileController>();
+        }
+
+        private ProjectileController GetProjectileFromPool()
+        {
+            if (_projectilePool.Count > 0)
+                return _projectilePool.Dequeue();
+
+            return CreatePooledProjectile();
+        }
+
+        private void ReturnToPool(ProjectileController projectile)
+        {
+            _projectilePool.Enqueue(projectile);
         }
 
         public void SetUnitTarget(BaseUnit target, UnitState state)
@@ -286,13 +328,33 @@ namespace Units.UnitTypes
 
             _nextAttackTime = Time.time + (1f / unitConfig.AttackSpeed);
 
-            _target.TakeDamage(unitConfig.Damage);
+            if (unitConfig.ProjectilePrefab != null)
+            {
+                var projectile = GetProjectileFromPool();
+                var origin = unitTargetController.GetProjectileOrigin(transform.position + Vector3.up);
+                projectile.transform.position = origin;
+                var targetPos = _target.unitTargetController.GetProjectileTarget(transform.position);
+                var capturedTarget = _target;
+                projectile.Launch(targetPos, unitConfig.Damage, unitConfig.ProjectileSpeed,
+                    damage => { if (capturedTarget) capturedTarget.TakeDamage(damage); }, ReturnToPool);
+            }
+            else
+            {
+                _target.TakeDamage(unitConfig.Damage);
+            }
         }
 
         public virtual void CleanUp()
         {
             _climbCts?.Cancel();
             _climbCts = null;
+
+            if (_poolParent != null)
+            {
+                Destroy(_poolParent.gameObject);
+                _poolParent = null;
+            }
+            _projectilePool?.Clear();
         }
     }
 }

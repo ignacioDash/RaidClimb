@@ -6,6 +6,7 @@ namespace Units
     public class UnitTargetController : MonoBehaviour
     {
         [SerializeField] private List<Transform> targets;
+        [SerializeField] private Transform projectileTarget;
         [SerializeField] private float radius = 2;
 
         private readonly HashSet<Transform> _usedTargets = new();
@@ -27,6 +28,12 @@ namespace Units
                 targets[i].position = transform.position + offset;
             }
         }
+
+        public Vector3 GetProjectileOrigin(Vector3 fallback) =>
+            projectileTarget ? projectileTarget.position : fallback;
+
+        public Vector3 GetProjectileTarget(Vector3 from) =>
+            projectileTarget ? projectileTarget.position : GetRandomTarget(from)?.position ?? from;
 
         public void ReturnTarget(Transform target)
         {

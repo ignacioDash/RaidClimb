@@ -21,3 +21,5 @@ MonoBehaviour:
   movementSpeed: 1.8
   climbSpeed: 0.8
   attackSpeed: 1
+  projectilePrefab: {fileID: 4974414919169330723, guid: 118d16e2a0ea54b639e5f786673e991f, type: 3}
+  projectileSpeed: 15

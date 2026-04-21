@@ -14,6 +14,8 @@ namespace Config
         [SerializeField] private float movementSpeed;
         [SerializeField] private float climbSpeed;
         [SerializeField] private float attackSpeed;
+        [SerializeField] private GameObject projectilePrefab;
+        [SerializeField] private float projectileSpeed = 10f;
 
         public string UnitName => unitName;
         public int ArenaUnlock => arenaUnlock;
@@ -24,5 +26,7 @@ namespace Config
         public float MovementSpeed => movementSpeed;
         public float ClimbSpeed => climbSpeed;
         public float AttackSpeed => attackSpeed;
+        public GameObject ProjectilePrefab => projectilePrefab;
+        public float ProjectileSpeed => projectileSpeed;
     }
 }
