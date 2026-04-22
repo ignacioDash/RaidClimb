@@ -143,6 +143,7 @@ MonoBehaviour:
   - {fileID: 4978392292842454171}
   - {fileID: 7459436266975251404}
   - {fileID: 7555728042684254179}
+  projectileTarget: {fileID: 0}
   radius: 2
 --- !u!1 &2062370918716292931
 GameObject:
