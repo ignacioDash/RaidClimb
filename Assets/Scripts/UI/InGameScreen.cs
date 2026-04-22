@@ -90,6 +90,7 @@ namespace UI
             _squadUsed = 0;
             UpdateRangeVisuals();
             UpdateSquadMeter();
+            UpdateButtonStates();
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
@@ -209,6 +210,29 @@ namespace UI
             if (squadMeterImages == null) return;
             for (var i = 0; i < squadMeterImages.Length; i++)
                 if (squadMeterImages[i]) squadMeterImages[i].gameObject.SetActive(i < _squadUsed);
+            UpdateButtonStates();
+        }
+
+        private void UpdateButtonStates()
+        {
+            var pointers = new[] { unit1Pointer, unit2Pointer, unit3Pointer };
+            var remaining = squadMeterImages != null ? squadMeterImages.Length - _squadUsed : 0;
+
+            for (var i = 0; i < pointers.Length; i++)
+            {
+                if (!pointers[i]) continue;
+                var unitType = GetUnitTypeForButton(i);
+                var cost = unitType != BaseUnit.UnitTypes.None ? _unitManager.GetUnitSquadCost(unitType) : 0;
+                var canAfford = cost > 0 && cost <= remaining;
+                pointers[i].interactable = canAfford;
+
+                if (!canAfford && _activeButtonIndex == i)
+                {
+                    _activeButtonIndex = -1;
+                    _fillProgress = 0f;
+                    UpdateRangeVisuals();
+                }
+            }
         }
 
         private void UpdateRangeVisuals()
