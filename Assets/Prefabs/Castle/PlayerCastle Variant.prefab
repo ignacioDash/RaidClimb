@@ -431,7 +431,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1200993201898861748
 RectTransform:
   m_ObjectHideFlags: 0
@@ -902,7 +902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7290278401119268256
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1099,7 +1099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8501244559817705888
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1358,7 +1358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4533974255785528794
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1617,7 +1617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1151209301017651855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1739,7 +1739,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3302683116132023087
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2135,7 +2135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2467779178479284575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2331,7 +2331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5387174266389280516
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3106,7 +3106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4623255201007365149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3303,7 +3303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7577890175587833111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4211,7 +4211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6460148437089719544
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4408,7 +4408,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7926385098221774462
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4530,7 +4530,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5217863962215352212
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5076,7 +5076,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1687057470518739065
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5410,7 +5410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &567980583597634941
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5956,7 +5956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &369292211265720098
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6290,7 +6290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3846048273514030530
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6549,7 +6549,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6074447657378136831
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6671,7 +6671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3680096172497323889
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6793,7 +6793,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8900615561286199597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6915,7 +6915,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3195299871621492489
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7249,7 +7249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7900914324513358079
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7508,7 +7508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6565549986366307358
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7916,7 +7916,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2014955990879854101
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7993,7 +7993,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &887624046040894233
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8885,7 +8885,7 @@ MonoBehaviour:
       prizeText: {fileID: 532322956349429055}
       prize: 400
       arenaUnlock: 4
-      unitType: 7
+      unitType: 5
       trapType: 0
   - slotId: 7
     slotPosition: {fileID: 4814472650626510594}
@@ -8895,7 +8895,7 @@ MonoBehaviour:
       prizeText: {fileID: 5288649500049979627}
       prize: 400
       arenaUnlock: 4
-      unitType: 7
+      unitType: 5
       trapType: 0
   - slotId: 9
     slotPosition: {fileID: 1316114680262319797}
@@ -8955,7 +8955,7 @@ MonoBehaviour:
       prizeText: {fileID: 3735080047354385668}
       prize: 200
       arenaUnlock: 1
-      unitType: 7
+      unitType: 5
       trapType: 0
   - slotId: 15
     slotPosition: {fileID: 1899255338323652517}
@@ -8965,7 +8965,7 @@ MonoBehaviour:
       prizeText: {fileID: 4678671138211739747}
       prize: 200
       arenaUnlock: 1
-      unitType: 7
+      unitType: 5
       trapType: 0
   - slotId: 16
     slotPosition: {fileID: 7001454999492586532}
@@ -9065,7 +9065,7 @@ MonoBehaviour:
       prizeText: {fileID: 8692175867794041667}
       prize: 800
       arenaUnlock: 8
-      unitType: 7
+      unitType: 12
       trapType: 0
   - slotId: 2
     slotPosition: {fileID: 2511972750081627727}
@@ -9075,7 +9075,7 @@ MonoBehaviour:
       prizeText: {fileID: 6801808218598175249}
       prize: 800
       arenaUnlock: 8
-      unitType: 7
+      unitType: 12
       trapType: 0
   - slotId: 26
     slotPosition: {fileID: 950900059017741041}

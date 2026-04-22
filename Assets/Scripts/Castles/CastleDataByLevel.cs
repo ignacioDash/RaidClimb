@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Data;
-using Units;
 using Units.Traps;
 using Units.UnitTypes;
 

@@ -28,18 +28,21 @@ namespace Units.UnitTypes
         protected override void OnTriggerDefending()
         {
             base.OnTriggerDefending();
-            
-            _attackers.RemoveAll(a => !a);
 
-            if (_attackers?.Count > 0)
+            _attackers.RemoveAll(a => !a || a.UnitCurrentState == UnitState.Dead
+                                       || a.UnitCurrentState == UnitState.Won
+                                       || a.UnitCurrentState == UnitState.Lost);
+
+            var nextAttacker = _attackers.FirstOrDefault(a => a && a != _target);
+            if (nextAttacker)
             {
-                var nextAttacker = _attackers.FirstOrDefault(a => a && a != _target);
-                
-                if (nextAttacker)
-                {
-                    _target = nextAttacker;
-                    ChangeUnitStateTo(UnitState.Attacking);
-                }
+                _attackers.Remove(nextAttacker);
+                _target = nextAttacker;
+                ChangeUnitStateTo(UnitState.Attacking);
+            }
+            else
+            {
+                _target = null;
             }
         }
 
@@ -68,7 +71,7 @@ namespace Units.UnitTypes
                 var entryUnit = other.GetComponentInParent<BaseUnit>();
                 if (entryUnit && entryUnit.PlayerId != PlayerId)
                 {
-                    if (_target == null && UnitCurrentState == UnitState.Defending)
+                    if (UnitCurrentState == UnitState.Defending)
                     {
                         _target = entryUnit;
                         ChangeUnitStateTo(UnitState.Attacking);

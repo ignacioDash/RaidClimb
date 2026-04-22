@@ -61792,66 +61792,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1151143589771949177, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1325281648697049684, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_Name
       value: PlayerCastle
       objectReference: {fileID: 0}
-    - target: {fileID: 1619941735024366863, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[4].slotPurchase.unitType
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 1794736240766992081, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[5].slotPurchase.unitType
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 2060755952169482503, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[11].slotPurchase.unitType
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 2184683927278678849, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[12].slotPurchase.unitType
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 2222822541187915152, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[22].slotPurchase.unitType
+      value: 12
       objectReference: {fileID: 0}
-    - target: {fileID: 2315912471540458219, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2397522216359928681, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2878962639269762266, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2962254863337397406, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4017195402919888128, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196966657188219514, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[23].slotPurchase.unitType
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4211572849971483311, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 4638495465386482743, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4731352426398732569, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25
@@ -61890,54 +61862,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4731352426398732569, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5508340521602867424, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5815980174828877613, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6233987742218244886, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6807165886946200555, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7189903817993297219, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7407295542922689668, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7607527506422993340, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7635803259498602311, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8005175477781369956, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272300028359170534, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8837970771113016051, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9087338789701683334, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
