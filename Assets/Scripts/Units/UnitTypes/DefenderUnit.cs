@@ -7,6 +7,8 @@ namespace Units.UnitTypes
 {
     public class DefenderUnit : BaseUnit
     {
+        [SerializeField] private Transform visualRoot;
+
         private SphereCollider _sphereCollider;
         private List<BaseUnit> _attackers;
         
@@ -38,6 +40,20 @@ namespace Units.UnitTypes
                     _target = nextAttacker;
                     ChangeUnitStateTo(UnitState.Attacking);
                 }
+            }
+        }
+
+        protected override void ApplyAttackRotation()
+        {
+            if (!_target || !visualRoot) return;
+            var dir = _target.transform.position - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.001f)
+            {
+                var worldRotation = Quaternion.LookRotation(dir);
+                var localRotation = Quaternion.Inverse(transform.rotation) * worldRotation;
+                var localEuler = visualRoot.localEulerAngles;
+                visualRoot.localEulerAngles = new Vector3(localEuler.x, localRotation.eulerAngles.y, localEuler.z);
             }
         }
 

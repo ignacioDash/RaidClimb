@@ -38,6 +38,7 @@ namespace Units.UnitTypes
             Golem,
             Deadeye,
             Berserk,
+            TeslaCoil,
             // todo: other defender types?
         }
         
@@ -53,7 +54,6 @@ namespace Units.UnitTypes
         [SerializeField] private UnitTargetController unitTargetController;
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] protected Animator animatorController;
-        [SerializeField] private Transform visualRoot;
 
         public string PlayerId { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
@@ -209,18 +209,7 @@ namespace Units.UnitTypes
                     OnTriggerDefending();
                     break;
                 case UnitState.Attacking:
-                    if (gameObject && _target)
-                    {
-                        var rotationTarget = visualRoot ? visualRoot : transform;
-                        var dir = _target.transform.position - rotationTarget.position;
-                        dir.y = 0f;
-
-                        if (dir.sqrMagnitude > 0.001f)
-                        {
-                            rotationTarget.rotation = Quaternion.LookRotation(dir);
-                            rotationTarget.Rotate(_attackRotationOffset);
-                        }
-                    }
+                    ApplyAttackRotation();
                     
                     if (animatorController)
                         animatorController.SetTrigger(Attack);
@@ -343,13 +332,28 @@ namespace Units.UnitTypes
                 var targetPos = _target.unitTargetController.GetProjectileTarget(transform.position);
                 var capturedTarget = _target;
                 projectile.Launch(targetPos, unitConfig.Damage, unitConfig.ProjectileSpeed,
-                    damage => { if (capturedTarget) capturedTarget.TakeDamage(damage); }, ReturnToPool);
+                    GetHitCallback(capturedTarget), ReturnToPool);
             }
             else
             {
                 _target.TakeDamage(unitConfig.Damage);
             }
         }
+
+        protected virtual void ApplyAttackRotation()
+        {
+            if (!gameObject || !_target) return;
+            var dir = _target.transform.position - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.001f)
+            {
+                transform.rotation = Quaternion.LookRotation(dir);
+                transform.Rotate(_attackRotationOffset);
+            }
+        }
+
+        protected virtual Action<float> GetHitCallback(BaseUnit target) =>
+            damage => { if (target) target.TakeDamage(damage); };
 
         public virtual void CleanUp()
         {

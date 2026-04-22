@@ -19,7 +19,7 @@ namespace Castles
                         CastleSlots = new List<CastleSlot>
                         {
                             new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
-                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
                         }
                     };
                 case 5:
