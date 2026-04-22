@@ -139,6 +139,7 @@ MonoBehaviour:
   - {fileID: 4978392292842454171}
   - {fileID: 7459436266975251404}
   - {fileID: 7555728042684254179}
+  projectileTarget: {fileID: 0}
   radius: 2
 --- !u!1 &2062370918716292931
 GameObject:
@@ -504,6 +505,7 @@ MonoBehaviour:
   unitTargetController: {fileID: 8313875187324170783}
   navMeshAgent: {fileID: 0}
   animatorController: {fileID: 2361490574206414646}
+  visualRoot: {fileID: 6899256940431246836}
 --- !u!33 &8784083533352323298
 MeshFilter:
   m_ObjectHideFlags: 0

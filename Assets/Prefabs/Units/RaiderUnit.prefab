@@ -144,6 +144,7 @@ MonoBehaviour:
   - {fileID: 4978392292842454171}
   - {fileID: 7459436266975251404}
   - {fileID: 7555728042684254179}
+  projectileTarget: {fileID: 0}
   radius: 2
 --- !u!1 &2062370918716292931
 GameObject:
@@ -458,7 +459,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3067122286333166740}
-  - component: {fileID: 8444008086678691757}
   - component: {fileID: 734201783135079991}
   - component: {fileID: 4797850429092441982}
   - component: {fileID: 6737373594236319416}
@@ -490,26 +490,6 @@ Transform:
   - {fileID: 3077013905615618937}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8444008086678691757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6645005204730712831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7e78e4cf9c4a47aa03b967eed21b9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Units.MeleeUnit
-  unitCurrentState: 0
-  unitType: 1
-  unitConfig: {fileID: 11400000, guid: ea1de1b4672b141a8a17f6a84a41e3cf, type: 2}
-  healthController: {fileID: 978690181509329019}
-  unitVisualsController: {fileID: 7517335555699643000}
-  unitTargetController: {fileID: 8313875187324170783}
-  navMeshAgent: {fileID: 6737373594236319416}
-  animatorController: {fileID: 5682589686657453883}
 --- !u!114 &734201783135079991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,7 +509,8 @@ MonoBehaviour:
   unitVisualsController: {fileID: 7517335555699643000}
   unitTargetController: {fileID: 8313875187324170783}
   navMeshAgent: {fileID: 6737373594236319416}
-  animatorController: {fileID: 0}
+  animatorController: {fileID: 5682589686657453883}
+  visualRoot: {fileID: 7974577675116575630}
 --- !u!54 &4797850429092441982
 Rigidbody:
   m_ObjectHideFlags: 0

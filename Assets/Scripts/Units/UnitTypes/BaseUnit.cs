@@ -35,6 +35,9 @@ namespace Units.UnitTypes
             Hunter,
             Raider,
             Ogre,
+            Golem,
+            Deadeye,
+            Berserk,
             // todo: other defender types?
         }
         
@@ -50,6 +53,7 @@ namespace Units.UnitTypes
         [SerializeField] private UnitTargetController unitTargetController;
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] protected Animator animatorController;
+        [SerializeField] private Transform visualRoot;
 
         public string PlayerId { get; private set; }
         public UnitTargetInfo TargetInfo { get; private set; } // who is targeting this unit
@@ -207,13 +211,14 @@ namespace Units.UnitTypes
                 case UnitState.Attacking:
                     if (gameObject && _target)
                     {
-                        var dir = _target.transform.position - transform.position;
+                        var rotationTarget = visualRoot ? visualRoot : transform;
+                        var dir = _target.transform.position - rotationTarget.position;
                         dir.y = 0f;
 
                         if (dir.sqrMagnitude > 0.001f)
                         {
-                            transform.rotation = Quaternion.LookRotation(dir);
-                            transform.Rotate(_attackRotationOffset);
+                            rotationTarget.rotation = Quaternion.LookRotation(dir);
+                            rotationTarget.Rotate(_attackRotationOffset);
                         }
                     }
                     
