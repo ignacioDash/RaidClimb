@@ -511,7 +511,6 @@ MonoBehaviour:
   unitTargetController: {fileID: 8313875187324170783}
   navMeshAgent: {fileID: 6737373594236319416}
   animatorController: {fileID: 3243846062625531203}
-  visualRoot: {fileID: 5944419760028782465}
 --- !u!54 &4797850429092441982
 Rigidbody:
   m_ObjectHideFlags: 0

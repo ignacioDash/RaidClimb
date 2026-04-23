@@ -26,13 +26,13 @@ namespace Managers
                 CastleSlots = new List<CastleSlot>
                 {
                     new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
-                    new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                    new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
                 }
             };
 
             PlayerData = new PlayerData
             {
-                UserData = new UserData { coins = 0 },
+                UserData = new UserData { coins = 9990, trophies = 9000},
                 PlayerCastleData = initCastleData,
                 SquadData = DefaultSquadData(),
             };

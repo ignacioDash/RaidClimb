@@ -50,23 +50,6 @@ namespace Units.UnitTypes
 
         protected virtual void OnTriggerExit(Collider other)
         {
-            if (other == _climbWall && unitCurrentState == UnitState.Climbing)
-            {
-                _climbCts?.Cancel();
-                _climbCts?.Dispose();
-                _climbCts = null;
-
-                _rigidbody.isKinematic = false;
-
-                var velocity = (_wallNormal * -1 * CLIMB_END_PUSH_X) + (Vector3.up * CLIMB_END_PUSH_Y);
-
-                _rigidbody.linearVelocity = velocity;
-                _rigidbody.useGravity = true;
-
-                _climbWall = null;
-
-                _ = DelayedTarget();
-            }
         }
 
         protected virtual void OnTriggerAttacking()

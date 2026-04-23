@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Config;
 using Constants;
-using Units;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -39,6 +38,7 @@ namespace Units.UnitTypes
             Deadeye,
             Berserk,
             TeslaCoil,
+            KingCobra,
             // todo: other defender types?
         }
         
@@ -64,6 +64,7 @@ namespace Units.UnitTypes
         // common
         protected BaseUnit _target;
         private Rigidbody _rigidbody;
+        private float _unitHeight;
         
         //movement
         private Transform _moveTarget;
@@ -71,6 +72,7 @@ namespace Units.UnitTypes
         // climbing
         private Vector3 _wallNormal, _lastTargetPos;
         private Collider _climbWall;
+        private float _climbTargetY;
         private CancellationTokenSource _climbCts;
         private Task _climbTask;
         
@@ -107,6 +109,9 @@ namespace Units.UnitTypes
         {
             _attackRotationOffset = Vector3.zero;
             PlayerId = playerId;
+
+            var r = GetComponentInChildren<Renderer>();
+            _unitHeight = r ? r.bounds.size.y : 1f;
             
             unitVisualsController.Init(PlayerId);
             ChangeUnitStateTo(startState);
@@ -292,19 +297,40 @@ namespace Units.UnitTypes
             _rigidbody.isKinematic = true;
             _rigidbody.freezeRotation = true;
 
+            _climbTargetY = _climbWall.bounds.max.y + _unitHeight;
+
             _climbCts?.Cancel();
             _climbCts = new CancellationTokenSource();
 
             _climbTask = ClimbWallLoop(_climbCts.Token);
         }
-        
+
         private async Task ClimbWallLoop(CancellationToken token)
         {
             while (!token.IsCancellationRequested && _climbWall && unitCurrentState == UnitState.Climbing)
             {
+                if (transform.position.y >= _climbTargetY)
+                {
+                    FinishClimbing();
+                    return;
+                }
                 transform.position += Vector3.up * (unitConfig.ClimbSpeed * Time.deltaTime);
                 await Task.Yield();
             }
+        }
+
+        private void FinishClimbing()
+        {
+            _climbCts?.Cancel();
+            _climbCts?.Dispose();
+            _climbCts = null;
+
+            _rigidbody.isKinematic = false;
+            _rigidbody.linearVelocity = (_wallNormal * -1 * CLIMB_END_PUSH_X) + (Vector3.up * CLIMB_END_PUSH_Y);
+            _rigidbody.useGravity = true;
+            _climbWall = null;
+
+            _ = DelayedTarget();
         }
         
         private async Task DelayedTarget()
@@ -354,6 +380,16 @@ namespace Units.UnitTypes
 
         protected virtual Action<float> GetHitCallback(BaseUnit target) =>
             damage => { if (target) target.TakeDamage(damage); };
+
+        public async void ApplyPoison(float damagePerTick, int ticks)
+        {
+            for (var i = 0; i < ticks; i++)
+            {
+                if (unitCurrentState == UnitState.Dead) return;
+                TakeDamage(damagePerTick);
+                await Task.Delay(1000);
+            }
+        }
 
         public virtual void CleanUp()
         {

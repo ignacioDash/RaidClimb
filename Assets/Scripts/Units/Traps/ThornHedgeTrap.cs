@@ -55,7 +55,6 @@ namespace Units.Traps
         {
             if (_trapLoop == null)
                 _trapLoop = ThornHedgeTrapLoop();
-            PlayParticles();
         }
 
         protected override void OnTrapDestroyed()
@@ -69,18 +68,26 @@ namespace Units.Traps
         {
             if (CurrentTrapState != TrapState.Active)
                 return;
-            
+
             if (!_unitsInTrap.Contains(unit))
+            {
                 _unitsInTrap.Add(unit);
+                if (_unitsInTrap.Count == 1)
+                    PlayParticles();
+            }
         }
 
         protected override void OnEnemyUnitExitedTrap(BaseUnit unit)
         {
             if (CurrentTrapState != TrapState.Active)
                 return;
-            
+
             if (_unitsInTrap.Contains(unit))
+            {
                 _unitsInTrap.Remove(unit);
+                if (_unitsInTrap.Count == 0)
+                    StopParticles();
+            }
         }
 
         public override void CleanUp()

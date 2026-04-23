@@ -49,3 +49,6 @@ MonoBehaviour:
   - unitType: 12
     unitPrefab: {fileID: 5669563167363291019, guid: ad74fe1506d674ea38db1940cee14bd5, type: 3}
     unitConfig: {fileID: 11400000, guid: 8be468767de934f5a96f061c7f289759, type: 2}
+  - unitType: 13
+    unitPrefab: {fileID: 8368055254007193674, guid: e6dd12191157c4609b4d298801713cf5, type: 3}
+    unitConfig: {fileID: 11400000, guid: 9ac002044999f47c8a9efe3c8ba80d42, type: 2}

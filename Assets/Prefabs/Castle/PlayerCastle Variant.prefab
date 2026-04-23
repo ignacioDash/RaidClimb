@@ -8885,7 +8885,7 @@ MonoBehaviour:
       prizeText: {fileID: 532322956349429055}
       prize: 400
       arenaUnlock: 4
-      unitType: 5
+      unitType: 13
       trapType: 0
   - slotId: 7
     slotPosition: {fileID: 4814472650626510594}
@@ -8895,7 +8895,7 @@ MonoBehaviour:
       prizeText: {fileID: 5288649500049979627}
       prize: 400
       arenaUnlock: 4
-      unitType: 5
+      unitType: 13
       trapType: 0
   - slotId: 9
     slotPosition: {fileID: 1316114680262319797}
@@ -8903,10 +8903,10 @@ MonoBehaviour:
       purchasable: 1
       purchaseButton: {fileID: 1588771311485292886}
       prizeText: {fileID: 2427016441756081293}
-      prize: 200
+      prize: 400
       arenaUnlock: 4
       unitType: 0
-      trapType: 1
+      trapType: 3
   - slotId: 10
     slotPosition: {fileID: 6465575790657107280}
     slotPurchase:
@@ -9103,10 +9103,10 @@ MonoBehaviour:
       purchasable: 1
       purchaseButton: {fileID: 3921040344562795899}
       prizeText: {fileID: 3749170517259087527}
-      prize: 200
+      prize: 400
       arenaUnlock: 4
       unitType: 0
-      trapType: 1
+      trapType: 3
   rowLockVisuals:
   - arenaUnlock: 4
     lockedOverlay: {fileID: 8837970771113016051}

@@ -12,7 +12,8 @@ namespace Units.Traps
         {
             None,
             Spikes,
-            ThornHedge
+            ThornHedge,
+            Lava
         }
 
         public enum TrapState

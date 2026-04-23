@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ffadd9dcca47f29f8734662fab03d3, type: 3}
+  m_Name: KingCobraUnit
+  m_EditorClassIdentifier: Assembly-CSharp::Config.UnitBaseConfig
+  unitName: King Cobra
+  arenaUnlock: 1
+  squadCost: 0
+  health: 140
+  damage: 44
+  range: 17
+  movementSpeed: 0
+  climbSpeed: 0
+  attackSpeed: 0.4
+  projectilePrefab: {fileID: 4974414919169330723, guid: 4e3e49c00281244439bfd098452f1ae6, type: 3}
+  projectileSpeed: 15

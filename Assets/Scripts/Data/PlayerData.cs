@@ -24,8 +24,6 @@ namespace Data
     [Serializable]
     public class UserData
     {
-        public int UserLevel;
-        public string UserName;
         public int coins;
         public int trophies;
         public bool isFirstWin = true;
