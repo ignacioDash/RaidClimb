@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Config;
 using TMPro;
+using Units.UnitTypes;
 using UnityEngine;
 
 namespace Managers
@@ -14,7 +16,7 @@ namespace Managers
         private DataManager _dataManager;
         private int _coinsAmount, _trophiesAmount;
         
-        public void AddTrophies(int trophies)
+        public List<BaseUnit.UnitTypes> AddTrophies(int trophies)
         {
             var arenaBefore = GetArenaForTrophies(_trophiesAmount);
             _trophiesAmount += trophies;
@@ -23,18 +25,28 @@ namespace Managers
 
             var arenaAfter = GetArenaForTrophies(_trophiesAmount);
             if (arenaAfter > arenaBefore)
-                CheckAndUnlockUnitsForArena(arenaAfter);
+                return CheckAndUnlockUnitsForArena(arenaAfter);
+
+            return new List<BaseUnit.UnitTypes>();
         }
 
-        private void CheckAndUnlockUnitsForArena(int arena)
+        private List<BaseUnit.UnitTypes> CheckAndUnlockUnitsForArena(int arena)
         {
             var unitManager = GameManager.Instance.GetManager<UnitManager>();
             var newUnits = unitManager.GetUnitsUnlockingAtArena(arena);
             var squad = _dataManager.PlayerData.SquadData;
+            var unlocked = new List<BaseUnit.UnitTypes>();
 
             foreach (var unit in newUnits)
+            {
                 if (!squad.UnlockedUnits.Contains(unit))
+                {
                     squad.UnlockedUnits.Add(unit);
+                    unlocked.Add(unit);
+                }
+            }
+
+            return unlocked;
         }
         
         public void AddCoins(int coins)
@@ -64,13 +76,13 @@ namespace Managers
             SetTrophiesAmount(_dataManager.PlayerData.UserData.trophies);
         }
 
-        public (int coins, int trophies) AwardWinRewards()
+        public (int coins, int trophies, List<BaseUnit.UnitTypes> newlyUnlocked) AwardWinRewards()
         {
             var userData = _dataManager.PlayerData.UserData;
             userData.gamesPlayed++;
 
             var arenaBeforeWin = GetArenaForTrophies(userData.trophies);
-            AddTrophies(economyConfig.trophiesPerWin);
+            var newlyUnlocked = AddTrophies(economyConfig.trophiesPerWin);
 
             if (GetArenaForTrophies(userData.trophies) > arenaBeforeWin)
                 userData.demotionShieldCharges = economyConfig.demotionShieldChargesOnPromotion;
@@ -84,7 +96,7 @@ namespace Managers
             }
 
             AddCoins(coins);
-            return (coins, economyConfig.trophiesPerWin);
+            return (coins, economyConfig.trophiesPerWin, newlyUnlocked);
         }
 
         public int HandleDefeat()

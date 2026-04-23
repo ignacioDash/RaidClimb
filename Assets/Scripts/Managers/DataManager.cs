@@ -32,7 +32,7 @@ namespace Managers
 
             PlayerData = new PlayerData
             {
-                UserData = new UserData { coins = 9990, trophies = 9000},
+                UserData = new UserData { coins = 0, trophies = 0},
                 PlayerCastleData = initCastleData,
                 SquadData = DefaultSquadData(),
             };

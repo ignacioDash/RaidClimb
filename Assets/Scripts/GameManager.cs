@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Units.UnitTypes;
 using Castles;
 using Constants;
 using Input;
@@ -75,16 +76,19 @@ public class GameManager : MonoBehaviour
         var playerWon = winnerId == Keys.PLAYER_ID;
 
         int coinsEarned, trophiesEarned;
+        List<BaseUnit.UnitTypes> newlyUnlocked;
         if (playerWon)
         {
             var rewards = currencyManager.AwardWinRewards();
             coinsEarned = rewards.coins;
             trophiesEarned = rewards.trophies;
+            newlyUnlocked = rewards.newlyUnlocked;
         }
         else
         {
             coinsEarned = 0;
             trophiesEarned = currencyManager.HandleDefeat();
+            newlyUnlocked = new List<BaseUnit.UnitTypes>();
         }
 
         await _dataManager.Save();
@@ -98,7 +102,7 @@ public class GameManager : MonoBehaviour
 
         unitManager.OnGameEnded(winnerId);
 
-        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon, coinsEarned, trophiesEarned });
+        await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon, coinsEarned, trophiesEarned, newlyUnlocked });
     }
 
     // user leaves / finishes the game
