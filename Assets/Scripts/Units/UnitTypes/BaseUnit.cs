@@ -381,6 +381,23 @@ namespace Units.UnitTypes
         protected virtual Action<float> GetHitCallback(BaseUnit target) =>
             damage => { if (target) target.TakeDamage(damage); };
 
+        public void InterruptClimb(Vector3 pushForce)
+        {
+            if (unitCurrentState != UnitState.Climbing) return;
+
+            _climbCts?.Cancel();
+            _climbCts?.Dispose();
+            _climbCts = null;
+            _climbWall = null;
+
+            _rigidbody.isKinematic = false;
+            _rigidbody.useGravity = true;
+            _rigidbody.linearVelocity = pushForce;
+
+            ChangeUnitStateTo(UnitState.Idle);
+            _ = DelayedTarget();
+        }
+
         public async void ApplyPoison(float damagePerTick, int ticks)
         {
             for (var i = 0; i < ticks; i++)

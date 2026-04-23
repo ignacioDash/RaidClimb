@@ -13,7 +13,8 @@ namespace Units.Traps
             None,
             Spikes,
             ThornHedge,
-            Lava
+            Lava,
+            Pusher
         }
 
         public enum TrapState

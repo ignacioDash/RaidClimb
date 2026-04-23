@@ -43100,6 +43100,8 @@ MonoBehaviour:
     trapPrefab: {fileID: 8869146327405470053, guid: 8572b1daab9eb440fbc22b232a24db5d, type: 3}
   - trapType: 3
     trapPrefab: {fileID: 3379560568646382404, guid: 3087d5fbba19d44e69b6b9a2ff0997f9, type: 3}
+  - trapType: 4
+    trapPrefab: {fileID: 1352435153932294926, guid: 41ba6f823af164005b36397bb678f289, type: 3}
 --- !u!1 &1775412927
 GameObject:
   m_ObjectHideFlags: 0
@@ -61314,6 +61316,10 @@ PrefabInstance:
     - target: {fileID: 1325281648697049684, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_Name
       value: PlayerCastle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3035837745989551335, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
+      propertyPath: castleSlots.Array.data[25].slotPurchase.trapType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4211572849971483311, guid: b6266828a672f4440bc23163da72b4d2, type: 3}
       propertyPath: m_Camera

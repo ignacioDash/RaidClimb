@@ -9096,7 +9096,7 @@ MonoBehaviour:
       prize: 500
       arenaUnlock: 8
       unitType: 0
-      trapType: 2
+      trapType: 4
   - slotId: 8
     slotPosition: {fileID: 3041290791016169044}
     slotPurchase:
