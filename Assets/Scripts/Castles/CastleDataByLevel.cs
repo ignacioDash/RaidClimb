@@ -17,6 +17,40 @@ namespace Castles
                         CastleSlots = new List<CastleSlot>
                         {
                             new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                        }
+                    };
+                case 2:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                        }
+                    };
+                case 3:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                        }
+                    };
+                case 4:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
                         }
                     };
                 case 5:
@@ -25,14 +59,329 @@ namespace Castles
                         CastleSlots = new List<CastleSlot>
                         {
                             new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
-                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes},
-                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes},
-                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
-                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
-                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
                             new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
                         }
                     };
+                case 6:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                        }
+                    };
+                case 7:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 8:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                        }
+                    };
+                case 9:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                        }
+                    };
+                case 10:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                        }
+                    };
+                case 11:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 12:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                        }
+                    };
+                case 13:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                        }
+                    };
+                case 14:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 15:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 16:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                        }
+                    };
+                case 17:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall3, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 18:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall3, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                case 19:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall3, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor3, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                        }
+                    };
+                case 20:
+                    return new CastleData
+                    {
+                        CastleSlots = new List<CastleSlot>
+                        {
+                            new() { SlotId = CastleSlotId.King, SlotUnit = BaseUnit.UnitTypes.King },
+                            new() { SlotId = CastleSlotId.Stage3Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret1, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage2Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage1Turret2, SlotUnit = BaseUnit.UnitTypes.Defender },
+                            new() { SlotId = CastleSlotId.Stage1Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Floor1, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage2Floor2, SlotTrap = BaseTrap.TrapTypes.Lava },
+                            new() { SlotId = CastleSlotId.Stage2Turret1, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor2, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.Stage3Turret2, SlotUnit = BaseUnit.UnitTypes.TeslaCoil },
+                            new() { SlotId = CastleSlotId.Stage3Wall1, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage2Turret2, SlotUnit = BaseUnit.UnitTypes.KingCobra },
+                            new() { SlotId = CastleSlotId.Stage2Wall3, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage3Wall2, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                            new() { SlotId = CastleSlotId.Stage1Floor3, SlotTrap = BaseTrap.TrapTypes.Spikes },
+                            new() { SlotId = CastleSlotId.KinWall, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
+                        }
+                    };
+                default:
                 case 99:
                     return new CastleData
                     {
@@ -73,8 +422,6 @@ namespace Castles
                             new() { SlotId = CastleSlotId.KinWall, SlotTrap = BaseTrap.TrapTypes.ThornHedge },
                         }
                     };
-                default:
-                    return new CastleData();
             }
         }
     }

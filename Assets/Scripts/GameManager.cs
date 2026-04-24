@@ -62,8 +62,9 @@ public class GameManager : MonoBehaviour
         
         playerCastle.OnGameStarted();
 
-        // todo: check user level
-        ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(1));
+        var trophies = _dataManager.PlayerData.UserData.trophies;
+        var opponentLevel = Mathf.Clamp(trophies / 50, 1, 20);
+        ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(opponentLevel));
         
         _gameStateManager.StartGame();
         

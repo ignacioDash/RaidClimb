@@ -16,20 +16,20 @@ MonoBehaviour:
   - minArena: 1
     minSpawnIntervalMs: 3000
     maxSpawnIntervalMs: 5000
-    availableUnits: 01000000
+    availableUnits: 07000000
   - minArena: 2
     minSpawnIntervalMs: 2000
     maxSpawnIntervalMs: 4000
-    availableUnits: 0100000002000000
+    availableUnits: 0700000006000000
   - minArena: 4
     minSpawnIntervalMs: 2000
     maxSpawnIntervalMs: 3000
-    availableUnits: 010000000200000003000000
+    availableUnits: 070000000600000008000000
   - minArena: 10
     minSpawnIntervalMs: 1000
     maxSpawnIntervalMs: 3000
-    availableUnits: 010000000200000003000000
+    availableUnits: 0b0000000a00000008000000
   - minArena: 13
     minSpawnIntervalMs: 1000
     maxSpawnIntervalMs: 2000
-    availableUnits: 010000000200000003000000
+    availableUnits: 0b0000000a00000009000000

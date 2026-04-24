@@ -111,9 +111,10 @@ namespace UI
             while (equippedUnits.Count < 3)
                 equippedUnits.Add(BaseUnit.UnitTypes.None);
 
+            if (equippedUnits.Contains(_selectedUnit)) return;
+
             var slotIndex = selectedButton.Slot - 1;
-            var isEquipped = equippedUnits[slotIndex] == _selectedUnit;
-            equippedUnits[slotIndex] = isEquipped ? BaseUnit.UnitTypes.None : _selectedUnit;
+            equippedUnits[slotIndex] = _selectedUnit;
 
             foreach (var btn in unitButtons)
                 btn.SetEquipped(equippedUnits.Contains(btn.UnitType));
