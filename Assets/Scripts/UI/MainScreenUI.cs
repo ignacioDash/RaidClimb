@@ -9,8 +9,10 @@ namespace UI
 {
     public class MainScreenUI : BaseScreen
     {
-        [SerializeField] private Button playButton, settingsButton, leaderboardButton, collectionButton, towerButton;
-        [SerializeField] private TextMeshProUGUI leaderboardButtonText;
+        [SerializeField] private Button playButton, settingsButton, towerButton, squadButton;
+        [SerializeField] private TextMeshProUGUI trophiesText;
+        [SerializeField] private TextMeshProUGUI arenaText;
+        [SerializeField] private Slider trophiesSlider;
 
         private UIManager _uiManager;
 
@@ -23,18 +25,16 @@ namespace UI
             
             playButton.onClick.AddListener(OnPlayButton);
             settingsButton.onClick.AddListener(OnSettingsButton);
-            leaderboardButton.onClick.AddListener(OnLeaderboardButton);
-            collectionButton.onClick.AddListener(OnCollectionButton);
             towerButton.onClick.AddListener(OnCastleButton);
+            squadButton.onClick.AddListener(OnSquadButton);
         }
 
         private void OnDisable()
         {
             playButton.onClick.RemoveListener(OnPlayButton);
             settingsButton.onClick.RemoveListener(OnSettingsButton);
-            leaderboardButton.onClick.RemoveListener(OnLeaderboardButton);
-            collectionButton.onClick.RemoveListener(OnCollectionButton);
             towerButton.onClick.RemoveListener(OnCastleButton);
+            squadButton.onClick.RemoveListener(OnSquadButton);
         }
 
         public override async Task OpenScreen(object[] args)
@@ -43,7 +43,12 @@ namespace UI
 
             var currencyManager = GameManager.Instance.GetManager<CurrencyManager>();
             var trophies = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.trophies;
-            leaderboardButtonText.text = $"#{currencyManager.GetArenaForTrophies(trophies)}";
+            var arena = currencyManager.GetArenaForTrophies(trophies);
+            var progress = currencyManager.GetTrophyProgress(trophies);
+
+            arenaText.text = $"{arena}";
+            trophiesText.text = $"{progress.current}/{progress.next}";
+            trophiesSlider.value = progress.next > 0 ? (float)progress.current / progress.next : 1f;
 
             SetButtons(true);
         }
@@ -60,19 +65,7 @@ namespace UI
             await _uiManager.NavigateTo(UIManager.Screens.SettingsScreen, true);
             SetButtons(true);
         }
-
-        private async void OnLeaderboardButton()
-        {
-            SetButtons(false);
-            await _uiManager.NavigateTo(UIManager.Screens.LeaderboardScreen);
-        }
-
-        private async void OnCollectionButton()
-        {
-            SetButtons(false);
-            await _uiManager.NavigateTo(UIManager.Screens.CollectionScreen);
-        }
-
+        
         private async void OnCastleButton()
         {
             SetButtons(false);
@@ -86,13 +79,18 @@ namespace UI
             await Task.WhenAll(cameraTransition, screenTransition);
         }
 
+        private async void OnSquadButton()
+        {
+            SetButtons(false);
+            await _uiManager.NavigateTo(UIManager.Screens.SquadScreen);
+        }
+
         private void SetButtons(bool on)
         {
             towerButton.interactable = on;
-            collectionButton.interactable = on;
-            leaderboardButton.interactable = on;
             settingsButton.interactable = on;
             playButton.interactable = on;
+            squadButton.interactable = on;
         }
     }
 }

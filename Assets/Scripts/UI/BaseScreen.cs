@@ -24,7 +24,7 @@ namespace UI
 
         public virtual Task CloseScreen()
         {
-            return _canvasGroup.FadeCanvasGroup(1, fadeDuration);
+            return _canvasGroup.FadeCanvasGroup(0, fadeDuration);
         }
     }
 }

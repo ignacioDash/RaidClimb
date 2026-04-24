@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using UI;
 using UnityEngine;
@@ -15,19 +14,17 @@ namespace Managers
             MainScreen,
             InGameScreen,
             SettingsScreen,
-            LeaderboardScreen,
-            CollectionScreen,
             TowerScreen,
-            GameEndScreen
+            GameEndScreen,
+            SquadScreen
         }
         
         [SerializeField] private MainScreenUI mainScreen;
         [SerializeField] private InGameScreen inGameScreen;
         [SerializeField] private SettingsScreen settingsScreen;
-        [SerializeField] private LeaderboardScreen leaderboardScreen;
-        [SerializeField] private CollectionScreen collectionScreen;
         [SerializeField] private TowerScreen towerScreen;
         [SerializeField] private GameEndScreen gameEndScreen;
+        [SerializeField] private SquadScreenUI squadScreen;
 
         private readonly Dictionary<Screens, BaseScreen> _screensDictionary = new();
 
@@ -40,18 +37,15 @@ namespace Managers
             mainScreen.gameObject.SetActive(false);
             inGameScreen.gameObject.SetActive(false);
             settingsScreen.gameObject.SetActive(false);
-            leaderboardScreen.gameObject.SetActive(false);
-            collectionScreen.gameObject.SetActive(false);
             towerScreen.gameObject.SetActive(false);
             gameEndScreen.gameObject.SetActive(false);
             
             _screensDictionary.Add(Screens.MainScreen, mainScreen);
             _screensDictionary.Add(Screens.InGameScreen, inGameScreen);
             _screensDictionary.Add(Screens.SettingsScreen, settingsScreen);
-            _screensDictionary.Add(Screens.LeaderboardScreen, leaderboardScreen);
-            _screensDictionary.Add(Screens.CollectionScreen, collectionScreen);
             _screensDictionary.Add(Screens.TowerScreen, towerScreen);
             _screensDictionary.Add(Screens.GameEndScreen, gameEndScreen);
+            _screensDictionary.Add(Screens.SquadScreen, squadScreen);
         }
 
         public async Task NavigateTo(Screens targetScreen, bool asPopUp = false, object[] args = null)

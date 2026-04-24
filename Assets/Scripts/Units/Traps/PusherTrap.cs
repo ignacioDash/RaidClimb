@@ -17,7 +17,6 @@ namespace Units.Traps
         private CancellationTokenSource _cts;
         private Task _trapLoop;
         private Vector3 _visualStartLocalPos;
-        private string _playerId;
 
         public override void Init(string playerId)
         {

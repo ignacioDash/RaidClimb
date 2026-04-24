@@ -29,7 +29,7 @@ namespace Units.Traps
         [SerializeField] private ParticleSystem trapParticles;
 
         private Collider _trapCollider;
-        private string _playerId;
+        protected string _playerId;
 
         public TrapState CurrentTrapState { get; private set; }
 

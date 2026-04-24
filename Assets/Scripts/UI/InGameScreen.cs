@@ -21,6 +21,7 @@ namespace UI
 
         [SerializeField] private TextMeshProUGUI unitName1, unitName2, unitName3;
         [SerializeField] private UnitCamerasController unitCamerasController;
+        [SerializeField] private RawImage unitRawImage1, unitRawImage2, unitRawImage3;
         [SerializeField] private Image[] rangeImages;
         [SerializeField] private Image[] range2Images;
         [SerializeField] private Image[] range3Images;
@@ -197,6 +198,16 @@ namespace UI
             }
 
             unitCamerasController.Init(equipped);
+
+            var rawImages = new[] { unitRawImage1, unitRawImage2, unitRawImage3 };
+            for (var i = 0; i < rawImages.Length; i++)
+            {
+                if (!rawImages[i]) continue;
+                var unitType = i < equipped.Count ? equipped[i] : BaseUnit.UnitTypes.None;
+                rawImages[i].texture = unitType != BaseUnit.UnitTypes.None
+                    ? unitCamerasController.GetRenderTexture(unitType)
+                    : null;
+            }
         }
 
         private void FreeSquadCost(int cost)

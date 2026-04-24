@@ -10,7 +10,6 @@ namespace Managers
     public class CurrencyManager : MonoBehaviour, IManager
     {
         [SerializeField] private TextMeshProUGUI coinsAmount;
-        [SerializeField] private TextMeshProUGUI trophiesAmount;
         [SerializeField] private EconomyConfig economyConfig;
 
         private DataManager _dataManager;
@@ -21,7 +20,6 @@ namespace Managers
             var arenaBefore = GetArenaForTrophies(_trophiesAmount);
             _trophiesAmount += trophies;
             _dataManager.PlayerData.UserData.trophies = _trophiesAmount;
-            trophiesAmount.text = _trophiesAmount.ToString();
 
             var arenaAfter = GetArenaForTrophies(_trophiesAmount);
             if (arenaAfter > arenaBefore)
@@ -59,7 +57,6 @@ namespace Managers
         private void SetTrophiesAmount(int amount)
         {
             _trophiesAmount = amount;
-            trophiesAmount.text = _trophiesAmount.ToString();
         }
 
         private void SetCoinsAmount(int amount)
@@ -128,6 +125,18 @@ namespace Managers
                     break;
             }
             return arena;
+        }
+
+        public (int current, int next) GetTrophyProgress(int trophies)
+        {
+            var prevThreshold = 0;
+            foreach (var threshold in economyConfig.arenaTrophyThresholds)
+            {
+                if (trophies < threshold)
+                    return (trophies - prevThreshold, threshold - prevThreshold);
+                prevThreshold = threshold;
+            }
+            return (trophies - prevThreshold, trophies - prevThreshold); // max arena
         }
 
         private int GetCoinsForTrophies(int trophies)
