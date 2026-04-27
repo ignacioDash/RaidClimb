@@ -163,7 +163,7 @@ namespace UI
                 }
             }
 
-            _fillStartTime = Time.time;
+            _activeButtonIndex = -1;
             _fillProgress = 0f;
             UpdateRangeVisuals();
         }

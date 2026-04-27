@@ -15,9 +15,11 @@ MonoBehaviour:
   unitName: Raider
   arenaUnlock: 2
   squadCost: 1
-  health: 50
+  health: 60
   damage: 25
   range: 1
-  movementSpeed: 2.2
-  climbSpeed: 1.5
+  movementSpeed: 4.4
+  climbSpeed: 3
   attackSpeed: 1.5
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 10

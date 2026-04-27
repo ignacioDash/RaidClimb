@@ -45,12 +45,15 @@ namespace UI
 
         private async void OnBack()
         {
-            await GameManager.Instance.GetManager<UIManager>().NavigateTo(UIManager.Screens.MainScreen);
+            var cameraTransition = GameManager.Instance.GetManager<CameraManager>().SetCameraAt(CameraManager.CameraPosition.Default);
+            var screenTransition = GameManager.Instance.GetManager<UIManager>().NavigateTo(UIManager.Screens.MainScreen);
+            await Task.WhenAll(cameraTransition, screenTransition);
         }
 
         public override async Task OpenScreen(object[] args)
         {
-            await base.OpenScreen(args);
+            var cameraTransition = GameManager.Instance.GetManager<CameraManager>().SetCameraAt(CameraManager.CameraPosition.Opponent);
+            await Task.WhenAll(base.OpenScreen(args), cameraTransition);
 
             var dataManager = GameManager.Instance.GetManager<DataManager>();
             var currencyManager = GameManager.Instance.GetManager<CurrencyManager>();

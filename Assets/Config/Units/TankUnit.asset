@@ -18,6 +18,6 @@ MonoBehaviour:
   health: 420
   damage: 50
   range: 1.2
-  movementSpeed: 1.2
-  climbSpeed: 0.7
+  movementSpeed: 2.4
+  climbSpeed: 1.4
   attackSpeed: 0.6

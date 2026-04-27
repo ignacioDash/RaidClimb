@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
         var trophies = _dataManager.PlayerData.UserData.trophies;
         var opponentLevel = Mathf.Clamp(trophies / 50, 1, 20);
-        ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(opponentLevel));
+        ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(opponentLevel, trophies));
         
         _gameStateManager.StartGame();
         

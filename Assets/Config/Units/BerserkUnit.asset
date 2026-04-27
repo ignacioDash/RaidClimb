@@ -18,8 +18,8 @@ MonoBehaviour:
   health: 200
   damage: 12
   range: 1
-  movementSpeed: 2
-  climbSpeed: 1.4
+  movementSpeed: 4
+  climbSpeed: 2.8
   attackSpeed: 0.9
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
