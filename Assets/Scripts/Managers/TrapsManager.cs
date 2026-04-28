@@ -43,7 +43,7 @@ namespace Managers
             return trapInstance;
         }
 
-        public void Cleanup()
+        public void CleanupPlayerTraps()
         {
             foreach (var trap in PlayerTraps)
             {
@@ -51,6 +51,12 @@ namespace Managers
                 if (trap)
                     Destroy(trap.gameObject);
             }
+            PlayerTraps.Clear();
+        }
+
+        public void Cleanup()
+        {
+            CleanupPlayerTraps();
 
             foreach (var trap in OpponentTraps)
             {
@@ -58,8 +64,6 @@ namespace Managers
                 if (trap)
                     Destroy(trap.gameObject);
             }
-
-            PlayerTraps.Clear();
             OpponentTraps.Clear();
         }
     }

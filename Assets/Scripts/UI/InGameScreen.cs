@@ -22,9 +22,6 @@ namespace UI
         [SerializeField] private TextMeshProUGUI unitName1, unitName2, unitName3;
         [SerializeField] private UnitCamerasController unitCamerasController;
         [SerializeField] private RawImage unitRawImage1, unitRawImage2, unitRawImage3;
-        [SerializeField] private Image[] rangeImages;
-        [SerializeField] private Image[] range2Images;
-        [SerializeField] private Image[] range3Images;
 
         [Header("Squad Meter")]
         [SerializeField] private Image[] squadMeterImages;
@@ -36,7 +33,6 @@ namespace UI
         [SerializeField] private RectTransform playerUnit, opponentUnit;
 
         [Header("Settings")]
-        [SerializeField] private HoldRanges[] holdRanges;
         [SerializeField] private Collider playerSpawnArea;
 
         private UnitManager _unitManager;
@@ -44,21 +40,16 @@ namespace UI
         private Vector3 _playerUnitStartPosition;
         private Vector3 _opponentUnitStartPosition;
 
-        private int _activeButtonIndex = -1;
-        private float _fillProgress;
-        private float _fillStartTime;
-        private int _squadUsed;
+        private int _squadMeter;
+        private float _refillAccumulator;
 
-        private Action _onUnit1Down, _onUnit1Up;
-        private Action _onUnit2Down, _onUnit2Up;
-        private Action _onUnit3Down, _onUnit3Up;
+        private Action _onUnit1Down, _onUnit2Down, _onUnit3Down;
 
         private void Awake()
         {
-            // Cache lambdas so OnDisable can unsubscribe the same instances
-            _onUnit1Down = () => OnButtonPressed(0); _onUnit1Up = () => OnButtonReleased(0);
-            _onUnit2Down = () => OnButtonPressed(1); _onUnit2Up = () => OnButtonReleased(1);
-            _onUnit3Down = () => OnButtonPressed(2); _onUnit3Up = () => OnButtonReleased(2);
+            _onUnit1Down = () => OnUnitButtonPressed(0);
+            _onUnit2Down = () => OnUnitButtonPressed(1);
+            _onUnit3Down = () => OnUnitButtonPressed(2);
         }
 
         protected override void OnEnable()
@@ -68,11 +59,8 @@ namespace UI
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
 
             unit1Pointer.PointerDown += _onUnit1Down;
-            unit1Pointer.PointerUp   += _onUnit1Up;
             unit2Pointer.PointerDown += _onUnit2Down;
-            unit2Pointer.PointerUp   += _onUnit2Up;
             unit3Pointer.PointerDown += _onUnit3Down;
-            unit3Pointer.PointerUp   += _onUnit3Up;
 
             pauseButton.onClick.AddListener(OnPaused);
             unPauseButton.onClick.AddListener(OnUnPause);
@@ -86,12 +74,9 @@ namespace UI
             if (opponentUnit)
                 _opponentUnitStartPosition = opponentUnit.position;
 
-            _activeButtonIndex = -1;
-            _fillProgress = 0f;
-            _squadUsed = 0;
-            UpdateRangeVisuals();
+            _squadMeter = squadMeterImages != null ? squadMeterImages.Length : 0;
+            _refillAccumulator = 0f;
             UpdateSquadMeter();
-            UpdateButtonStates();
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
@@ -103,11 +88,8 @@ namespace UI
         private void OnDisable()
         {
             unit1Pointer.PointerDown -= _onUnit1Down;
-            unit1Pointer.PointerUp   -= _onUnit1Up;
             unit2Pointer.PointerDown -= _onUnit2Down;
-            unit2Pointer.PointerUp   -= _onUnit2Up;
             unit3Pointer.PointerDown -= _onUnit3Down;
-            unit3Pointer.PointerUp   -= _onUnit3Up;
 
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
@@ -117,55 +99,34 @@ namespace UI
 
         private void Update()
         {
-            if (_activeButtonIndex < 0) return;
-
-            _fillProgress = Mathf.Clamp01((Time.time - _fillStartTime) / holdRanges[_activeButtonIndex].RangeDuration);
-
-            UpdateRangeVisuals();
-
-            if (_fillProgress >= 1f)
-                OnFillCompleted(_activeButtonIndex);
-        }
-
-        private void OnButtonPressed(int index)
-        {
-            _activeButtonIndex = index;
-            _fillStartTime = Time.time;
-            _fillProgress = 0f;
-            UpdateRangeVisuals();
-        }
-
-        private void OnButtonReleased(int index)
-        {
-            if (_activeButtonIndex != index) return;
-            _activeButtonIndex = -1;
-            _fillProgress = 0f;
-            UpdateRangeVisuals();
-        }
-
-        private void OnFillCompleted(int buttonIndex)
-        {
-            var unitType = GetUnitTypeForButton(buttonIndex);
-            if (unitType != BaseUnit.UnitTypes.None)
+            var max = squadMeterImages != null ? squadMeterImages.Length : 0;
+            if (_squadMeter < max)
             {
-                var cost = _unitManager.GetUnitSquadCost(unitType);
-                if (_squadUsed + cost <= squadMeterImages.Length)
+                _refillAccumulator += Time.deltaTime;
+                if (_refillAccumulator >= 3f)
                 {
-                    var unitPosition = GetRandomSpawnPosition();
-                    var unit = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
-                    if (unit)
-                    {
-                        _squadUsed += cost;
-                        unit.OnDeath += () => FreeSquadCost(cost);
-                        UpdateSquadMeter();
-                        StartCoroutine(SetDelayedTarget(unit, 1.5f));
-                    }
+                    _refillAccumulator -= 3f;
+                    _squadMeter = Mathf.Min(_squadMeter + 1, max);
+                    UpdateSquadMeter();
                 }
             }
+        }
 
-            _activeButtonIndex = -1;
-            _fillProgress = 0f;
-            UpdateRangeVisuals();
+        private void OnUnitButtonPressed(int index)
+        {
+            var unitType = GetUnitTypeForButton(index);
+            if (unitType == BaseUnit.UnitTypes.None) return;
+
+            var cost = _unitManager.GetUnitSquadCost(unitType);
+            if (cost > _squadMeter) return;
+
+            var unitPosition = GetRandomSpawnPosition();
+            var unit = _unitManager.SpawnUnit(unitType, unitPosition, Keys.PLAYER_ID);
+            if (!unit) return;
+
+            _squadMeter -= cost;
+            UpdateSquadMeter();
+            StartCoroutine(SetDelayedTarget(unit, 1.5f));
         }
 
         private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
@@ -210,55 +171,25 @@ namespace UI
             }
         }
 
-        private void FreeSquadCost(int cost)
-        {
-            _squadUsed = Mathf.Max(0, _squadUsed - cost);
-            UpdateSquadMeter();
-        }
-
         private void UpdateSquadMeter()
         {
             if (squadMeterImages == null) return;
             for (var i = 0; i < squadMeterImages.Length; i++)
-                if (squadMeterImages[i]) squadMeterImages[i].gameObject.SetActive(i < _squadUsed);
+                if (squadMeterImages[i]) squadMeterImages[i].gameObject.SetActive(i < _squadMeter);
             UpdateButtonStates();
         }
 
         private void UpdateButtonStates()
         {
             var pointers = new[] { unit1Pointer, unit2Pointer, unit3Pointer };
-            var remaining = squadMeterImages != null ? squadMeterImages.Length - _squadUsed : 0;
 
             for (var i = 0; i < pointers.Length; i++)
             {
                 if (!pointers[i]) continue;
                 var unitType = GetUnitTypeForButton(i);
                 var cost = unitType != BaseUnit.UnitTypes.None ? _unitManager.GetUnitSquadCost(unitType) : 0;
-                var canAfford = cost > 0 && cost <= remaining;
-                pointers[i].interactable = canAfford;
-
-                if (!canAfford && _activeButtonIndex == i)
-                {
-                    _activeButtonIndex = -1;
-                    _fillProgress = 0f;
-                    UpdateRangeVisuals();
-                }
+                pointers[i].interactable = cost > 0 && cost <= _squadMeter;
             }
-        }
-
-        private void UpdateRangeVisuals()
-        {
-            UpdateImageArray(rangeImages,  _activeButtonIndex == 0 ? _fillProgress : 0f);
-            UpdateImageArray(range2Images, _activeButtonIndex == 1 ? _fillProgress : 0f);
-            UpdateImageArray(range3Images, _activeButtonIndex == 2 ? _fillProgress : 0f);
-        }
-
-        private void UpdateImageArray(Image[] images, float progress)
-        {
-            if (images == null || images.Length == 0) return;
-            var filled = Mathf.Clamp(Mathf.FloorToInt(progress * images.Length), 0, images.Length);
-            for (var i = 0; i < images.Length; i++)
-                if (images[i]) images[i].gameObject.SetActive(i < filled);
         }
 
         private Vector3 GetRandomSpawnPosition()
@@ -326,11 +257,5 @@ namespace UI
             if (opponentUnit && opponentCastleTarget)
                 opponentUnit.position = Vector3.Lerp(opponentCastleTarget.position, _opponentUnitStartPosition, opponentDistance);
         }
-    }
-
-    [Serializable]
-    public class HoldRanges
-    {
-        public float RangeDuration;
     }
 }

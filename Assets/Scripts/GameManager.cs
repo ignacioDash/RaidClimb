@@ -59,12 +59,14 @@ public class GameManager : MonoBehaviour
         await Task.WhenAll(cameraAnimation, screenChange);
         
         unitManager.Cleanup();
-        
+        trapsManager.CleanupPlayerTraps();
+
         playerCastle.OnGameStarted();
 
         var trophies = _dataManager.PlayerData.UserData.trophies;
         var opponentLevel = Mathf.Clamp(trophies / 50, 1, 20);
         ((OpponentCastleManager)opponentCastle).SetUpOpponent(CastleDataByLevel.GetCastleDataForLevel(opponentLevel, trophies));
+        currencyManager.SetContainerActive(false);
         
         _gameStateManager.StartGame();
         
@@ -103,18 +105,20 @@ public class GameManager : MonoBehaviour
 
         unitManager.OnGameEnded(winnerId);
 
+        currencyManager.SetContainerActive(true);
         await uiManager.NavigateTo(UIManager.Screens.GameEndScreen, args: new object[] { playerWon, coinsEarned, trophiesEarned, newlyUnlocked });
     }
 
     // user leaves / finishes the game
     public async Task FinishGame()
     {
+        currencyManager.SetContainerActive(true);
+        CleanUp();
+
         var cameraAnimation = cameraManager.SetCameraAt(CameraManager.CameraPosition.Default);
         var screenChange = uiManager.NavigateTo(UIManager.Screens.MainScreen);
 
         await Task.WhenAll(cameraAnimation, screenChange);
-        
-        CleanUp();
     }
 
     private async Task SetUp()

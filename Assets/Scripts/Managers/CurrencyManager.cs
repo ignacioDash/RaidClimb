@@ -11,6 +11,7 @@ namespace Managers
     {
         [SerializeField] private TextMeshProUGUI coinsAmount;
         [SerializeField] private EconomyConfig economyConfig;
+        [SerializeField] private GameObject container;
 
         private DataManager _dataManager;
         private int _coinsAmount, _trophiesAmount;
@@ -65,10 +66,20 @@ namespace Managers
             coinsAmount.text = _coinsAmount.ToString();
         }
         
+        private void Awake()
+        {
+            if (!container)
+            {
+                Debug.LogWarning("CurrencyManager: container reference is not assigned.", this);
+                return;
+            }
+            container.SetActive(true);
+        }
+
         public async Task Init(object[] args)
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
-            
+
             SetCoinsAmount(_dataManager.PlayerData.UserData.coins);
             SetTrophiesAmount(_dataManager.PlayerData.UserData.trophies);
         }
@@ -150,6 +161,11 @@ namespace Managers
                     break;
             }
             return reward;
+        }
+
+        public void SetContainerActive(bool active)
+        {
+            if (container) container.SetActive(active);
         }
 
         public void Cleanup()

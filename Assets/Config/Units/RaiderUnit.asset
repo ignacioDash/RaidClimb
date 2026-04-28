@@ -15,7 +15,7 @@ MonoBehaviour:
   unitName: Raider
   arenaUnlock: 2
   squadCost: 1
-  health: 60
+  health: 65
   damage: 25
   range: 1
   movementSpeed: 4.4

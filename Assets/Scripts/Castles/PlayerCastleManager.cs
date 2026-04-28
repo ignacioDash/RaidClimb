@@ -48,10 +48,17 @@ namespace Castles
             UpdateCastleWithCastleData();
         }
 
+        public void RefreshDefenses()
+        {
+            _currencyManager = GameManager.Instance.GetManager<CurrencyManager>();
+            GameManager.Instance.GetManager<UnitManager>().Cleanup();
+            GameManager.Instance.GetManager<TrapsManager>().CleanupPlayerTraps();
+            _castleData = _dataManager.PlayerData.PlayerCastleData;
+            UpdateCastleWithCastleData();
+        }
+
         public void OnCastleScreenOpened()
         {
-            UpdateCastleWithCastleData();
-
             var currentArena = _currencyManager.GetArenaForTrophies(
                 _dataManager.PlayerData.UserData.trophies);
 

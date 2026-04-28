@@ -17,9 +17,7 @@ namespace UI
         [SerializeField] private int slot;
         [SerializeField] private GameObject lockedIcon;
         [SerializeField] private TextMeshProUGUI arenaUnlockText;
-        [SerializeField] private Image unitImage;
-        [SerializeField] private Sprite equippedSprite;
-        [SerializeField] private Sprite unequippedSprite;
+        [SerializeField] private GameObject equippedIndicator;
 
         public BaseUnit.UnitTypes UnitType => unitType;
         public int Slot => slot;
@@ -47,16 +45,16 @@ namespace UI
 
         public void SetEquipped(bool isEquipped)
         {
-            if (unitImage) unitImage.sprite = isEquipped ? equippedSprite : unequippedSprite;
+            if (equippedIndicator) equippedIndicator.SetActive(isEquipped);
         }
 
         public void InitSlot(UnitBaseConfig config, bool hasUnit)
         {
             if (lockedIcon) lockedIcon.SetActive(false);
+            if (equippedIndicator) equippedIndicator.SetActive(false);
             if (unitNameText) unitNameText.text = hasUnit && config ? config.UnitName : string.Empty;
             if (unitCostText) unitCostText.text = hasUnit && config ? config.SquadCost.ToString() : string.Empty;
             button.interactable = false;
-            SetEquipped(hasUnit);
         }
     }
 }

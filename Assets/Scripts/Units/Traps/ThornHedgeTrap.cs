@@ -72,6 +72,7 @@ namespace Units.Traps
             if (!_unitsInTrap.Contains(unit))
             {
                 _unitsInTrap.Add(unit);
+                unit.OnDeath += () => OnEnemyUnitExitedTrap(unit);
                 if (_unitsInTrap.Count == 1)
                     PlayParticles();
             }
@@ -79,15 +80,8 @@ namespace Units.Traps
 
         protected override void OnEnemyUnitExitedTrap(BaseUnit unit)
         {
-            if (CurrentTrapState != TrapState.Active)
-                return;
-
-            if (_unitsInTrap.Contains(unit))
-            {
-                _unitsInTrap.Remove(unit);
-                if (_unitsInTrap.Count == 0)
-                    StopParticles();
-            }
+            if (_unitsInTrap.Remove(unit) && _unitsInTrap.Count == 0)
+                StopParticles();
         }
 
         public override void CleanUp()

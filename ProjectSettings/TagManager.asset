@@ -8,6 +8,7 @@ TagManager:
   - Unit
   - Ground
   - Path
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Walkable
   - Climbable
   - Path
-  - 
+  - Unit
   - 
   - 
   - 

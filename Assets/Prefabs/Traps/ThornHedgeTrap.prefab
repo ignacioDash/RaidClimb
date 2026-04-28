@@ -26,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2906140338955341805}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.030000016, y: 0.03999996, z: -0.041975774}
+  m_LocalScale: {x: 0.27367252, y: 0.4493703, z: 0.27367255}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2906140338955113421}
+  m_Father: {fileID: 1583325749127117361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2906140338973464207
 ParticleSystem:
@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -250,8 +250,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 0.05
+      minMaxState: 0
+      scalar: 0.5
       minScalar: 0.01
       maxCurve:
         serializedVersion: 2
@@ -285,7 +285,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 1
       minScalar: 0
       maxCurve:
@@ -320,7 +320,7 @@ ParticleSystem:
         m_RotationOrder: 0
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 1
       minScalar: 0
       maxCurve:
@@ -4680,8 +4680,7 @@ Transform:
   m_LocalPosition: {x: -0.03, y: 0.04, z: -0.041975774}
   m_LocalScale: {x: 0.27367255, y: 0.44937032, z: 0.27367255}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2906140338955113423}
+  m_Children: []
   m_Father: {fileID: 1583325749127117361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2906140338973464205
@@ -4701,7 +4700,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -5377,7 +5376,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 54.95
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -9536,6 +9535,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7383952142740398829}
+  - {fileID: 2906140338955113423}
   - {fileID: 2906140338955113421}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
@@ -9553,7 +9553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Units.Traps.ThornHedge
   trapType: 2
   trapConfig: {fileID: 11400000, guid: 649bfa867139143ab8268be9129adc18, type: 2}
-  trapParticles: {fileID: 2906140338973464205}
+  trapParticles: {fileID: 2906140338973464207}
 --- !u!33 &4412512216210547487
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9581,5 +9581,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.15111317, z: 1}
-  m_Center: {x: 1.9154548e-16, y: 0.012804218, z: 0}
+  m_Size: {x: 1, y: 0.2769122, z: 1}
+  m_Center: {x: 8.6761447e-16, y: 0.0757037, z: 0}

@@ -4,6 +4,7 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI
 {
@@ -13,6 +14,7 @@ namespace UI
         [SerializeField] private TextMeshProUGUI trophiesText;
         [SerializeField] private TextMeshProUGUI arenaText;
         [SerializeField] private Slider trophiesSlider;
+        [SerializeField] private GameObject matchmakingContainer;
 
         private UIManager _uiManager;
 
@@ -50,13 +52,23 @@ namespace UI
             trophiesText.text = $"{progress.current}/{progress.next}";
             trophiesSlider.value = progress.next > 0 ? (float)progress.current / progress.next : 1f;
 
+            GameManager.Instance.GetManager<PlayerCastleManager>().RefreshDefenses();
+            matchmakingContainer.SetActive(false);
             SetButtons(true);
         }
 
         private async void OnPlayButton()
         {
             SetButtons(false);
+            await OnMatchmakingStarted();
             await GameManager.Instance.StartGame();
+        }
+
+        private async Task OnMatchmakingStarted()
+        {
+            matchmakingContainer.SetActive(true);
+            await Task.Delay(Random.Range(3000, 5001));
+            matchmakingContainer.SetActive(false);
         }
 
         private async void OnSettingsButton()
