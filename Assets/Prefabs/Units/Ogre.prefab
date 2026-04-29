@@ -888,6 +888,22 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 1805408607781133811, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805408607781133811, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805408607781133811, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805408607781133811, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1901668933210921603, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -936,6 +952,38 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 2890098742115468804, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2890098742115468804, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2890098742115468804, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2890098742115468804, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2953007264812306782, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2953007264812306782, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2953007264812306782, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2953007264812306782, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3164326382536437365, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -959,6 +1007,22 @@ PrefabInstance:
     - target: {fileID: 3528751183067137446, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755993603907400417, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755993603907400417, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755993603907400417, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755993603907400417, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3923109007048807226, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}
       propertyPath: m_Layer

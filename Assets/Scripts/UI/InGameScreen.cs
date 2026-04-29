@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Constants;
 using Managers;
@@ -17,7 +16,7 @@ namespace UI
         [SerializeField] private GameObject pauseMenu;
         [SerializeField] private RectTransform unitPreviewContainer;
 
-        [SerializeField] private ButtonPointerComponent unit1Pointer, unit2Pointer, unit3Pointer;
+        [SerializeField] private Button unit1Pointer, unit2Pointer, unit3Pointer;
 
         [SerializeField] private TextMeshProUGUI unitName1, unitName2, unitName3;
         [SerializeField] private UnitCamerasController unitCamerasController;
@@ -43,24 +42,15 @@ namespace UI
         private int _squadMeter;
         private float _refillAccumulator;
 
-        private Action _onUnit1Down, _onUnit2Down, _onUnit3Down;
-
-        private void Awake()
-        {
-            _onUnit1Down = () => OnUnitButtonPressed(0);
-            _onUnit2Down = () => OnUnitButtonPressed(1);
-            _onUnit3Down = () => OnUnitButtonPressed(2);
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
 
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
 
-            unit1Pointer.PointerDown += _onUnit1Down;
-            unit2Pointer.PointerDown += _onUnit2Down;
-            unit3Pointer.PointerDown += _onUnit3Down;
+            unit1Pointer.onClick.AddListener(() => OnUnitButtonPressed(0));
+            unit2Pointer.onClick.AddListener(() => OnUnitButtonPressed(1));
+            unit3Pointer.onClick.AddListener(() => OnUnitButtonPressed(2));
 
             pauseButton.onClick.AddListener(OnPaused);
             unPauseButton.onClick.AddListener(OnUnPause);
@@ -87,29 +77,14 @@ namespace UI
 
         private void OnDisable()
         {
-            unit1Pointer.PointerDown -= _onUnit1Down;
-            unit2Pointer.PointerDown -= _onUnit2Down;
-            unit3Pointer.PointerDown -= _onUnit3Down;
+            unit1Pointer.onClick.RemoveAllListeners();
+            unit2Pointer.onClick.RemoveAllListeners();
+            unit3Pointer.onClick.RemoveAllListeners();
 
             pauseButton.onClick.RemoveListener(OnPaused);
             unPauseButton.onClick.RemoveListener(OnUnPause);
             exitButton.onClick.RemoveListener(OnExitButton);
             StopAllCoroutines();
-        }
-
-        private void Update()
-        {
-            var max = squadMeterImages != null ? squadMeterImages.Length : 0;
-            if (_squadMeter < max)
-            {
-                _refillAccumulator += Time.deltaTime;
-                if (_refillAccumulator >= 3f)
-                {
-                    _refillAccumulator -= 3f;
-                    _squadMeter = Mathf.Min(_squadMeter + 1, max);
-                    UpdateSquadMeter();
-                }
-            }
         }
 
         private void OnUnitButtonPressed(int index)
@@ -246,7 +221,31 @@ namespace UI
             pauseMenu.SetActive(true);
         }
 
-        private void FixedUpdate()
+        private float _progressTimer;
+
+        private void Update()
+        {
+            var max = squadMeterImages != null ? squadMeterImages.Length : 0;
+            if (_squadMeter < max)
+            {
+                _refillAccumulator += Time.deltaTime;
+                if (_refillAccumulator >= 3f)
+                {
+                    _refillAccumulator -= 3f;
+                    _squadMeter = Mathf.Min(_squadMeter + 1, max);
+                    UpdateSquadMeter();
+                }
+            }
+
+            _progressTimer += Time.deltaTime;
+            if (_progressTimer >= 0.1f)
+            {
+                _progressTimer = 0f;
+                UpdateProgressBar();
+            }
+        }
+
+        private void UpdateProgressBar()
         {
             var playerDistance = _unitManager.GetPlayerKingDistance();
             var opponentDistance = _unitManager.GetOpponentKingDistance();
