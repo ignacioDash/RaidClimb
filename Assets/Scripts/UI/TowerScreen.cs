@@ -10,6 +10,18 @@ namespace UI
     public class TowerScreen : BaseScreen
     {
         [SerializeField] private Button exitButton;
+        [SerializeField] private OnboardingScreen onboardingScreen;
+
+        private const int CastleUpgradeCoinsThreshold = 25;
+
+        public override async Task OpenScreen(object[] args)
+        {
+            await base.OpenScreen(args);
+
+            var coins = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.coins;
+            if (coins >= CastleUpgradeCoinsThreshold)
+                onboardingScreen?.ShowTowerSteps();
+        }
         
         protected override void OnEnable()
         {

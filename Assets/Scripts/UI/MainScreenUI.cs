@@ -10,6 +10,7 @@ namespace UI
 {
     public class MainScreenUI : BaseScreen
     {
+        [SerializeField] private OnboardingScreen onboardingScreen;
         [SerializeField] private Button playButton, settingsButton, towerButton, squadButton;
         [SerializeField] private TextMeshProUGUI trophiesText;
         [SerializeField] private TextMeshProUGUI arenaText;
@@ -55,10 +56,13 @@ namespace UI
             GameManager.Instance.GetManager<PlayerCastleManager>().RefreshDefenses();
             matchmakingContainer.SetActive(false);
             SetButtons(true);
+
+            onboardingScreen?.ShowFromStart();
         }
 
         private async void OnPlayButton()
         {
+            onboardingScreen?.CompleteAndHide();
             SetButtons(false);
             await OnMatchmakingStarted();
             await GameManager.Instance.StartGame();

@@ -12,6 +12,21 @@ namespace Data
         public UserData UserData;
         public CastleData PlayerCastleData;
         public SquadData SquadData;
+        public OnboardingData OnboardingData = new();
+    }
+
+    [Serializable]
+    public class OnboardingData
+    {
+        public List<int> CompletedSteps = new();
+
+        public bool IsStepCompleted(int step) => CompletedSteps.Contains(step);
+
+        public void CompleteStep(int step)
+        {
+            if (!CompletedSteps.Contains(step))
+                CompletedSteps.Add(step);
+        }
     }
 
     [Serializable]

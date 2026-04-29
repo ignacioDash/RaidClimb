@@ -11,6 +11,7 @@ namespace UI
 {
     public class SquadScreenUI : BaseScreen
     {
+        [SerializeField] private OnboardingScreen onboardingScreen;
         [SerializeField] private UnitCamerasController unitCamerasController;
         [SerializeField] private Button mainButton;
         [SerializeField] private Button equipButton;
@@ -73,12 +74,20 @@ namespace UI
                 OnUnitSelected(firstEquipped);
             else
                 ClearUnitStats();
+
+            var raiderButton = unitButtons.Find(b => b.UnitType == BaseUnit.UnitTypes.Raider);
+            var raiderUnlocked = raiderButton != null && raiderButton.Config != null && currentArena >= raiderButton.Config.ArenaUnlock;
+            if (raiderUnlocked)
+                onboardingScreen?.ShowSquadSteps();
         }
 
         private void OnUnitSelected(BaseUnit.UnitTypes unitType)
         {
             _selectedUnit = unitType;
             _hasSelection = true;
+
+            if (unitType == BaseUnit.UnitTypes.Raider)
+                onboardingScreen?.TryCompleteStep(4);
 
             var unitButton = unitButtons.Find(b => b.UnitType == unitType);
             var config = unitButton?.Config;
@@ -115,6 +124,8 @@ namespace UI
                 equippedUnits.Add(BaseUnit.UnitTypes.None);
 
             if (equippedUnits.Contains(_selectedUnit)) return;
+
+            onboardingScreen?.TryCompleteStep(5);
 
             var slotIndex = selectedButton.Slot - 1;
             equippedUnits[slotIndex] = _selectedUnit;

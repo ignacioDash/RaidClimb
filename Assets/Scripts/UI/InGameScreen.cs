@@ -33,6 +33,7 @@ namespace UI
 
         [Header("Settings")]
         [SerializeField] private Collider playerSpawnArea;
+        [SerializeField] private OnboardingScreen onboardingScreen;
 
         private UnitManager _unitManager;
 
@@ -68,6 +69,8 @@ namespace UI
             _refillAccumulator = 0f;
             UpdateSquadMeter();
 
+            onboardingScreen?.ShowInGameSteps();
+
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
 
@@ -102,6 +105,8 @@ namespace UI
             _squadMeter -= cost;
             UpdateSquadMeter();
             StartCoroutine(SetDelayedTarget(unit, 1.5f));
+
+            onboardingScreen?.TryCompleteStep(2);
         }
 
         private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
