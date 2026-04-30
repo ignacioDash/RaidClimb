@@ -43,6 +43,14 @@ namespace UI
         private int _squadMeter;
         private float _refillAccumulator;
         private bool _inGameOnboardingShown;
+        private bool _step1Shown;
+        private bool _step2Shown;
+
+        private void Awake()
+        {
+            if (playerUnit) _playerUnitStartPosition = playerUnit.position;
+            if (opponentUnit) _opponentUnitStartPosition = opponentUnit.position;
+        }
 
         protected override void OnEnable()
         {
@@ -60,16 +68,16 @@ namespace UI
 
             pauseMenu.SetActive(false);
 
-            if (playerUnit)
-                _playerUnitStartPosition = playerUnit.position;
+            if (playerUnit) playerUnit.position = _playerUnitStartPosition;
+            if (opponentUnit) opponentUnit.position = _opponentUnitStartPosition;
 
-            if (opponentUnit)
-                _opponentUnitStartPosition = opponentUnit.position;
-
-            _squadMeter = 0;
+            _squadMeter = 1;
             _refillAccumulator = 0f;
-            _inGameOnboardingShown = false;
+            _inGameOnboardingShown = true;
+            _step1Shown = false;
+            _step2Shown = false;
             UpdateSquadMeter();
+            onboardingScreen?.ShowInGameSteps();
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
@@ -107,6 +115,8 @@ namespace UI
             StartCoroutine(SetDelayedTarget(unit, 1.5f));
 
             onboardingScreen?.TryCompleteStep(0);
+            if (index == 1) onboardingScreen?.TryCompleteStep(1);
+            onboardingScreen?.TryCompleteStep(2);
         }
 
         private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
@@ -245,6 +255,18 @@ namespace UI
                         _inGameOnboardingShown = true;
                         onboardingScreen?.ShowInGameSteps();
                     }
+
+                    if (_squadMeter == 3 && !_step1Shown)
+                    {
+                        _step1Shown = true;
+                        onboardingScreen?.ShowInGameStep1();
+                    }
+
+                    if (_squadMeter == 5 && !_step2Shown)
+                    {
+                        _step2Shown = true;
+                        onboardingScreen?.ShowInGameStep2();
+                    }
                 }
             }
 
@@ -262,10 +284,10 @@ namespace UI
             var opponentDistance = _unitManager.GetOpponentKingDistance();
 
             if (playerUnit && playerCastleTarget)
-                playerUnit.position = Vector3.Lerp(playerCastleTarget.position, _playerUnitStartPosition, playerDistance);
+                playerUnit.position = Vector3.Lerp(playerCastleTarget.position, _playerUnitStartPosition, opponentDistance);
 
             if (opponentUnit && opponentCastleTarget)
-                opponentUnit.position = Vector3.Lerp(opponentCastleTarget.position, _opponentUnitStartPosition, opponentDistance);
+                opponentUnit.position = Vector3.Lerp(opponentCastleTarget.position, _opponentUnitStartPosition, playerDistance);
         }
     }
 }

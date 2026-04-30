@@ -44,6 +44,25 @@ namespace Units
                 v.unitGameObject.SetActive(v == visual);
         }
 
+        public void ShowRandomFullBodyUnit(List<BaseUnit.UnitTypes> fromUnits)
+        {
+            var available = fullBodyCameraVisuals.FindAll(v => fromUnits.Contains(v.UnitTypes));
+            if (available.Count == 0) return;
+
+            var chosen = available[UnityEngine.Random.Range(0, available.Count)];
+            foreach (var v in fullBodyCameraVisuals)
+                v.unitGameObject.SetActive(v == chosen);
+
+            var animator = chosen.unitGameObject.GetComponentInChildren<Animator>();
+            animator?.SetTrigger("Look");
+        }
+
+        public void HideAllFullBodyUnits()
+        {
+            foreach (var v in fullBodyCameraVisuals)
+                v.unitGameObject.SetActive(false);
+        }
+
         public RenderTexture EnableUnitCamera(BaseUnit.UnitTypes unitType)
         {
             var visual = cameraVisuals.Find(v => v.UnitTypes == unitType);

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Castles;
 using Managers;
+using Units;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI
     {
         [SerializeField] private Button playButton, settingsButton, towerButton, squadButton;
         [SerializeField] private OnboardingScreen onboardingScreen;
+        [SerializeField] private UnitCamerasController unitCamerasController;
         [SerializeField] private TextMeshProUGUI trophiesText;
         [SerializeField] private TextMeshProUGUI arenaText;
         [SerializeField] private Slider trophiesSlider;
@@ -62,14 +64,14 @@ namespace UI
                 onboardingScreen?.ShowMainMenuSteps();
 
             var onboardingData = GameManager.Instance.GetManager<DataManager>().PlayerData.OnboardingData;
-            if (onboardingData.IsStepCompleted(3))
+            if (onboardingData.IsStepCompleted(5))
                 onboardingScreen?.ShowMainMenuPlaySteps();
 
         }
 
         private async void OnPlayButton()
         {
-            onboardingScreen?.TryCompleteStep(6);
+            onboardingScreen?.TryCompleteStep(8);
             SetButtons(false);
             await OnMatchmakingStarted();
             await GameManager.Instance.StartGame();
@@ -78,7 +80,13 @@ namespace UI
         private async Task OnMatchmakingStarted()
         {
             matchmakingContainer.SetActive(true);
+
+            var equipped = GameManager.Instance.GetManager<DataManager>().PlayerData.SquadData.EquippedUnits;
+            unitCamerasController?.ShowRandomFullBodyUnit(equipped);
+
             await Task.Delay(Random.Range(3000, 5001));
+
+            unitCamerasController?.HideAllFullBodyUnits();
             matchmakingContainer.SetActive(false);
         }
 
@@ -91,7 +99,7 @@ namespace UI
         
         private async void OnCastleButton()
         {
-            onboardingScreen?.TryCompleteStep(3);
+            onboardingScreen?.TryCompleteStep(5);
             SetButtons(false);
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
                 .SetCameraAt(CameraManager.CameraPosition.Castle);

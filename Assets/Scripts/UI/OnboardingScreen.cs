@@ -23,7 +23,8 @@ namespace UI
             Equip,
             Castle,
             CastleBuyTarget,
-            CastleQuit
+            CastleQuit,
+            UnitButtons
         }
 
         [SerializeField] private GameObject textContainer;
@@ -48,7 +49,7 @@ namespace UI
         private int _maxStep;
         private DataManager _dataManager;
 
-        private const int TotalSteps = 7;
+        private const int TotalSteps = 9;
 
         private Coroutine _fingerCoroutine;
 
@@ -68,35 +69,51 @@ namespace UI
             AdvanceToNextPendingStep();
         }
 
-        public void ShowSquadSteps()
+        public void ShowInGameStep1()
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
             _currentStep = 1;
+            _maxStep = 1;
+            AdvanceToNextPendingStep();
+        }
+
+        public void ShowInGameStep2()
+        {
+            _dataManager = GameManager.Instance.GetManager<DataManager>();
+            _currentStep = 2;
             _maxStep = 2;
+            AdvanceToNextPendingStep();
+        }
+
+        public void ShowSquadSteps()
+        {
+            _dataManager = GameManager.Instance.GetManager<DataManager>();
+            _currentStep = 3;
+            _maxStep = 4;
             AdvanceToNextPendingStep();
         }
 
         public void ShowMainMenuSteps()
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
-            _currentStep = 3;
-            _maxStep = 3;
+            _currentStep = 5;
+            _maxStep = 5;
             AdvanceToNextPendingStep();
         }
 
         public void ShowTowerSteps()
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
-            _currentStep = 4;
-            _maxStep = 5;
+            _currentStep = 6;
+            _maxStep = 7;
             AdvanceToNextPendingStep();
         }
 
         public void ShowMainMenuPlaySteps()
         {
             _dataManager = GameManager.Instance.GetManager<DataManager>();
-            _currentStep = 6;
-            _maxStep = 6;
+            _currentStep = 8;
+            _maxStep = 8;
             AdvanceToNextPendingStep();
         }
 
@@ -194,21 +211,27 @@ namespace UI
                     Show(MaskTarget.Unit1, OnboardingTexts.DropUnit);
                     break;
                 case 1:
-                    Show(MaskTarget.Raider, OnboardingTexts.SelectRaider);
+                    Show(MaskTarget.Unit2, OnboardingTexts.SummonArcher);
                     break;
                 case 2:
-                    Show(MaskTarget.Equip, null);
+                    Show(MaskTarget.UnitButtons, OnboardingTexts.KeepSummoning, showFinger: false);
                     break;
                 case 3:
-                    Show(MaskTarget.Castle, OnboardingTexts.TapCastleButton);
+                    Show(MaskTarget.Raider, OnboardingTexts.SelectRaider);
                     break;
                 case 4:
-                    Show(MaskTarget.CastleBuyTarget, OnboardingTexts.BuyCastleSlot, showFinger: false);
+                    Show(MaskTarget.Equip, null);
                     break;
                 case 5:
-                    Show(MaskTarget.CastleQuit, null);
+                    Show(MaskTarget.Castle, OnboardingTexts.TapCastleButton);
                     break;
                 case 6:
+                    Show(MaskTarget.CastleBuyTarget, OnboardingTexts.BuyCastleSlot, showFinger: false);
+                    break;
+                case 7:
+                    Show(MaskTarget.CastleQuit, null);
+                    break;
+                case 8:
                     Show(MaskTarget.PlayButton, OnboardingTexts.LetsRaid);
                     break;
                 default:

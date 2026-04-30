@@ -4,6 +4,10 @@ namespace Constants
     {
         public const string DropUnit = "Tap to summon a Scout";
 
+        public const string SummonArcher = "Now, summon an Archer!";
+
+        public const string KeepSummoning = "Keep summoning and reach the King!";
+
         public const string SelectRaider = "You unlocked the Raider—equip now!";
 
         public const string TapCastleButton =

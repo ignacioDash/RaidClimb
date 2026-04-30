@@ -44,12 +44,12 @@ namespace UI
 
         private void OnSlotPurchased()
         {
-            onboardingScreen?.TryCompleteStep(4);
+            onboardingScreen?.TryCompleteStep(6);
         }
 
         private async void OnExit()
         {
-            onboardingScreen?.TryCompleteStep(5);
+            onboardingScreen?.TryCompleteStep(7);
             exitButton.interactable = false;
 
             GameManager.Instance.GetManager<PlayerCastleManager>().OnCastleScreenClosed();
