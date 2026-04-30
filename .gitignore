@@ -8,6 +8,8 @@
 UserSettings/
 
 RaidClimb_*
+TwerkRoyale_*
+TwerkRoyale-*
 .utmp/
 Recordings/
 
@@ -37,6 +39,7 @@ Assets/AddressableAssetsData/*/*.json
 *.keystore
 *.hprof
 *.symbols
+*.symbols.zip
 *.so
 
 # Rider / VS misc

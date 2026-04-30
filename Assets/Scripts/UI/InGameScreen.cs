@@ -77,13 +77,19 @@ namespace UI
             _step1Shown = false;
             _step2Shown = false;
             UpdateSquadMeter();
-            onboardingScreen?.ShowInGameSteps();
+            StartCoroutine(ShowInGameOnboardingNextFrame());
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
 
             UpdateUnitNames();
             SetButtons(true);
+        }
+
+        private IEnumerator ShowInGameOnboardingNextFrame()
+        {
+            yield return new WaitForSeconds(0.4f);
+            onboardingScreen?.ShowInGameSteps();
         }
 
         private void OnDisable()
