@@ -10,8 +10,8 @@ namespace UI
 {
     public class MainScreenUI : BaseScreen
     {
-        [SerializeField] private OnboardingScreen onboardingScreen;
         [SerializeField] private Button playButton, settingsButton, towerButton, squadButton;
+        [SerializeField] private OnboardingScreen onboardingScreen;
         [SerializeField] private TextMeshProUGUI trophiesText;
         [SerializeField] private TextMeshProUGUI arenaText;
         [SerializeField] private Slider trophiesSlider;
@@ -57,12 +57,19 @@ namespace UI
             matchmakingContainer.SetActive(false);
             SetButtons(true);
 
-            onboardingScreen?.ShowFromStart();
+            var coins = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.coins;
+            if (coins >= 25)
+                onboardingScreen?.ShowMainMenuSteps();
+
+            var onboardingData = GameManager.Instance.GetManager<DataManager>().PlayerData.OnboardingData;
+            if (onboardingData.IsStepCompleted(3))
+                onboardingScreen?.ShowMainMenuPlaySteps();
+
         }
 
         private async void OnPlayButton()
         {
-            onboardingScreen?.CompleteAndHide();
+            onboardingScreen?.TryCompleteStep(6);
             SetButtons(false);
             await OnMatchmakingStarted();
             await GameManager.Instance.StartGame();
@@ -84,6 +91,7 @@ namespace UI
         
         private async void OnCastleButton()
         {
+            onboardingScreen?.TryCompleteStep(3);
             SetButtons(false);
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()
                 .SetCameraAt(CameraManager.CameraPosition.Castle);

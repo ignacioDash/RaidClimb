@@ -26,21 +26,32 @@ namespace UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            
-            exitButton.onClick.AddListener(OnExit);
 
+            exitButton.onClick.AddListener(OnExit);
             exitButton.interactable = true;
+
+            GameManager.Instance.GetManager<PlayerCastleManager>().OnSlotPurchased += OnSlotPurchased;
         }
 
         private void OnDisable()
         {
             exitButton.onClick.RemoveListener(OnExit);
+
+            var castleManager = GameManager.Instance.GetManager<PlayerCastleManager>();
+            if (castleManager != null)
+                castleManager.OnSlotPurchased -= OnSlotPurchased;
+        }
+
+        private void OnSlotPurchased()
+        {
+            onboardingScreen?.TryCompleteStep(4);
         }
 
         private async void OnExit()
         {
+            onboardingScreen?.TryCompleteStep(5);
             exitButton.interactable = false;
-            
+
             GameManager.Instance.GetManager<PlayerCastleManager>().OnCastleScreenClosed();
 
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()

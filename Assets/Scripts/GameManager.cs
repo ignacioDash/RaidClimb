@@ -153,7 +153,11 @@ public class GameManager : MonoBehaviour
         };
 
         await Task.WhenAll(managersInit);
-        await uiManager.NavigateTo(UIManager.Screens.MainScreen);
+
+        if (_dataManager.PlayerData.UserData.gamesPlayed == 0)
+            await StartGame();
+        else
+            await uiManager.NavigateTo(UIManager.Screens.MainScreen);
     }
 
     private void CleanUp()

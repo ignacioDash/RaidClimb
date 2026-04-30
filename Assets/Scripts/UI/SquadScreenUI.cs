@@ -87,7 +87,7 @@ namespace UI
             _hasSelection = true;
 
             if (unitType == BaseUnit.UnitTypes.Raider)
-                onboardingScreen?.TryCompleteStep(4);
+                onboardingScreen?.TryCompleteStep(1);
 
             var unitButton = unitButtons.Find(b => b.UnitType == unitType);
             var config = unitButton?.Config;
@@ -125,7 +125,7 @@ namespace UI
 
             if (equippedUnits.Contains(_selectedUnit)) return;
 
-            onboardingScreen?.TryCompleteStep(5);
+            onboardingScreen?.TryCompleteStep(2);
 
             var slotIndex = selectedButton.Slot - 1;
             equippedUnits[slotIndex] = _selectedUnit;

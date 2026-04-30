@@ -20,6 +20,8 @@ namespace Castles
         private DataManager _dataManager;
         private CurrencyManager _currencyManager;
 
+        public Action OnSlotPurchased;
+
         public override async Task Init(object[] args)
         {
             _playerId = Keys.PLAYER_ID;
@@ -111,7 +113,8 @@ namespace Castles
             slot.SlotPurchase.purchaseButton.gameObject.SetActive(false);
 
             SpawnSlot(slotToAdd, slot);
-            
+            OnSlotPurchased?.Invoke();
+
             _ = _dataManager.Save();
         }
     }

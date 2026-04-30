@@ -42,6 +42,7 @@ namespace UI
 
         private int _squadMeter;
         private float _refillAccumulator;
+        private bool _inGameOnboardingShown;
 
         protected override void OnEnable()
         {
@@ -65,11 +66,10 @@ namespace UI
             if (opponentUnit)
                 _opponentUnitStartPosition = opponentUnit.position;
 
-            _squadMeter = squadMeterImages != null ? squadMeterImages.Length : 0;
+            _squadMeter = 0;
             _refillAccumulator = 0f;
+            _inGameOnboardingShown = false;
             UpdateSquadMeter();
-
-            onboardingScreen?.ShowInGameSteps();
 
             if (unitPreviewContainer)
                 unitPreviewContainer.gameObject.SetActive(false);
@@ -106,7 +106,7 @@ namespace UI
             UpdateSquadMeter();
             StartCoroutine(SetDelayedTarget(unit, 1.5f));
 
-            onboardingScreen?.TryCompleteStep(2);
+            onboardingScreen?.TryCompleteStep(0);
         }
 
         private BaseUnit.UnitTypes GetUnitTypeForButton(int index)
@@ -239,6 +239,12 @@ namespace UI
                     _refillAccumulator -= 3f;
                     _squadMeter = Mathf.Min(_squadMeter + 1, max);
                     UpdateSquadMeter();
+
+                    if (_squadMeter == 1 && !_inGameOnboardingShown)
+                    {
+                        _inGameOnboardingShown = true;
+                        onboardingScreen?.ShowInGameSteps();
+                    }
                 }
             }
 
