@@ -1346,10 +1346,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.25140512
   m_Height: 1.98
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1, z: -0.048594892}
 --- !u!137 &2959158146080866199 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2890098742115468804, guid: 4eed76e868d22e04ea8fcd3d8c990931, type: 3}

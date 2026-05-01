@@ -111,7 +111,7 @@ namespace Units.UnitTypes
             PlayerId = playerId;
 
             var r = GetComponentInChildren<Renderer>();
-            _unitHeight = r ? r.bounds.size.y : 1f;
+            _unitHeight = 1f;
             
             unitVisualsController.Init(PlayerId);
             ChangeUnitStateTo(startState);

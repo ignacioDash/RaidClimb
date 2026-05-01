@@ -19,13 +19,33 @@ MonoBehaviour:
   demotionShieldChargesOnPromotion: 1
   arenaRewardTiers:
   - minTrophies: 0
+    coinsPerWin: 5
+  - minTrophies: 100
+    coinsPerWin: 10
+  - minTrophies: 200
+    coinsPerWin: 15
+  - minTrophies: 350
+    coinsPerWin: 20
+  - minTrophies: 500
+    coinsPerWin: 25
+  - minTrophies: 700
     coinsPerWin: 30
-  - minTrophies: 90
+  - minTrophies: 900
+    coinsPerWin: 35
+  - minTrophies: 1150
+    coinsPerWin: 40
+  - minTrophies: 1400
     coinsPerWin: 50
-  - minTrophies: 180
+  - minTrophies: 1700
+    coinsPerWin: 55
+  - minTrophies: 2000
+    coinsPerWin: 60
+  - minTrophies: 2350
+    coinsPerWin: 65
+  - minTrophies: 2700
+    coinsPerWin: 70
+  - minTrophies: 3100
     coinsPerWin: 75
-  - minTrophies: 300
-    coinsPerWin: 100
-  - minTrophies: 420
-    coinsPerWin: 150
+  - minTrophies: 3500
+    coinsPerWin: 80
   arenaTrophyThresholds: 64000000c80000005e010000f4010000bc020000840300007e04000078050000a4060000d00700002e0900008c0a00001c0c0000ac0d0000

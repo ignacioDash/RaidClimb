@@ -15,7 +15,8 @@
       "mcp__UnityMCP__manage_scene",
       "mcp__UnityMCP__execute_code",
       "Bash(grep -v \"\\\\.meta$\")",
-      "Bash(xargs cat *)"
+      "Bash(xargs cat *)",
+      "WebFetch(domain:doc-0o-2c-sheets.googleusercontent.com)"
     ]
   },
   "prefersReducedMotion": false
