@@ -59,12 +59,17 @@ namespace UI
             matchmakingContainer.SetActive(false);
             SetButtons(true);
 
-            var coins = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.coins;
-            if (coins >= 25)
-                onboardingScreen?.ShowMainMenuSteps();
+            var dataManager = GameManager.Instance.GetManager<DataManager>();
+            var coins = dataManager.PlayerData.UserData.coins;
+            var onboardingData = dataManager.PlayerData.OnboardingData;
 
-            var onboardingData = GameManager.Instance.GetManager<DataManager>().PlayerData.OnboardingData;
-            if (onboardingData.IsStepCompleted(5))
+            var castleStepActive = coins >= 25 && !onboardingData.IsStepCompleted(5);
+
+            if (castleStepActive)
+                onboardingScreen?.ShowMainMenuSteps();
+            else if (!onboardingData.IsStepCompleted(9))
+                onboardingScreen?.ShowMainMenuSquadSteps();
+            else if (onboardingData.IsStepCompleted(5))
                 onboardingScreen?.ShowMainMenuPlaySteps();
 
         }
@@ -113,6 +118,7 @@ namespace UI
 
         private async void OnSquadButton()
         {
+            onboardingScreen?.TryCompleteStep(9);
             SetButtons(false);
             await _uiManager.NavigateTo(UIManager.Screens.SquadScreen);
         }

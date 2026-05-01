@@ -24,7 +24,8 @@ namespace UI
             Castle,
             CastleBuyTarget,
             CastleQuit,
-            UnitButtons
+            UnitButtons,
+            Squad
         }
 
         [SerializeField] private GameObject textContainer;
@@ -49,7 +50,7 @@ namespace UI
         private int _maxStep;
         private DataManager _dataManager;
 
-        private const int TotalSteps = 9;
+        private const int TotalSteps = 10;
 
         private Coroutine _fingerCoroutine;
 
@@ -114,6 +115,14 @@ namespace UI
             _dataManager = GameManager.Instance.GetManager<DataManager>();
             _currentStep = 8;
             _maxStep = 8;
+            AdvanceToNextPendingStep();
+        }
+
+        public void ShowMainMenuSquadSteps()
+        {
+            _dataManager = GameManager.Instance.GetManager<DataManager>();
+            _currentStep = 9;
+            _maxStep = 9;
             AdvanceToNextPendingStep();
         }
 
@@ -233,6 +242,9 @@ namespace UI
                     break;
                 case 8:
                     Show(MaskTarget.PlayButton, OnboardingTexts.LetsRaid);
+                    break;
+                case 9:
+                    Show(MaskTarget.Squad, null);
                     break;
                 default:
                     Hide();
