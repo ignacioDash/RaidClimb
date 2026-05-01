@@ -20,6 +20,8 @@ namespace Managers
 
         public readonly List<BaseUnit> PlayerUnits = new();
         public readonly List<BaseUnit> OpponentUnits = new();
+
+        public Action<BaseUnit> OnPlayerUnitDied;
         
         public async Task Init(object[] args)
         {
@@ -196,6 +198,9 @@ namespace Managers
 
         private void OnUnitDeath(BaseUnit unit)
         {
+            if (unit.PlayerId == Keys.PLAYER_ID)
+                OnPlayerUnitDied?.Invoke(unit);
+
             UnRegisterUnit(unit);
 
             foreach (var attacker in unit.TargetInfo.TargetedBy)

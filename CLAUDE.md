@@ -78,6 +78,16 @@ All screens extend `BaseScreen`. Active screens: `MainScreenUI`, `InGameScreen`,
 
 Player/opponent IDs and spawn heights live in `Assets/Scripts/Constants/Keys.cs`.
 
+## ClaudeContext Reading Strategy
+
+Always read `ClaudeContext/ClaudeStartContext.md` at session start.
+Read other ClaudeContext files only when directly relevant to the task:
+- `UnitTrapReference.md` — only when implementing/modifying units or traps
+- `OnboardingAndUIChanges.md` — only when working on onboarding or UI flow
+- `BotDifficultyIdeas.md` — only when working on bot AI or difficulty
+- `ProgressionIdeas.md` — only when working on economy or progression
+- `instructions.md` — working rules and reading strategy
+
 ## Conventions
 
 - Singleton access: `GameManager.Instance`

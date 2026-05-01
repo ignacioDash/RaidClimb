@@ -34,6 +34,10 @@ namespace UI
         [Header("Settings")]
         [SerializeField] private Collider playerSpawnArea;
         [SerializeField] private OnboardingScreen onboardingScreen;
+        [SerializeField] private TextMeshProUGUI opponentNameText;
+
+        [System.Serializable]
+        private class OpponentNamesData { public string[] names; }
 
         private UnitManager _unitManager;
 
@@ -57,6 +61,7 @@ namespace UI
             base.OnEnable();
 
             _unitManager = GameManager.Instance.GetManager<UnitManager>();
+            _unitManager.OnPlayerUnitDied += OnPlayerUnitDied;
 
             unit1Pointer.onClick.AddListener(() => OnUnitButtonPressed(0));
             unit2Pointer.onClick.AddListener(() => OnUnitButtonPressed(1));
@@ -83,6 +88,7 @@ namespace UI
                 unitPreviewContainer.gameObject.SetActive(false);
 
             UpdateUnitNames();
+            SetOpponentName();
             SetButtons(true);
         }
 
@@ -94,6 +100,8 @@ namespace UI
 
         private void OnDisable()
         {
+            _unitManager.OnPlayerUnitDied -= OnPlayerUnitDied;
+
             unit1Pointer.onClick.RemoveAllListeners();
             unit2Pointer.onClick.RemoveAllListeners();
             unit3Pointer.onClick.RemoveAllListeners();
@@ -165,6 +173,23 @@ namespace UI
                     ? unitCamerasController.GetRenderTexture(unitType)
                     : null;
             }
+        }
+
+        private void SetOpponentName()
+        {
+            if (!opponentNameText) return;
+            var asset = Resources.Load<TextAsset>("opponent_names");
+            if (asset == null) return;
+            var data = JsonUtility.FromJson<OpponentNamesData>(asset.text);
+            if (data?.names?.Length > 0)
+                opponentNameText.text = data.names[Random.Range(0, data.names.Length)];
+        }
+
+        private void OnPlayerUnitDied(BaseUnit unit)
+        {
+            var max = squadMeterImages != null ? squadMeterImages.Length : 0;
+            _squadMeter = Mathf.Min(_squadMeter + _unitManager.GetUnitSquadCost(unit.UnitType), max);
+            UpdateSquadMeter();
         }
 
         private void UpdateSquadMeter()

@@ -14,22 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Config.BotDifficultyConfig
   tiers:
   - minArena: 1
-    minSpawnIntervalMs: 3000
-    maxSpawnIntervalMs: 5000
+    minSpawnIntervalMs: 1500
+    maxSpawnIntervalMs: 2500
+    spawnIntervalFloorMs: 500
+    rampIntervalSeconds: 30
+    intervalReductionPerRampMs: 300
     availableUnits: 07000000
   - minArena: 2
-    minSpawnIntervalMs: 2000
-    maxSpawnIntervalMs: 4000
+    minSpawnIntervalMs: 1200
+    maxSpawnIntervalMs: 2000
+    spawnIntervalFloorMs: 400
+    rampIntervalSeconds: 25
+    intervalReductionPerRampMs: 300
     availableUnits: 0700000006000000
   - minArena: 4
-    minSpawnIntervalMs: 2000
-    maxSpawnIntervalMs: 3000
+    minSpawnIntervalMs: 800
+    maxSpawnIntervalMs: 1800
+    spawnIntervalFloorMs: 300
+    rampIntervalSeconds: 25
+    intervalReductionPerRampMs: 250
     availableUnits: 070000000600000008000000
   - minArena: 10
-    minSpawnIntervalMs: 1000
-    maxSpawnIntervalMs: 3000
+    minSpawnIntervalMs: 500
+    maxSpawnIntervalMs: 1200
+    spawnIntervalFloorMs: 200
+    rampIntervalSeconds: 20
+    intervalReductionPerRampMs: 150
     availableUnits: 0b0000000a00000008000000
   - minArena: 13
-    minSpawnIntervalMs: 1000
-    maxSpawnIntervalMs: 2000
+    minSpawnIntervalMs: 400
+    maxSpawnIntervalMs: 900
+    spawnIntervalFloorMs: 150
+    rampIntervalSeconds: 20
+    intervalReductionPerRampMs: 100
     availableUnits: 0b0000000a00000009000000

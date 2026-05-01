@@ -30,6 +30,9 @@ namespace Config
         public int minArena;
         public int minSpawnIntervalMs;
         public int maxSpawnIntervalMs;
+        public int spawnIntervalFloorMs;
+        public int rampIntervalSeconds;
+        public int intervalReductionPerRampMs;
         public List<BaseUnit.UnitTypes> availableUnits;
     }
 }

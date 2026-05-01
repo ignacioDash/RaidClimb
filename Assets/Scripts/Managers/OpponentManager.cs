@@ -20,6 +20,7 @@ namespace Managers
 
         private bool _isPlaying;
         private BotDifficultyTier _currentTier;
+        private float _matchStartTime;
 
         public async Task Init(object[] args)
         {
@@ -41,6 +42,7 @@ namespace Managers
             var arena = _currencyManager.GetArenaForTrophies(_dataManager.PlayerData.UserData.trophies);
             _currentTier = botDifficultyConfig.GetTierForArena(arena);
 
+            _matchStartTime = Time.time;
             _isPlaying = true;
             _ = PlayingLoop();
         }
@@ -74,8 +76,7 @@ namespace Managers
                 var delay = GetDelayForUnit(unitToSpawn);
                 await Task.Delay(delay, _cts.Token);
 
-                var randomDelay = Random.Range(_currentTier.minSpawnIntervalMs, _currentTier.maxSpawnIntervalMs);
-                await Task.Delay(randomDelay, _cts.Token);
+                await Task.Delay(GetCurrentSpawnInterval(), _cts.Token);
             }
         }
         
@@ -85,6 +86,24 @@ namespace Managers
             
             if (!_cts.IsCancellationRequested)
                 _unitManager.FindNewTargetFor(unit);
+        }
+
+        private int GetCurrentSpawnInterval()
+        {
+            var min = _currentTier.minSpawnIntervalMs;
+            var max = _currentTier.maxSpawnIntervalMs;
+
+            if (_currentTier.rampIntervalSeconds > 0 && _currentTier.intervalReductionPerRampMs > 0)
+            {
+                var elapsed = Time.time - _matchStartTime;
+                var steps = Mathf.FloorToInt(elapsed / _currentTier.rampIntervalSeconds);
+                var reduction = steps * _currentTier.intervalReductionPerRampMs;
+                var floor = _currentTier.spawnIntervalFloorMs;
+                min = Mathf.Max(min - reduction, floor);
+                max = Mathf.Max(max - reduction, floor);
+            }
+
+            return Random.Range(min, max);
         }
 
         private int GetDelayForUnit(BaseUnit.UnitTypes unitType)
