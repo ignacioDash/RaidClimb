@@ -14,7 +14,8 @@ namespace Units.Traps
             Spikes,
             ThornHedge,
             Lava,
-            Pusher
+            Pusher,
+            Saws
         }
 
         public enum TrapState
