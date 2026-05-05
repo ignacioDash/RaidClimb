@@ -64,8 +64,9 @@ namespace UI
 
             unitCamerasController.ShowAllUnits();
 
+            var newContentData = dataManager.PlayerData.NewContentData;
             foreach (var unitButton in unitButtons)
-                unitButton.Init(currentArena, equippedUnits.Contains(unitButton.UnitType), OnUnitSelected);
+                unitButton.Init(currentArena, equippedUnits.Contains(unitButton.UnitType), newContentData.IsUnitNew(unitButton.UnitType), OnUnitSelected);
 
             RefreshSlotButtons(equippedUnits);
 
@@ -85,6 +86,15 @@ namespace UI
         {
             _selectedUnit = unitType;
             _hasSelection = true;
+
+            var dataManager = GameManager.Instance.GetManager<DataManager>();
+            var newContentData = dataManager.PlayerData.NewContentData;
+            if (newContentData.IsUnitNew(unitType))
+            {
+                newContentData.MarkUnitSeen(unitType);
+                _ = dataManager.Save();
+                unitButtons.Find(b => b.UnitType == unitType)?.SetNew(false);
+            }
 
             if (unitType == BaseUnit.UnitTypes.Raider)
                 onboardingScreen?.TryCompleteStep(3);

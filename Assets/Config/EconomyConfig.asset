@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Config.EconomyConfig
   trophiesPerWin: 30
   trophiesPerLoss: 20
-  tutorialBonusCoins: 100
+  tutorialBonusCoins: 300
   newPlayerShieldGames: 10
   demotionShieldChargesOnPromotion: 1
   arenaRewardTiers:

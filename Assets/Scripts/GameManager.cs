@@ -76,6 +76,10 @@ public class GameManager : MonoBehaviour
     // game end
     public async Task GameEnded(string winnerId)
     {
+        if (_gameStateManager.CurrentState != GameStateManager.GameState.InGame)
+            return;
+
+        _gameStateManager.FinishGame();
         var playerWon = winnerId == Keys.PLAYER_ID;
 
         int coinsEarned, trophiesEarned;
@@ -86,6 +90,9 @@ public class GameManager : MonoBehaviour
             coinsEarned = rewards.coins;
             trophiesEarned = rewards.trophies;
             newlyUnlocked = rewards.newlyUnlocked;
+
+            foreach (var unit in newlyUnlocked)
+                _dataManager.PlayerData.NewContentData.AddNewUnit(unit);
         }
         else
         {

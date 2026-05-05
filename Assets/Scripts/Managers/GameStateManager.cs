@@ -20,7 +20,7 @@ namespace Managers
 
         public void FinishGame()
         {
-            
+            CurrentState = GameState.GameEnded;
         }
         
         public async Task Init(object[] args)

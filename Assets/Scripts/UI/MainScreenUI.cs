@@ -12,6 +12,8 @@ namespace UI
     public class MainScreenUI : BaseScreen
     {
         [SerializeField] private Button playButton, settingsButton, towerButton, squadButton;
+        [SerializeField] private GameObject castleNewIndicator;
+        [SerializeField] private GameObject squadNewIndicator;
         [SerializeField] private OnboardingScreen onboardingScreen;
         [SerializeField] private UnitCamerasController unitCamerasController;
         [SerializeField] private TextMeshProUGUI trophiesText;
@@ -63,11 +65,13 @@ namespace UI
             var coins = dataManager.PlayerData.UserData.coins;
             var onboardingData = dataManager.PlayerData.OnboardingData;
 
+            RefreshNewContentBadges(dataManager, arena);
+
             var castleStepActive = coins >= 25 && !onboardingData.IsStepCompleted(5);
 
             if (castleStepActive)
                 onboardingScreen?.ShowMainMenuSteps();
-            else if (!onboardingData.IsStepCompleted(9))
+            else if (arena >= 2 && !onboardingData.IsStepCompleted(9))
                 onboardingScreen?.ShowMainMenuSquadSteps();
             else if (onboardingData.IsStepCompleted(5))
                 onboardingScreen?.ShowMainMenuPlaySteps();
@@ -102,8 +106,39 @@ namespace UI
             SetButtons(true);
         }
         
+        private static readonly int[] CastleMilestones = { 4, 8, 12 };
+
+        private void RefreshNewContentBadges(DataManager dataManager, int arena)
+        {
+            var newContent = dataManager.PlayerData.NewContentData;
+
+            var hasNewCastle = false;
+            foreach (var milestone in CastleMilestones)
+            {
+                if (milestone <= arena && !newContent.IsCastleMilestoneSeen(milestone))
+                {
+                    hasNewCastle = true;
+                    break;
+                }
+            }
+            if (castleNewIndicator) castleNewIndicator.SetActive(hasNewCastle);
+            if (squadNewIndicator) squadNewIndicator.SetActive(newContent.NewUnitTypes.Count > 0);
+        }
+
         private async void OnCastleButton()
         {
+            var dataManager = GameManager.Instance.GetManager<DataManager>();
+            var trophies = dataManager.PlayerData.UserData.trophies;
+            var arena = GameManager.Instance.GetManager<CurrencyManager>().GetArenaForTrophies(trophies);
+            var newContent = dataManager.PlayerData.NewContentData;
+            foreach (var milestone in CastleMilestones)
+            {
+                if (milestone <= arena)
+                    newContent.AcknowledgeCastleMilestone(milestone);
+            }
+            _ = dataManager.Save();
+            if (castleNewIndicator) castleNewIndicator.SetActive(false);
+
             onboardingScreen?.TryCompleteStep(5);
             SetButtons(false);
             var cameraTransition = GameManager.Instance.GetManager<CameraManager>()

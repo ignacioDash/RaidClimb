@@ -8,6 +8,7 @@ namespace Units.UnitTypes
     public class DefenderUnit : BaseUnit
     {
         [SerializeField] private Transform visualRoot;
+        [SerializeField] private ParticleSystem deathParticle;
 
         private SphereCollider _sphereCollider;
         private List<BaseUnit> _attackers;
@@ -58,6 +59,11 @@ namespace Units.UnitTypes
                 var localEuler = visualRoot.localEulerAngles;
                 visualRoot.localEulerAngles = new Vector3(localEuler.x, localRotation.eulerAngles.y, localEuler.z);
             }
+        }
+
+        protected override void OnEnteredDeadState()
+        {
+            if (deathParticle) deathParticle.Play();
         }
 
         protected override void HandleMoveToTarget() { }

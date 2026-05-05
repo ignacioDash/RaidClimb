@@ -13,6 +13,33 @@ namespace Data
         public CastleData PlayerCastleData;
         public SquadData SquadData;
         public OnboardingData OnboardingData = new();
+        public NewContentData NewContentData = new();
+    }
+
+    [Serializable]
+    public class NewContentData
+    {
+        public List<int> NewUnitTypes = new();
+        public List<int> AcknowledgedCastleMilestones = new();
+
+        public bool IsUnitNew(BaseUnit.UnitTypes unitType) => NewUnitTypes.Contains((int)unitType);
+
+        public void AddNewUnit(BaseUnit.UnitTypes unitType)
+        {
+            var id = (int)unitType;
+            if (!NewUnitTypes.Contains(id))
+                NewUnitTypes.Add(id);
+        }
+
+        public void MarkUnitSeen(BaseUnit.UnitTypes unitType) => NewUnitTypes.Remove((int)unitType);
+
+        public bool IsCastleMilestoneSeen(int arena) => AcknowledgedCastleMilestones.Contains(arena);
+
+        public void AcknowledgeCastleMilestone(int arena)
+        {
+            if (!AcknowledgedCastleMilestones.Contains(arena))
+                AcknowledgedCastleMilestones.Add(arena);
+        }
     }
 
     [Serializable]

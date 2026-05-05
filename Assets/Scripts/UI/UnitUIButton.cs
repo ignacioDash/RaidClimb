@@ -18,6 +18,7 @@ namespace UI
         [SerializeField] private GameObject lockedIcon;
         [SerializeField] private TextMeshProUGUI arenaUnlockText;
         [SerializeField] private GameObject equippedIndicator;
+        [SerializeField] private GameObject newIndicator;
 
         public BaseUnit.UnitTypes UnitType => unitType;
         public int Slot => slot;
@@ -25,7 +26,7 @@ namespace UI
 
         private Action<BaseUnit.UnitTypes> _onSelected;
 
-        public void Init(int currentArena, bool isEquipped, Action<BaseUnit.UnitTypes> onSelected)
+        public void Init(int currentArena, bool isEquipped, bool isNew, Action<BaseUnit.UnitTypes> onSelected)
         {
             if (unitNameText) unitNameText.text = unitConfig ? unitConfig.UnitName : string.Empty;
             if (unitCostText) unitCostText.text = unitConfig ? unitConfig.SquadCost.ToString() : string.Empty;
@@ -36,6 +37,7 @@ namespace UI
 
             _onSelected = onSelected;
             SetEquipped(isEquipped);
+            SetNew(isNew && !isLocked);
 
             button.interactable = !isLocked;
             button.onClick.RemoveAllListeners();
@@ -46,6 +48,11 @@ namespace UI
         public void SetEquipped(bool isEquipped)
         {
             if (equippedIndicator) equippedIndicator.SetActive(isEquipped);
+        }
+
+        public void SetNew(bool isNew)
+        {
+            if (newIndicator) newIndicator.SetActive(isNew);
         }
 
         public void InitSlot(UnitBaseConfig config, bool hasUnit)

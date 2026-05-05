@@ -228,6 +228,7 @@ namespace Units.UnitTypes
                     if (_target && _target.unitTargetController)
                         _target.unitTargetController.ReturnTarget(_moveTarget);
                     
+                    OnEnteredDeadState();
                     DelayedDeath();
                     break;
                 case UnitState.Won:
@@ -248,6 +249,8 @@ namespace Units.UnitTypes
                     break;
             }
         }
+
+        protected virtual void OnEnteredDeadState() { }
 
         private async void DelayedDeath()
         {
