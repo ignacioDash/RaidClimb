@@ -15,10 +15,10 @@ MonoBehaviour:
   unitName: Golem
   arenaUnlock: 7
   squadCost: 5
-  health: 480
-  damage: 40
+  health: 540
+  damage: 80
   range: 1.2
-  movementSpeed: 2
+  movementSpeed: 1
   climbSpeed: 1.2
   attackSpeed: 0.6
   projectilePrefab: {fileID: 0}

@@ -16,8 +16,8 @@ MonoBehaviour:
   arenaUnlock: 4
   squadCost: 5
   health: 480
-  damage: 40
+  damage: 60
   range: 1
-  movementSpeed: 2.4
+  movementSpeed: 2.8
   climbSpeed: 1.4
   attackSpeed: 0.6

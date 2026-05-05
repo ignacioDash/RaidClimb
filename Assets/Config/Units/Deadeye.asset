@@ -15,9 +15,9 @@ MonoBehaviour:
   unitName: Deadeye
   arenaUnlock: 6
   squadCost: 3
-  health: 80
-  damage: 15
-  range: 8
+  health: 65
+  damage: 35
+  range: 15
   movementSpeed: 4
   climbSpeed: 1.4
   attackSpeed: 0.8
