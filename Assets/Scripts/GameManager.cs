@@ -96,8 +96,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            coinsEarned = 0;
-            trophiesEarned = currencyManager.HandleDefeat();
+            var defeatRewards = currencyManager.HandleDefeat();
+            coinsEarned = defeatRewards.coins;
+            trophiesEarned = defeatRewards.trophies;
             newlyUnlocked = new List<BaseUnit.UnitTypes>();
         }
 

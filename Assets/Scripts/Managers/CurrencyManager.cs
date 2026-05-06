@@ -107,22 +107,25 @@ namespace Managers
             return (coins, economyConfig.trophiesPerWin, newlyUnlocked);
         }
 
-        public int HandleDefeat()
+        public (int coins, int trophies) HandleDefeat()
         {
             var userData = _dataManager.PlayerData.UserData;
             userData.gamesPlayed++;
 
+            var coins = GetCoinsForTrophies(userData.trophies) / 3;
+            AddCoins(coins);
+
             if (userData.gamesPlayed <= economyConfig.newPlayerShieldGames)
-                return 0;
+                return (coins, 0);
 
             if (userData.demotionShieldCharges > 0)
             {
                 userData.demotionShieldCharges--;
-                return 0;
+                return (coins, 0);
             }
 
             AddTrophies(-economyConfig.trophiesPerLoss);
-            return -economyConfig.trophiesPerLoss;
+            return (coins, -economyConfig.trophiesPerLoss);
         }
 
         public int GetArenaForTrophies(int trophies)

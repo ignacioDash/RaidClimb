@@ -13,39 +13,39 @@ MonoBehaviour:
   m_Name: EconomyConfig
   m_EditorClassIdentifier: Assembly-CSharp::Config.EconomyConfig
   trophiesPerWin: 30
-  trophiesPerLoss: 20
+  trophiesPerLoss: 0
   tutorialBonusCoins: 300
   newPlayerShieldGames: 10
   demotionShieldChargesOnPromotion: 1
   arenaRewardTiers:
   - minTrophies: 0
-    coinsPerWin: 5
-  - minTrophies: 100
-    coinsPerWin: 10
-  - minTrophies: 200
     coinsPerWin: 15
-  - minTrophies: 350
-    coinsPerWin: 20
-  - minTrophies: 500
-    coinsPerWin: 25
-  - minTrophies: 700
+  - minTrophies: 100
     coinsPerWin: 30
-  - minTrophies: 900
-    coinsPerWin: 35
-  - minTrophies: 1150
-    coinsPerWin: 40
-  - minTrophies: 1400
-    coinsPerWin: 50
-  - minTrophies: 1700
-    coinsPerWin: 55
-  - minTrophies: 2000
+  - minTrophies: 200
+    coinsPerWin: 45
+  - minTrophies: 350
     coinsPerWin: 60
-  - minTrophies: 2350
-    coinsPerWin: 65
-  - minTrophies: 2700
-    coinsPerWin: 70
-  - minTrophies: 3100
+  - minTrophies: 500
     coinsPerWin: 75
+  - minTrophies: 700
+    coinsPerWin: 90
+  - minTrophies: 900
+    coinsPerWin: 105
+  - minTrophies: 1150
+    coinsPerWin: 120
+  - minTrophies: 1400
+    coinsPerWin: 135
+  - minTrophies: 1700
+    coinsPerWin: 150
+  - minTrophies: 2000
+    coinsPerWin: 165
+  - minTrophies: 2350
+    coinsPerWin: 180
+  - minTrophies: 2700
+    coinsPerWin: 195
+  - minTrophies: 3100
+    coinsPerWin: 210
   - minTrophies: 3500
-    coinsPerWin: 80
+    coinsPerWin: 225
   arenaTrophyThresholds: 64000000c80000005e010000f4010000bc020000840300007e04000078050000a4060000d00700002e0900008c0a00001c0c0000ac0d0000

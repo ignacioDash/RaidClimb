@@ -50,7 +50,10 @@ namespace Units.Traps
                     _nextAttackTime = Time.time + trapConfig.AttackSpeed;
 
                     foreach (var unit in _unitsInTrap)
+                    {
                         unit.TakeDamage(trapConfig.Damage);
+                        PlayParticlesAtXZ(unit.transform.position.x, unit.transform.position.z);
+                    }
                 }
 
                 await Task.Yield();
@@ -86,15 +89,12 @@ namespace Units.Traps
             {
                 _unitsInTrap.Add(unit);
                 unit.OnDeath += () => OnEnemyUnitExitedTrap(unit);
-                if (_unitsInTrap.Count == 1)
-                    PlayParticles();
             }
         }
 
         protected override void OnEnemyUnitExitedTrap(BaseUnit unit)
         {
-            if (_unitsInTrap.Remove(unit) && _unitsInTrap.Count == 0)
-                StopParticles();
+            _unitsInTrap.Remove(unit);
         }
 
         private void Update()
