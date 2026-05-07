@@ -178,7 +178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 3.61}
+  m_AnchoredPosition: {x: 0, y: 5.42}
   m_SizeDelta: {x: 1.66, y: 0.53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &580246304481710229
@@ -1371,10 +1371,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.18643183
   m_Height: 1.98
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1, z: -0.017818213}
 --- !u!4 &4147506057315160054 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6988248857270708769, guid: 25871f0e0039b9f4ea25f369273d4b09, type: 3}
