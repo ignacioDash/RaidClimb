@@ -43,6 +43,13 @@ public class GameManager : MonoBehaviour
         await cameraManager.SetCameraAt(CameraManager.CameraPosition.Default);
         
         await SetUp();
+        
+        TinySauce.SubscribeOnInitFinishedEvent(OnTinySauceInit);
+    }
+
+    private void OnTinySauceInit(bool adConsent, bool analyticsConsent)
+    {
+        Debug.Log($"Tiny Sauce Init ads {adConsent} analytics {analyticsConsent}");
     }
 
     public T GetManager<T>()
@@ -71,6 +78,14 @@ public class GameManager : MonoBehaviour
         _gameStateManager.StartGame();
         
         opponentManager.OnGameStarted();
+
+        var gameStartParams = new Dictionary<string, object>()
+        {
+            {"opponentLevel", opponentLevel},
+            {"trophies", trophies},
+        };
+
+        TinySauce.OnGameStarted($"Game{opponentLevel}", gameStartParams);
     }
 
     // game end
@@ -78,7 +93,7 @@ public class GameManager : MonoBehaviour
     {
         if (_gameStateManager.CurrentState != GameStateManager.GameState.InGame)
             return;
-
+        
         _gameStateManager.FinishGame();
         var playerWon = winnerId == Keys.PLAYER_ID;
 
@@ -118,8 +133,10 @@ public class GameManager : MonoBehaviour
     }
 
     // user leaves / finishes the game
-    public async Task FinishGame()
+    public async Task FinishGame(bool finished)
     {
+        TinySauce.OnGameFinished(finished, 0);
+        
         currencyManager.SetContainerActive(true);
         CleanUp();
 

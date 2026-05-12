@@ -252,7 +252,7 @@ namespace UI
         {
             Time.timeScale = 1;
             SetButtons(false);
-            await GameManager.Instance.FinishGame();
+            await GameManager.Instance.FinishGame(false);
         }
 
         private void OnUnPause()

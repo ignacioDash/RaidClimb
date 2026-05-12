@@ -88,7 +88,7 @@ namespace UI
         private async void OnQuit()
         {
             closeButton.interactable = false;
-            await GameManager.Instance.FinishGame();
+            await GameManager.Instance.FinishGame(true);
         }
     }
 }
