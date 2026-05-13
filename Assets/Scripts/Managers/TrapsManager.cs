@@ -43,6 +43,13 @@ namespace Managers
             return trapInstance;
         }
 
+        public void RemovePlayerTrap(BaseTrap trap)
+        {
+            PlayerTraps.Remove(trap);
+            trap.CleanUp();
+            if (trap) Destroy(trap.gameObject);
+        }
+
         public void CleanupPlayerTraps()
         {
             foreach (var trap in PlayerTraps)

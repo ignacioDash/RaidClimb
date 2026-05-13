@@ -41,7 +41,10 @@ namespace Managers
         {
         }
 
-        protected void UpdateCastleWithCastleData()
+        protected static bool IsWallSlot(CastleSlotId id) =>
+            Enum.GetName(typeof(CastleSlotId), id)?.Contains("Wall") ?? false;
+
+        protected virtual void UpdateCastleWithCastleData()
         {
             if (_castleData == null)
                 return;
@@ -56,16 +59,19 @@ namespace Managers
             }
         }
 
-        protected void SpawnSlot(CastleSlot slot, CastleSlotReference spawnPosition)
+        protected (BaseUnit unit, BaseTrap trap) SpawnSlot(CastleSlot slot, CastleSlotReference spawnPosition)
         {
             if (slot.SlotUnit != BaseUnit.UnitTypes.None)
             {
                 var unit = _unitManager.SpawnUnit(slot.SlotUnit, spawnPosition.SlotPosition.position, _playerId);
+                return (unit, null);
             }
-            else if (slot.SlotTrap != BaseTrap.TrapTypes.None)
+            if (slot.SlotTrap != BaseTrap.TrapTypes.None)
             {
                 var trap = _trapsManager.SpawnTrap(slot.SlotTrap, spawnPosition.SlotPosition, _playerId);
+                return (null, trap);
             }
+            return (null, null);
         }
 
     }
@@ -88,6 +94,7 @@ namespace Managers
     {
         public bool purchasable;
         public Button purchaseButton;
+        public Button swapButton;
         public TextMeshProUGUI prizeText;
         public int prize;
         public int arenaUnlock = 1;

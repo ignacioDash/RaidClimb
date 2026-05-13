@@ -160,6 +160,8 @@ namespace Managers
             return Mathf.Clamp01(closestDistance / 50f);
         }
 
+        public void RemoveUnit(BaseUnit unit) => UnRegisterUnit(unit);
+
         private void UnRegisterUnit(BaseUnit unit)
         {
             unit.CleanUp();
