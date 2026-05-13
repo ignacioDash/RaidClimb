@@ -11,6 +11,7 @@ namespace UI
     {
         [SerializeField] private Button exitButton;
         [SerializeField] private OnboardingScreen onboardingScreen;
+        [SerializeField] private GameObject instructionsContainer;
 
         private const int CastleUpgradeCoinsThreshold = 25;
 
@@ -18,8 +19,12 @@ namespace UI
         {
             await base.OpenScreen(args);
 
-            var coins = GameManager.Instance.GetManager<DataManager>().PlayerData.UserData.coins;
-            if (coins >= CastleUpgradeCoinsThreshold)
+            var data = GameManager.Instance.GetManager<DataManager>().PlayerData;
+
+            if (instructionsContainer != null)
+                instructionsContainer.SetActive(data.OnboardingData.IsStepCompleted(7));
+
+            if (data.UserData.coins >= CastleUpgradeCoinsThreshold)
                 onboardingScreen?.ShowTowerSteps();
         }
         

@@ -41,15 +41,15 @@ public class GameManager : MonoBehaviour
     private async void Start()
     {
         await cameraManager.SetCameraAt(CameraManager.CameraPosition.Default);
-        
-        await SetUp();
-        
-        TinySauce.SubscribeOnInitFinishedEvent(OnTinySauceInit);
-    }
 
-    private void OnTinySauceInit(bool adConsent, bool analyticsConsent)
-    {
-        Debug.Log($"Tiny Sauce Init ads {adConsent} analytics {analyticsConsent}");
+        var tinySauceReady = new TaskCompletionSource<bool>();
+        TinySauce.SubscribeOnInitFinishedEvent((adConsent, analyticsConsent) =>
+        {
+            Debug.Log($"Tiny Sauce Init ads {adConsent} analytics {analyticsConsent}");
+            tinySauceReady.TrySetResult(true);
+        });
+
+        await SetUp(tinySauceReady.Task);
     }
 
     public T GetManager<T>()
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
         await Task.WhenAll(cameraAnimation, screenChange);
     }
 
-    private async Task SetUp()
+    private async Task SetUp(Task tinySauceReady = null)
     {
         _gameStateManager = new GameStateManager();
         _dataManager = new DataManager();
@@ -178,6 +178,9 @@ public class GameManager : MonoBehaviour
         };
 
         await Task.WhenAll(managersInit);
+
+        if (tinySauceReady != null)
+            await tinySauceReady;
 
         if (_dataManager.PlayerData.UserData.gamesPlayed == 0)
             await StartGame();
