@@ -130,27 +130,41 @@ namespace Managers
 
         public int GetArenaForTrophies(int trophies)
         {
+            var thresholds = economyConfig.arenaTrophyThresholds;
             var arena = 1;
-            foreach (var threshold in economyConfig.arenaTrophyThresholds)
+            foreach (var threshold in thresholds)
             {
                 if (trophies >= threshold)
                     arena++;
                 else
                     break;
             }
+
+            if (arena == thresholds.Count + 1 && thresholds.Count >= 2)
+            {
+                var lastGap = thresholds[thresholds.Count - 1] - thresholds[thresholds.Count - 2];
+                arena += (trophies - thresholds[thresholds.Count - 1]) / lastGap;
+            }
+
             return arena;
         }
 
         public (int current, int next) GetTrophyProgress(int trophies)
         {
             var prevThreshold = 0;
+            var prevPrevThreshold = 0;
             foreach (var threshold in economyConfig.arenaTrophyThresholds)
             {
                 if (trophies < threshold)
                     return (trophies - prevThreshold, threshold - prevThreshold);
+                prevPrevThreshold = prevThreshold;
                 prevThreshold = threshold;
             }
-            return (trophies - prevThreshold, trophies - prevThreshold); // max arena
+
+            var arenaGap = prevThreshold - prevPrevThreshold;
+            if (arenaGap <= 0)
+                return (trophies - prevThreshold, trophies - prevThreshold);
+            return ((trophies - prevThreshold) % arenaGap, arenaGap);
         }
 
         private int GetCoinsForTrophies(int trophies)
